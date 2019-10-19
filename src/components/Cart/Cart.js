@@ -34,7 +34,7 @@ class Cart extends Component {
     let cart = this.props.items.length ? (
       this.props.items.map(item => {
         return (
-          <div class="shopping-cart" key={item.id}>
+          <div class="shopping-cart-list" key={item.id}>
             <div class="item">
               <div class="image">
                 <img
@@ -122,7 +122,7 @@ class Cart extends Component {
     let saved = this.props.savedItems.length ? (
       this.props.savedItems.map(item => {
         return (
-          <div class="shopping-cart" key={item.id}>
+          <div class="save-for-later-list" key={item.id}>
             <div class="item">
               <div class="image">
                 <img
@@ -172,10 +172,8 @@ class Cart extends Component {
 
     let subtotal = this.props.items.length ? (
       [
-        <div class="subtotal-price">
-          <b>
-            <h5>Subtotal: ${this.props.total}</h5>
-          </b>
+        <div class="subtotal-price" key="Price">
+          <b>Subtotal: ${this.props.total}</b>
         </div>
       ]
     ) : (
@@ -188,7 +186,7 @@ class Cart extends Component {
           <br></br>
           <h4>Shopping cart ({this.props.items.length})</h4>
           <ul className="current-items">{cart}</ul>
-          <div class="shopping-cart">
+          <div className="shopping-cart">
             <h5>{subtotal}</h5>
           </div>
           <h5>
