@@ -12,17 +12,6 @@ class Wishlist extends Component {
       options: []
     };
   }
-  handleChange = id => {
-    this.props.clickRemove(id);
-    console.log("Remove Active %d", id);
-  };
-  handleClick = () => {
-    this.setState(prevState => {
-      return {
-        items: this.props.items.filter(li => !li.value)
-      };
-    });
-  };
   onChange(e) {
     // current array of options
     const options = this.state.options;

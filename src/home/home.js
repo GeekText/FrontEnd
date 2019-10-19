@@ -2,6 +2,7 @@ import React from "react";
 import "./home.css";
 import Bookdetails from "../components/Bookdetails/Bookdetails";
 import Filter from "../components/Filter/Filter";
+import { connect } from "react-redux";
 
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
@@ -34,19 +35,20 @@ class home extends React.Component {
       ],
       FetchedAt: null
     };
+
+    this.state.bookdetails = this.props.items;
+    if (this.state.bookdetails.length <= 1) {
+      console.log(
+        "No DATA on HOME PAGE: Length %d",
+        this.state.bookdetails.length
+      );
+      this.getData();
+    }
   }
 
   styling = {
     textAlign: "center"
   };
-
-  componentDidMount() {
-    console.log("First Run");
-    this.getData();
-    console.log("Last Run");
-    console.log("after change?", this.state.bookdetails);
-  }
-
   // componentWillMount()
   // {
   //     // Clear the interval right before component unmount
@@ -54,13 +56,11 @@ class home extends React.Component {
   // }
 
   async getData() {
-    console.log("Get Run");
+    console.log("Getting DB data");
     try {
       const response = await axios.get(url);
-      console.log(response);
-      console.log("hoping for data", response.data);
       this.setState({ bookdetails: response.data });
-      console.log("Set Run");
+      console.log("Got Data");
     } catch (error) {
       console.error(error);
     }
@@ -77,4 +77,10 @@ class home extends React.Component {
   }
 }
 
-export default home;
+const currentItems = state => {
+  return {
+    items: state.items
+  };
+};
+
+export default connect(currentItems)(home);

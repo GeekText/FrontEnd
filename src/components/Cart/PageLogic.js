@@ -114,7 +114,7 @@ const PageLogic = (state = homeItems, action) => {
     //Counts for floating point problem
     let newTotal =
       (state.total * 100 -
-        removedItem.book_price * 100 * (removedItem.quantity * 100)) /
+        removedItem.book_price * 100 * removedItem.quantity) /
       100;
     return {
       ...state,
@@ -162,9 +162,7 @@ const PageLogic = (state = homeItems, action) => {
     let cartItem = state.addedItems.find(item => action.id === item.id);
     //Counts for floating point problem
     let newTotal =
-      (state.total * 100 -
-        cartItem.book_price * 100 * (cartItem.quantity * 100)) /
-      100;
+      (state.total * 100 - cartItem.book_price * 100 * cartItem.quantity) / 100;
     if (exists) {
       return state;
     } else {
@@ -183,9 +181,7 @@ const PageLogic = (state = homeItems, action) => {
     //List of cart list without selected item
     let cartItem = state.savedItems.find(item => action.id === item.id);
     let newTotal =
-      (state.total * 100 +
-        cartItem.book_price * 100 * (cartItem.quantity * 100)) /
-      100;
+      (state.total * 100 + cartItem.book_price * 100 * cartItem.quantity) / 100;
     if (exists) {
       return state;
     } else {
