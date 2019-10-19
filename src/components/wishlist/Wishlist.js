@@ -5,6 +5,13 @@ import { wishRemove } from "./WishlistFunctions";
 import "./Wishlist.css";
 
 class Wishlist extends Component {
+  constructor() {
+    super();
+    // initialize your options array on your state
+    this.state = {
+      options: []
+    };
+  }
   handleChange = id => {
     this.props.clickRemove(id);
     console.log("Remove Active %d", id);
@@ -16,6 +23,24 @@ class Wishlist extends Component {
       };
     });
   };
+  onChange(e) {
+    // current array of options
+    const options = this.state.options;
+    let index;
+
+    // check if the check box is checked or unchecked
+    if (e.target.checked) {
+      // add the numerical value of the checkbox to options array
+      options.push(+e.target.value);
+    } else {
+      // or remove the value from the unchecked checkbox from the array
+      index = options.indexOf(+e.target.value);
+      options.splice(index, 1);
+    }
+
+    // update the state with the new array of options
+    this.setState({ options: options });
+  }
   render() {
     let wishlist = this.props.items.length ? (
       this.props.items.map(item => {
@@ -28,15 +53,14 @@ class Wishlist extends Component {
             }}
             key={item.id}
           >
-            <input
-              type="checkbox"
-              id={item.id}
-              checked={item.value}
-              onChange={() => {
-                this.handleChange(item.id);
-              }}
-            />{" "}
-            <name htmlFor={item.id}>{item.book_name}</name>
+            <div className="input-group">
+              <input
+                type="checkbox"
+                value={item.id}
+                onChange={this.onChange.bind(this)}
+              />{" "}
+              <name htmlFor={item.id}>{item.book_name}</name>
+            </div>
           </div>
         );
       })
@@ -57,6 +81,14 @@ class Wishlist extends Component {
           <br></br>
           <h4>Wishlist ({this.props.items.length})</h4>
           <ul className="wishlist">{wishlist}</ul>
+          <span
+            class="del-button"
+            onClick={() => {
+              this.state.options.map(number => this.props.clickRemove(number));
+            }}
+          >
+            Remove
+          </span>
         </div>
       </div>
     );
