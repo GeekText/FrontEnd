@@ -63,8 +63,11 @@ function dbNotLoaded() {
 }
 
 const PageLogic = (state = homeItems, action) => {
+  console.log("Action occurred");
   if (!Array.isArray(state.items) || !state.items.length) {
+    console.log("DB NOT LOADED");
     state.items = dbNotLoaded();
+    console.log("Length: %d", homeItems.items.length);
   }
   //Adds item to detail page
   if (action.type === DETAILS) {
