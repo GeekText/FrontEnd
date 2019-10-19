@@ -20,7 +20,7 @@ export class Bookitem extends Component {
   };
   render() {
     return (
-      <div className="card">
+      <div className="container">
         <div className="card-body">
           <span
             className="clickAddButton"

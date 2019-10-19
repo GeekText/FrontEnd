@@ -48,17 +48,43 @@ class Cart extends Component {
               <div class="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
-                </span>
-                <i className="card-subtitle mb-2 text-muted">
-                  {item.book_desc}
-                </i>
-                <span>
-                  <i>Original Price: ${item.book_price}</i>
+                  <span class="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <i className="card-subtitle mb-2 text-muted">
+                    {item.book_desc}
+                  </i>
+                  <div class="additional-details">
+                    <div class="stats">
+                      <span class="publisher">
+                        Publisher: {item.book_publisher}
+                      </span>
+                      <span class="publisher">
+                        Released: {item.book_releaseDate}
+                      </span>
+                    </div>
+                    <div class="stats">
+                      <span class="publisher">
+                        Books Sold: {item.book_copies_sold}
+                      </span>
+                      <span class="publisher">
+                        Rating: {item.book_rating} of 5
+                      </span>
+                    </div>
+                  </div>
+                  <span class="bio">
+                    <i class="text-muted">Bio: "{item.author_biography}"</i>
+                  </span>
+                  <span class="email">({item.email})</span>
                 </span>
               </div>
               <div class="buttons">
                 <div class="item-price">
-                  <h5>${item.book_price * item.quantity}</h5>
+                  <span>${item.book_price * item.quantity}</span>
+                  <i className="item-each text-muted">
+                    ${item.book_price} each
+                  </i>
                 </div>
                 <div class="quantity">
                   Qty:
@@ -136,6 +162,17 @@ class Cart extends Component {
               <div class="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
+                  <span class="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <span class="publisher">
+                    Publisher: {item.book_publisher}
+                  </span>
+                  <span class="publisher">
+                    Books Sold: {item.book_copies_sold}
+                  </span>
+                  <span class="publisher">Rating: {item.book_rating} of 5</span>
                 </span>
               </div>
               <div class="buttons">
