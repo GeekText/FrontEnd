@@ -7,7 +7,8 @@ import {
   removeItem,
   saveAdd,
   saveAddToCart,
-  saveRemove
+  saveRemove,
+  addItemWish
 } from "./CartFunctions.js";
 import "./Cart.css";
 
@@ -29,6 +30,9 @@ class Cart extends Component {
   };
   clickSaveRemove = id => {
     this.props.clickSaveRemove(id);
+  };
+  clickSaveToWish = id => {
+    this.props.clickSaveToWish(id);
   };
   render() {
     let cart = this.props.items.length ? (
@@ -180,12 +184,21 @@ class Cart extends Component {
                   <h5>${item.book_price}</h5>
                 </div>
                 <span
-                  class="save-button"
+                  class="cart-button"
                   onClick={() => {
                     this.clickSaveToCart(item.id);
                   }}
                 >
                   Add to cart
+                </span>
+                <br></br>
+                <span
+                  class="wishcart-button"
+                  onClick={() => {
+                    this.clickSaveToWish(item.id);
+                  }}
+                >
+                  Add to Wishlist
                 </span>
                 <br></br>
                 <span
@@ -263,6 +276,9 @@ const changeItems = dispatch => {
     },
     clickSaveRemove: id => {
       dispatch(saveRemove(id));
+    },
+    clickSaveToWish: id => {
+      dispatch(addItemWish(id));
     }
   };
 };

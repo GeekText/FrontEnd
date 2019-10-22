@@ -16,11 +16,35 @@
   color: #666666;
   font-weight: bold;
 }
-
 .save-button:hover {
   background-color: #f6f6f6;
   text-decoration: none;
-  color: #1900ff;
+  color: #4538b6;
+}
+
+.wishcart-button {
+  display: inline-block;
+  cursor: pointer;
+  color: #666666;
+  font-weight: bold;
+}
+.wishcart-button:hover {
+  background-color: #f6f6f6;
+  text-decoration: none;
+  color: #4538b6;
+}
+
+.cart-button {
+  display: inline-block;
+  cursor: pointer;
+  color: #666666;
+  font-weight: bold;
+}
+
+.cart-button:hover {
+  background-color: #f6f6f6;
+  text-decoration: none;
+  color: #00aa8b;
 }
 .quantity {
   text-align: center;
