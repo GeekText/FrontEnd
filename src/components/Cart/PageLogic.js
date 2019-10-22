@@ -11,7 +11,14 @@ export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
 
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
-
+/**
+ *items: book_data()  - Gets data from DB Backend
+ *addedItems: [],     - Stores items in cart list
+ *addedItemID: [],    - Stores items in details page
+ *savedItems: [],     - Stores items in "save for later" list
+ *wishlist: [],       - Stores items in "wishlist" list
+ *total: 0            - Subtotal of items on cart page
+ */
 var homeItems = {
   items: book_data(),
   addedItems: [],
@@ -25,6 +32,7 @@ async function book_data() {
     const response = await axios.get(url);
     homeItems.items = response.data;
     this.setState({ items: response.data });
+    console.log("called data");
   } catch (error) {}
 }
 
@@ -49,83 +57,97 @@ function dbNotLoaded() {
       gender: "",
       book_publishing_info: "",
       book_copies_sold: 0,
-      book_price: 0,
-      quantity: 0
+      book_price: 0
     }
   ];
 }
 
 const PageLogic = (state = homeItems, action) => {
+  console.log("Action occurred");
   if (!Array.isArray(state.items) || !state.items.length) {
+    console.log("DB NOT LOADED");
     state.items = dbNotLoaded();
+    console.log("Length: %d", homeItems.items.length);
   }
+  //Adds item to detail page
   if (action.type === DETAILS) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    let existed_item = state.addedItemID.find(item => action.id === item.id);
-    if (existed_item) {
+    let clickedItem = state.items.find(item => item.id === action.id);
+    //Checks if it exists already
+    let exists = state.addedItemID.find(item => action.id === item.id);
+    if (exists) {
       return {
         ...state
       };
     } else {
       return {
         ...state,
-        addedItemID: [addedItem]
+        //Returns only the clicked item
+        addedItemID: [clickedItem]
       };
     }
   }
+  //Adds item to cart
   if (action.type === ADD) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    let existed_item = state.addedItems.find(item => action.id === item.id);
-    if (existed_item) {
-      addedItem.quantity += 1;
+    let cartItem = state.items.find(item => item.id === action.id);
+    let exists = state.addedItems.find(item => action.id === item.id);
+    if (exists) {
+      cartItem.quantity += 1;
       return {
         ...state,
-        total: state.total + addedItem.book_price
+        total: state.total + cartItem.book_price
       };
     } else {
-      addedItem.quantity = 1;
-      let newTotal = state.total + addedItem.book_price;
+      cartItem.quantity = 1;
+      //Counts for floating point problem
+      let newTotal = (state.total * 100 + cartItem.book_price * 100) / 100;
 
       return {
         ...state,
-        addedItems: [...state.addedItems, addedItem],
+        addedItems: [...state.addedItems, cartItem],
         total: newTotal
       };
     }
   }
   if (action.type === REMOVE) {
-    let itemToRemove = state.addedItems.find(item => action.id === item.id);
-    let new_items = state.addedItems.filter(item => action.id !== item.id);
+    let removedItem = state.addedItems.find(item => action.id === item.id);
+    let newCartList = state.addedItems.filter(item => action.id !== item.id);
+    //Counts for floating point problem
     let newTotal =
-      state.total - itemToRemove.book_price * itemToRemove.quantity;
+      (state.total * 100 -
+        removedItem.book_price * 100 * removedItem.quantity) /
+      100;
     return {
       ...state,
-      addedItems: new_items,
+      addedItems: newCartList,
       total: newTotal
     };
   }
   if (action.type === COUNT_UP) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    addedItem.quantity += 1;
-    let newTotal = state.total + addedItem.book_price;
+    let selectedItem = state.items.find(item => item.id === action.id);
+    selectedItem.quantity += 1;
+    //Counts for floating point problem
+    let newTotal = (state.total * 100 + selectedItem.book_price * 100) / 100;
     return {
       ...state,
       total: newTotal
     };
   }
   if (action.type === COUNT_DOWN) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    if (addedItem.quantity === 1) {
-      let new_items = state.addedItems.filter(item => item.id !== action.id);
-      let newTotal = state.total - addedItem.book_price;
+    let selectedItem = state.items.find(item => item.id === action.id);
+    if (selectedItem.quantity <= 1) {
+      //New list without selected item
+      let newCartList = state.addedItems.filter(item => item.id !== action.id);
+      //Counts for floating point problem
+      let newTotal = (state.total * 100 - selectedItem.book_price * 100) / 100;
+      //Returns a new list due to qty reaching 0
       return {
         ...state,
-        addedItems: new_items,
+        addedItems: newCartList,
         total: newTotal
       };
     } else {
-      addedItem.quantity -= 1;
-      let newTotal = state.total - addedItem.book_price;
+      selectedItem.quantity -= 1;
+      let newTotal = state.total - selectedItem.book_price;
       return {
         ...state,
         total: newTotal
@@ -133,66 +155,69 @@ const PageLogic = (state = homeItems, action) => {
     }
   }
   if (action.type === SAVE_ADD) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    let existed_item = state.savedItems.find(item => action.id === item.id);
-    let new_items = state.addedItems.filter(item => action.id !== item.id);
-    let itemToRemove = state.addedItems.find(item => action.id === item.id);
+    let savedItem = state.items.find(item => item.id === action.id);
+    let exists = state.savedItems.find(item => action.id === item.id);
+    //List of cart list without selected item
+    let newCartList = state.addedItems.filter(item => action.id !== item.id);
+    let cartItem = state.addedItems.find(item => action.id === item.id);
+    //Counts for floating point problem
     let newTotal =
-      state.total - itemToRemove.book_price * itemToRemove.quantity;
-    if (existed_item) {
+      (state.total * 100 - cartItem.book_price * 100 * cartItem.quantity) / 100;
+    if (exists) {
       return state;
     } else {
       return {
         ...state,
-        addedItems: new_items,
-        savedItems: [...state.savedItems, addedItem],
+        addedItems: newCartList,
+        savedItems: [...state.savedItems, savedItem],
         total: newTotal
       };
     }
   }
   if (action.type === SAVE_ADD_CART) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    let existed_item = state.addedItems.find(item => action.id === item.id);
-    let new_items = state.savedItems.filter(item => action.id !== item.id);
-
-    let itemToRemove = state.savedItems.find(item => action.id === item.id);
+    let savedItem = state.items.find(item => item.id === action.id);
+    let exists = state.addedItems.find(item => action.id === item.id);
+    let newCartList = state.savedItems.filter(item => action.id !== item.id);
+    //List of cart list without selected item
+    let cartItem = state.savedItems.find(item => action.id === item.id);
     let newTotal =
-      state.total + itemToRemove.book_price * itemToRemove.quantity;
-    if (existed_item) {
+      (state.total * 100 + cartItem.book_price * 100 * cartItem.quantity) / 100;
+    if (exists) {
       return state;
     } else {
       return {
         ...state,
-        addedItems: [...state.addedItems, addedItem],
-        savedItems: new_items,
+        addedItems: [...state.addedItems, savedItem],
+        savedItems: newCartList,
         total: newTotal
       };
     }
   }
   if (action.type === SAVE_REMOVE) {
-    let new_items = state.savedItems.filter(item => action.id !== item.id);
+    //Returns list of saved items without selected item.
+    let newSaveList = state.savedItems.filter(item => action.id !== item.id);
     return {
       ...state,
-      savedItems: new_items
+      savedItems: newSaveList
     };
   }
   if (action.type === WISH_LIST_ADD) {
-    let addedItem = state.items.find(item => item.id === action.id);
-    let existed_item = state.wishlist.find(item => action.id === item.id);
-    if (existed_item) {
+    let wishItem = state.items.find(item => item.id === action.id);
+    let exists = state.wishlist.find(item => action.id === item.id);
+    if (exists) {
       return state;
     } else {
       return {
         ...state,
-        wishlist: [...state.wishlist, addedItem]
+        wishlist: [...state.wishlist, wishItem]
       };
     }
   }
   if (action.type === WISH_LIST_REMOVE) {
-    let new_items = state.wishlist.filter(item => action.id !== item.id);
+    let newWishList = state.wishlist.filter(item => action.id !== item.id);
     return {
       ...state,
-      wishlist: new_items
+      wishlist: newWishList
     };
   } else {
     return state;

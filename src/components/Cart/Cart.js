@@ -7,7 +7,8 @@ import {
   removeItem,
   saveAdd,
   saveAddToCart,
-  saveRemove
+  saveRemove,
+  addItemWish
 } from "./CartFunctions.js";
 import "./Cart.css";
 
@@ -30,11 +31,14 @@ class Cart extends Component {
   clickSaveRemove = id => {
     this.props.clickSaveRemove(id);
   };
+  clickSaveToWish = id => {
+    this.props.clickSaveToWish(id);
+  };
   render() {
     let cart = this.props.items.length ? (
       this.props.items.map(item => {
         return (
-          <div class="shopping-cart" key={item.id}>
+          <div class="shopping-cart-list" key={item.id}>
             <div class="item">
               <div class="image">
                 <img
@@ -48,17 +52,43 @@ class Cart extends Component {
               <div class="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
-                </span>
-                <i className="card-subtitle mb-2 text-muted">
-                  {item.book_desc}
-                </i>
-                <span>
-                  <i>Original Price: ${item.book_price}</i>
+                  <span class="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <i className="card-subtitle mb-2 text-muted">
+                    {item.book_desc}
+                  </i>
+                  <div class="additional-details">
+                    <div class="stats">
+                      <span class="publisher">
+                        Publisher: {item.book_publisher}
+                      </span>
+                      <span class="publisher">
+                        Released: {item.book_releaseDate}
+                      </span>
+                    </div>
+                    <div class="stats">
+                      <span class="publisher">
+                        Books Sold: {item.book_copies_sold}
+                      </span>
+                      <span class="publisher">
+                        Rating: {item.book_rating} of 5
+                      </span>
+                    </div>
+                  </div>
+                  <span class="bio">
+                    <i class="text-muted">Bio: "{item.author_biography}"</i>
+                  </span>
+                  <span class="email">({item.email})</span>
                 </span>
               </div>
               <div class="buttons">
                 <div class="item-price">
-                  <h5>${item.book_price * item.quantity}</h5>
+                  <span>${item.book_price * item.quantity}</span>
+                  <i className="item-each text-muted">
+                    ${item.book_price} each
+                  </i>
                 </div>
                 <div class="quantity">
                   Qty:
@@ -122,7 +152,7 @@ class Cart extends Component {
     let saved = this.props.savedItems.length ? (
       this.props.savedItems.map(item => {
         return (
-          <div class="shopping-cart" key={item.id}>
+          <div class="save-for-later-list" key={item.id}>
             <div class="item">
               <div class="image">
                 <img
@@ -136,6 +166,17 @@ class Cart extends Component {
               <div class="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
+                  <span class="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <span class="publisher">
+                    Publisher: {item.book_publisher}
+                  </span>
+                  <span class="publisher">
+                    Books Sold: {item.book_copies_sold}
+                  </span>
+                  <span class="publisher">Rating: {item.book_rating} of 5</span>
                 </span>
               </div>
               <div class="buttons">
@@ -143,12 +184,21 @@ class Cart extends Component {
                   <h5>${item.book_price}</h5>
                 </div>
                 <span
-                  class="save-button"
+                  class="cart-button"
                   onClick={() => {
                     this.clickSaveToCart(item.id);
                   }}
                 >
                   Add to cart
+                </span>
+                <br></br>
+                <span
+                  class="wishcart-button"
+                  onClick={() => {
+                    this.clickSaveToWish(item.id);
+                  }}
+                >
+                  Add to Wishlist
                 </span>
                 <br></br>
                 <span
@@ -172,10 +222,8 @@ class Cart extends Component {
 
     let subtotal = this.props.items.length ? (
       [
-        <div class="subtotal-price">
-          <b>
-            <h5>Subtotal: ${this.props.total}</h5>
-          </b>
+        <div class="subtotal-price" key="Price">
+          <b>Subtotal: ${this.props.total}</b>
         </div>
       ]
     ) : (
@@ -188,7 +236,7 @@ class Cart extends Component {
           <br></br>
           <h4>Shopping cart ({this.props.items.length})</h4>
           <ul className="current-items">{cart}</ul>
-          <div class="shopping-cart">
+          <div className="shopping-cart">
             <h5>{subtotal}</h5>
           </div>
           <h5>
@@ -228,6 +276,9 @@ const changeItems = dispatch => {
     },
     clickSaveRemove: id => {
       dispatch(saveRemove(id));
+    },
+    clickSaveToWish: id => {
+      dispatch(addItemWish(id));
     }
   };
 };
