@@ -1,7 +1,16 @@
 import React, { Component } from "react";
+
+//////////////////////////////////
 import { connect } from "react-redux";
+//////////////////////////////////
+
 import { Link } from "react-router-dom";
 import { wishRemove } from "./WishlistFunctions";
+
+////////////////////////////////
+import { wishToCart } from "./WishlistFunctions";
+//////////////////////////////
+
 import "./Wishlist.css";
 
 class Wishlist extends Component {
@@ -30,6 +39,9 @@ class Wishlist extends Component {
     // update the state with the new array of options
     this.setState({ options: options });
   }
+  clickWishToCart = id => {
+    this.props.clickWishToCart(id);
+  };
   render() {
     let wishlist = this.props.items.length ? (
       this.props.items.map(item => {
@@ -78,6 +90,21 @@ class Wishlist extends Component {
           >
             Remove
           </span>
+
+          {/*//////////////////////////////////////////////////////////////////////////*/}
+
+          <span
+            class="add-button"
+            onClick={() => {
+              this.state.options.map(number =>
+                this.props.clickWishToCart(number)
+              );
+            }}
+          >
+            Add To Cart
+          </span>
+
+          {/*/////////////////////////////////////////////////////////////*/}
         </div>
       </div>
     );
@@ -94,7 +121,14 @@ const changeItems = dispatch => {
   return {
     clickRemove: id => {
       dispatch(wishRemove(id));
+    },
+    ////////////////////////
+    ////////////////////////
+    clickWishToCart: id => {
+      dispatch(wishToCart(id));
     }
+    ///////////////////////
+    //////////////////////
   };
 };
 
