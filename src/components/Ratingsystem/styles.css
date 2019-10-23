@@ -31,7 +31,8 @@
   background-color: Khaki;
 }
 /*Board css statements cause problems in other parts of the site.
-This p will affect all other <p>(s) everywhere.
+This p will affect all other <p>(s) everywhere. 
+Try something like .star p {} to affect things only within a that className div.
 p {
     flex-basis: 100%;
     text-align: center;

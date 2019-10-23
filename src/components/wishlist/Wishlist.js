@@ -60,7 +60,7 @@ class Wishlist extends Component {
                 value={item.id}
                 onChange={this.onChange.bind(this)}
               />{" "}
-              <name htmlFor={item.id}>{item.book_name}</name>
+              <span htmlFor={item.id}>{item.book_name}</span>
             </div>
           </div>
         );
@@ -83,7 +83,7 @@ class Wishlist extends Component {
           <h4>Wishlist ({this.props.items.length})</h4>
           <ul className="wishlist">{wishlist}</ul>
           <span
-            class="del-button"
+            className="del-button"
             onClick={() => {
               this.state.options.map(number => this.props.clickRemove(number));
             }}
@@ -94,7 +94,7 @@ class Wishlist extends Component {
           {/*//////////////////////////////////////////////////////////////////////////*/}
 
           <span
-            class="add-button"
+            className="add-button"
             onClick={() => {
               this.state.options.map(number =>
                 this.props.clickWishToCart(number)

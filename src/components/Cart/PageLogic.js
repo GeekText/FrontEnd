@@ -63,11 +63,10 @@ function dbNotLoaded() {
 }
 
 const PageLogic = (state = homeItems, action) => {
-  console.log("Action occurred");
+  console.log("Last Action: ", action.type);
   if (!Array.isArray(state.items) || !state.items.length) {
-    console.log("DB NOT LOADED");
     state.items = dbNotLoaded();
-    console.log("Length: %d", homeItems.items.length);
+    console.log("PageLogic DB NOT LOADED: Length %d", homeItems.items.length);
   }
   //Adds item to detail page
   if (action.type === DETAILS) {
@@ -183,7 +182,11 @@ const PageLogic = (state = homeItems, action) => {
     let newTotal =
       (state.total * 100 + cartItem.book_price * 100 * cartItem.quantity) / 100;
     if (exists) {
-      return state;
+      let cartList = state.addedItems.filter(item => action.id !== item.id);
+      return {
+        ...state,
+        addedItems: cartList
+      };
     } else {
       return {
         ...state,

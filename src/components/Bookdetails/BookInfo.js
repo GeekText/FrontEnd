@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Ratingsystem } from '../Ratingsystem/Ratingsystem'
+import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 
 class BookInfo extends Component {
   clickRemove = id => {
@@ -31,11 +31,10 @@ class BookInfo extends Component {
             <Ratingsystem></Ratingsystem>
 
             <Link to="/#Items">
-              <a href="#cart" class="links" type="button">
+              <span href="#cart" className="links" type="button">
                 Back to Home Page
-              </a>
+              </span>
             </Link>
-            
           </div>
         );
       })
@@ -43,9 +42,9 @@ class BookInfo extends Component {
       <div>
         <p>The item you're looking for is no longer here.</p>
         <Link to="/#Items">
-          <a href="#cart" class="links" type="button">
+          <span href="#cart" className="links" type="button">
             Shop Here
-          </a>
+          </span>
         </Link>
       </div>
     );

@@ -5,8 +5,8 @@ class Login extends React.Component {
   render() {
     return (
       <div className="container">
-        <div class="form-header">
-          <h4 class="title">Welcome to the Account Login Page</h4>
+        <div className="form-header">
+          <h4 className="title">Welcome to the Account Login Page</h4>
         </div>
         Enter your existing login credentials in the fields below to proceed to
         proceed: <br /> <br />
