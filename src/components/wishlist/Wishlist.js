@@ -1,16 +1,8 @@
 import React, { Component } from "react";
-
-//////////////////////////////////
 import { connect } from "react-redux";
-//////////////////////////////////
-
 import { Link } from "react-router-dom";
 import { wishRemove } from "./WishlistFunctions";
-
-////////////////////////////////
 import { wishToCart } from "./WishlistFunctions";
-//////////////////////////////
-
 import "./Wishlist.css";
 
 class Wishlist extends Component {
@@ -18,12 +10,28 @@ class Wishlist extends Component {
     super();
     // initialize your options array on your state
     this.state = {
-      options: []
+      wishlist: [
+        {
+          id: 0,
+          options: [],
+          wishlistName: "Default"
+        },
+        {
+          id: 1,
+          options: [],
+          wishlistName: "One"
+        },
+        {
+          id: 2,
+          options: [],
+          wishlistName: "Two"
+        }
+      ]
     };
   }
   onChange(e) {
     // current array of options
-    const options = this.state.options;
+    const options = this.state.wishlist[0].options;
     let index;
 
     // check if the check box is checked or unchecked
@@ -42,6 +50,18 @@ class Wishlist extends Component {
   clickWishToCart = id => {
     this.props.clickWishToCart(id);
   };
+
+  mySubmitHandler = event => {
+    event.preventDefault();
+    const newList = this.state.wishlist.slice(); //copy the array
+    newList[0].wishlistName = this.state.wishlistName; //execute the manipulations
+    this.setState({ wishlist: newList });
+    alert("You are submitting " + this.state.wishlistName);
+  };
+  myChangeHandler = event => {
+    this.setState({ wishlistName: event.target.value });
+  };
+
   render() {
     let wishlist = this.props.items.length ? (
       this.props.items.map(item => {
@@ -80,31 +100,53 @@ class Wishlist extends Component {
       <div className="container">
         <div className="#cart">
           <br></br>
-          <h4>Wishlist ({this.props.items.length})</h4>
+          <h4>
+            {this.state.wishlist[0].wishlistName} ({this.props.items.length})
+          </h4>
+          <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
+            <input
+              type="text"
+              name="title"
+              style={{ flex: "10", padding: "5px" }}
+              placeholder="Name your wishlist"
+              onChange={this.myChangeHandler}
+            />
+
+            <input
+              type="submit"
+              value="submit"
+              className="btn"
+              style={{ flex: "1" }}
+            />
+          </form>
           <ul className="wishlist">{wishlist}</ul>
           <span
             className="del-button"
             onClick={() => {
-              this.state.options.map(number => this.props.clickRemove(number));
+              this.state.wishlist[0].options.map(number =>
+                this.props.clickRemove(number)
+              );
             }}
           >
             Remove
           </span>
 
-          {/*//////////////////////////////////////////////////////////////////////////*/}
-
           <span
             className="add-button"
             onClick={() => {
-              this.state.options.map(number =>
+              this.state.wishlist.options.map(number =>
                 this.props.clickWishToCart(number)
               );
             }}
           >
             Add To Cart
           </span>
-
-          {/*/////////////////////////////////////////////////////////////*/}
+          {/* <select>
+  <option value="grapefruit">Grapefruit</option>
+  <option value="lime">Lime</option>
+  <option selected value="coconut">Coconut</option>
+  <option value="mango">Mango</option>
+</select> */}
         </div>
       </div>
     );
@@ -122,13 +164,9 @@ const changeItems = dispatch => {
     clickRemove: id => {
       dispatch(wishRemove(id));
     },
-    ////////////////////////
-    ////////////////////////
     clickWishToCart: id => {
       dispatch(wishToCart(id));
     }
-    ///////////////////////
-    //////////////////////
   };
 };
 
