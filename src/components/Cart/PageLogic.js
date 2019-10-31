@@ -27,8 +27,11 @@ var homeItems = {
   addedItems: [],
   addedItemID: [],
   savedItems: [],
-  wishlist: [],
-  wishlistName: "Default",
+  wishlist: {
+    items: [],
+    options: [],
+    wishlistName: "Default"
+  },
   total: 0
   //////////////////////////
 };
@@ -211,13 +214,16 @@ const PageLogic = (state = homeItems, action) => {
   }
   if (action.type === WISH_LIST_ADD) {
     let wishItem = state.items.find(item => item.id === action.id);
-    let exists = state.wishlist.find(item => action.id === item.id);
+    let exists = state.wishlist.items.find(item => action.id === item.id);
     if (exists) {
       return state;
     } else {
       return {
         ...state,
-        wishlist: [...state.wishlist, wishItem]
+        wishlist: {
+          ...state.wishlist,
+          items: [...state.wishlist.items, wishItem]
+        }
       };
     }
   }
@@ -226,17 +232,28 @@ const PageLogic = (state = homeItems, action) => {
   if (action.type === WISH_LIST_RENAME) {
     return {
       ...state,
-      wishlistName: action.event
+      wishlist: {
+        ...state.wishlist,
+        wishlistName: action.event
+      }
     };
   }
   //////////////////////////////////////
   /////////////////////////////////////
 
   if (action.type === WISH_LIST_REMOVE) {
-    let newWishList = state.wishlist.filter(item => action.id !== item.id);
+    console.log("Before change: ", state.wishlist.options);
+    let newWishList = state.wishlist.items.filter(
+      item => action.id !== item.id
+    );
+    console.log("After change: ", state.wishlist.options);
     return {
       ...state,
-      wishlist: newWishList
+      wishlist: {
+        ...state.wishlist,
+        items: newWishList,
+        options: []
+      }
     };
   } else {
     return state;

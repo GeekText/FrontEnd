@@ -17,21 +17,23 @@ class Wishlist extends Component {
   }
   onChange(e) {
     // current array of options
-    const options = this.state.wishlist.options;
+    const options = this.props.wishlist.options;
     let index;
 
     // check if the check box is checked or unchecked
     if (e.target.checked) {
       // add the numerical value of the checkbox to options array
       options.push(+e.target.value);
+      console.log(options);
     } else {
       // or remove the value from the unchecked checkbox from the array
       index = options.indexOf(+e.target.value);
       options.splice(index, 1);
+      console.log(options);
     }
 
     // update the state with the new array of options
-    this.setState({ optnions: options });
+    //this.setState({ options: options });
   }
   clickWishToCart = id => {
     this.props.clickWishToCart(id);
@@ -39,10 +41,6 @@ class Wishlist extends Component {
 
   mySubmitHandler = event => {
     event.preventDefault();
-    //const newList = this.state.wishlist; //copy the array
-    //newList.wishlistName = this.state.wishlistName; //execute the manipulations
-    //this.setState({ wishlist: newList });
-    //alert("You are submitting " + this.state.wishlist.wishlistName);
     this.props.mySubmitHandler(this.state.wishlistName);
   };
 
@@ -113,7 +111,7 @@ class Wishlist extends Component {
         <div className="#cart">
           <br></br>
           <h4>
-            {this.props.wishlistName} ({this.props.items.length})
+            {this.props.currentName} ({this.props.items.length})
           </h4>
           <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
             <input
@@ -136,7 +134,7 @@ class Wishlist extends Component {
           <span
             className="wish-del-button"
             onClick={() => {
-              this.state.wishlist.options.map(number =>
+              this.props.wishlist.options.map(number =>
                 this.props.clickRemove(number)
               );
             }}
@@ -147,11 +145,8 @@ class Wishlist extends Component {
           <span
             className="add-button"
             onClick={() => {
-              this.state.wishlist.options.map(
-                number => (
-                  this.props.clickWishToCart(number),
-                  this.props.clickRemove(number)
-                )
+              this.props.wishlist.options.map(number =>
+                this.props.clickWishToCart(number)
               );
             }}
           >
@@ -187,8 +182,9 @@ class Wishlist extends Component {
 
 const currentItems = state => {
   return {
-    items: state.wishlist,
-    wishlistName: state.wishlistName
+    items: state.wishlist.items,
+    currentName: state.wishlist.wishlistName,
+    wishlist: state.wishlist
   };
 };
 
