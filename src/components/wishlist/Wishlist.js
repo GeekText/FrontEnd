@@ -1,37 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { wishRemove } from "./WishlistFunctions";
-import { wishToCart } from "./WishlistFunctions";
+import { wishRemove, wishToCart, changeWishName } from "./WishlistFunctions.js";
 import "./Wishlist.css";
 
 class Wishlist extends Component {
-  constructor() {
-    super();
-    // initialize your options array on your state
-    this.state = {
-      wishlist: [
-        {
-          id: 0,
-          options: [],
-          wishlistName: "Default"
-        },
-        {
-          id: 1,
-          options: [],
-          wishlistName: "One"
-        },
-        {
-          id: 2,
-          options: [],
-          wishlistName: "Two"
-        }
-      ]
-    };
+  constructor(props) {
+    super(props);
+    this.state = { showPopup: false };
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
   }
   onChange(e) {
     // current array of options
-    const options = this.state.wishlist[0].options;
+    const options = this.state.wishlist.options;
     let index;
 
     // check if the check box is checked or unchecked
@@ -45,7 +31,7 @@ class Wishlist extends Component {
     }
 
     // update the state with the new array of options
-    this.setState({ options: options });
+    this.setState({ optnions: options });
   }
   clickWishToCart = id => {
     this.props.clickWishToCart(id);
@@ -53,17 +39,43 @@ class Wishlist extends Component {
 
   mySubmitHandler = event => {
     event.preventDefault();
-    const newList = this.state.wishlist.slice(); //copy the array
-    newList[0].wishlistName = this.state.wishlistName; //execute the manipulations
-    this.setState({ wishlist: newList });
-    alert("You are submitting " + this.state.wishlistName);
+    //const newList = this.state.wishlist; //copy the array
+    //newList.wishlistName = this.state.wishlistName; //execute the manipulations
+    //this.setState({ wishlist: newList });
+    //alert("You are submitting " + this.state.wishlist.wishlistName);
+    this.props.mySubmitHandler(this.state.wishlistName);
   };
+
   myChangeHandler = event => {
     this.setState({ wishlistName: event.target.value });
   };
 
+  clickRemove = id => {
+    this.props.clickRemove(id);
+  };
+  clickAdd = id => {
+    this.props.clickAdd(id);
+  };
+  clickSubtr = id => {
+    this.props.clickSubtr(id);
+  };
+  clickSave = id => {
+    let cart = this.props.items.length;
+    this.props.clickSave(id);
+    if (cart === this.props.items.length) {
+    }
+  };
+  clickSaveToCart = id => {
+    this.props.clickSaveToCart(id);
+  };
+  clickSaveRemove = id => {
+    this.props.clickSaveRemove(id);
+  };
+  clickSaveToWish = id => {
+    this.props.clickSaveToWish(id);
+  };
   render() {
-    let wishlist = this.props.items.length ? (
+    let currentWishlist = this.props.items.length ? (
       this.props.items.map(item => {
         return (
           <div
@@ -101,12 +113,12 @@ class Wishlist extends Component {
         <div className="#cart">
           <br></br>
           <h4>
-            {this.state.wishlist[0].wishlistName} ({this.props.items.length})
+            {this.props.wishlistName} ({this.props.items.length})
           </h4>
           <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
             <input
               type="text"
-              name="title"
+              name="wishlistName"
               style={{ flex: "10", padding: "5px" }}
               placeholder="Name your wishlist"
               onChange={this.myChangeHandler}
@@ -119,11 +131,12 @@ class Wishlist extends Component {
               style={{ flex: "1" }}
             />
           </form>
-          <ul className="wishlist">{wishlist}</ul>
+
+          <ul className="wishlist">{currentWishlist}</ul>
           <span
-            className="del-button"
+            className="wish-del-button"
             onClick={() => {
-              this.state.wishlist[0].options.map(number =>
+              this.state.wishlist.options.map(number =>
                 this.props.clickRemove(number)
               );
             }}
@@ -134,8 +147,11 @@ class Wishlist extends Component {
           <span
             className="add-button"
             onClick={() => {
-              this.state.wishlist.options.map(number =>
-                this.props.clickWishToCart(number)
+              this.state.wishlist.options.map(
+                number => (
+                  this.props.clickWishToCart(number),
+                  this.props.clickRemove(number)
+                )
               );
             }}
           >
@@ -148,6 +164,22 @@ class Wishlist extends Component {
   <option value="mango">Mango</option>
 </select> */}
         </div>
+        <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
+          <input
+            type="text"
+            name="wishlistName"
+            style={{ flex: "10", padding: "5px" }}
+            placeholder="Name your wishlist"
+            onChange={this.myChangeHandler}
+          />
+
+          <input
+            type="submit"
+            value="Create New List"
+            className="btn"
+            style={{ flex: "1" }}
+          />
+        </form>
       </div>
     );
   }
@@ -155,7 +187,8 @@ class Wishlist extends Component {
 
 const currentItems = state => {
   return {
-    items: state.wishlist
+    items: state.wishlist,
+    wishlistName: state.wishlistName
   };
 };
 
@@ -166,7 +199,14 @@ const changeItems = dispatch => {
     },
     clickWishToCart: id => {
       dispatch(wishToCart(id));
+    },
+    ///////////////////
+    /////////////////////
+    mySubmitHandler: event => {
+      dispatch(changeWishName(event));
     }
+    /////////////////////
+    /////////////////////
   };
 };
 

@@ -59,8 +59,11 @@ class home extends React.Component {
     console.log("Getting DB data");
     try {
       const response = await axios.get(url);
-      this.setState({ bookdetails: response.data });
-      console.log("Got Data");
+      console.log("Incoming data " + response.data);
+      if (response.data != null) {
+        this.setState({ bookdetails: response.data });
+      }
+      console.log("Current state " + this.state.bookdetails);
     } catch (error) {
       console.error(error);
     }

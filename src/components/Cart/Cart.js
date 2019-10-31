@@ -10,9 +10,21 @@ import {
   saveRemove,
   addItemWish
 } from "./CartFunctions.js";
+import Popup from "./Popup";
 import "./Cart.css";
 
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showPopup: false };
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
+
   clickRemove = id => {
     this.props.clickRemove(id);
   };
@@ -23,7 +35,10 @@ class Cart extends Component {
     this.props.clickSubtr(id);
   };
   clickSave = id => {
+    let cart = this.props.items.length;
     this.props.clickSave(id);
+    if (cart === this.props.items.length) {
+    }
   };
   clickSaveToCart = id => {
     this.props.clickSaveToCart(id);
@@ -124,6 +139,12 @@ class Cart extends Component {
                 >
                   Save for later
                 </span>
+                {this.state.showPopup ? (
+                  <Popup
+                    text='Click "Close Button" to hide popup'
+                    closePopup={this.togglePopup.bind(this)}
+                  />
+                ) : null}
                 <br></br>
                 <span
                   className="del-button"
