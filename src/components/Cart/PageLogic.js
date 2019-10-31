@@ -242,11 +242,9 @@ const PageLogic = (state = homeItems, action) => {
   /////////////////////////////////////
 
   if (action.type === WISH_LIST_REMOVE) {
-    console.log("Before change: ", state.wishlist.options);
     let newWishList = state.wishlist.items.filter(
       item => action.id !== item.id
     );
-    console.log("After change: ", state.wishlist.options);
     return {
       ...state,
       wishlist: {
