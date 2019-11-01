@@ -85,6 +85,7 @@ class Filter extends Component {
               </label>
               <div className="col-sm-10">
                 <select className="form-control" id="exampleFormControlSelect1">
+
                   <option>Author Name here</option>
                 </select>
               </div>

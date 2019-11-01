@@ -73,7 +73,9 @@ class home extends React.Component {
     return (
       <div className="App" style={this.styling}>
         <h4>Books for Sale</h4>
-        <Filter></Filter>
+        <Filter
+            bookdetails={this.state.bookdetails}
+        />
         <Bookdetails
           key={this.state.bookdetails}
           bookdetails={this.state.bookdetails}
