@@ -9,36 +9,36 @@ class Filter extends Component {
             <h3>Sort by</h3>
             <div className="form-check form-check-inline">
               <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="defaultCheck1"
-              ></input>
+              className="form-check-input"
+              type="checkbox"
+              value=""
+              id="defaultCheck1"
+              />
               <label className="form-check-label" htmlFor="defaultCheck1">
                 Genre
               </label>
 
               <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="defaultCheck2"
-              ></input>
+              className="form-check-input"
+              type="checkbox"
+              value=""
+              id="defaultCheck2"
+              />
               <label className="form-check-label" htmlFor="defaultCheck2">
                 Top sellers
               </label>
 
               <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="defaultCheck3"
-              ></input>
+              className="form-check-input"
+              type="checkbox"
+              value=""
+              id="defaultCheck3"
+              />
               <label className="form-check-label" htmlFor="defaultCheck3">
                 Book Title
               </label>
             </div>
-            <br></br>
+            <br/>
 
             <div className="form-group row">
               <label
@@ -111,16 +111,16 @@ class Filter extends Component {
               <div className="input-group-prepend">
                 <div className="input-group-text">
                   <input
-                    type="checkbox"
-                    aria-label="Checkbox for following text input"
-                  ></input>
+                  type="checkbox"
+                  aria-label="Checkbox for following text input"
+                  />
                 </div>
               </div>
               <input
-                type="text"
-                className="form-control"
-                placeholder="To sort by date put year here"
-              ></input>
+              type="text"
+              className="form-control"
+              placeholder="To sort by date put year here"
+              />
             </div>
           </div>
         </div>
