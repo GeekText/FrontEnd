@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import AuthorNames from "./AuthorNames";
 
 class Filter extends Component {
   render() {
@@ -85,8 +86,8 @@ class Filter extends Component {
               </label>
               <div className="col-sm-10">
                 <select className="form-control" id="exampleFormControlSelect1">
-
-                  <option>Author Name here</option>
+                  {/*Gets all the author's name and displays them*/}
+                  <AuthorNames bookdetails={this.props.bookdetails}/>
                 </select>
               </div>
             </div>
