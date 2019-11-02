@@ -22,6 +22,17 @@ const url = "https://geek-text-backend.herokuapp.com/api";
  *wishlist: [],       - Stores items in "wishlist" list
  *total: 0            - Subtotal of items on cart page
  */
+
+const MongoClient = require("mongodb").MongoClient;
+const uri =
+  "mongodb+srv://ehuez002@fiu.edu:WMCEVe9w$jEMZUb@cluster0-2eofd.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true });
+/*client.connect(err => {
+  //const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});*/
+
 var homeItems = {
   items: book_data(),
   addedItems: [],
