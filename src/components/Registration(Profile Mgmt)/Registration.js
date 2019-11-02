@@ -2,6 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Profile.css";
 class Registration extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      Password: "",
+      cc_number: ""
+    };
+    this.updatePassword = this.updatePassword.bind(this);
+    this.updateCC = this.updateCC.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   check_entries(input, cc_num) {
     /* var loginid = document.getElementByID("LoginID");
     var pw = document.getElementByID("Password");
@@ -10,27 +21,38 @@ class Registration extends React.Component {
     var nickname = document.getElementByID("Nickname");
     var email = document.myForm.email.value // document.getElementByID("email");
     var addrLine1 = document.getElementByID("AddressLine1");
-    var city = document.getElementByID("City");
-    var state = document.getElementByID("State");
+    var city = document.getElementByID("City");!cc_num.value.match(desired_ccnum)
+    var state = document.getElementByID("State");!input.value.match(desired_pswd)
     var zip = document.getElementByID("ZIPCode"); */
     var desired_pswd = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-    if (!input.value.match(desired_pswd)) {
+    if (!desired_pswd.test(input.value)) {
       alert("Password does not meet criteria! Try again.");
       return false;
     }
     var desired_ccnum = /^(?=.*[0-9])/;
-    if (!cc_num.value.match(desired_ccnum)) {
+    if (!desired_ccnum.test(cc_num.value)) {
       alert("Invalid credit card number. Should only contain numbers!");
       return false;
     }
 
     // insert form validation here
   }
+  updatePassword(event) {
+    this.setState({ Password: event.target.value });
+  }
+  updateCC(event) {
+    this.setState({ cc_number: event.target.value });
+  }
+  handleSubmit() {
+    console.log("PW: %s \nCC: %s", this.state.Password, this.state.cc_number);
+    this.check_entries(this.state.Password, this.state.cc_number);
+  }
+
   render() {
     return (
       <div className="container">
-        <div class="form">
-          <form name="form1" onsubmit="return check_entries(input, cc_num)">
+        <div className="form">
+          <form name="form1">
             Welcome to the Account Creation page. Here, you will create your
             account. <br />
             <br />
@@ -40,24 +62,31 @@ class Registration extends React.Component {
               </span>
             </Link>{" "}
             Enter the following to proceed: <br /> <br />
-            <div class="form-header">
-              <h4 class="title">Login Credentials</h4>
+            <div className="form-header">
+              <h4 className="title">Login Credentials</h4>
             </div>
             Login ID: <input type="text" id="LoginID" required /> <br />
-            Password: <input type="text" id="Password" required /> <br />
+            Password:{" "}
+            <input
+              type="text"
+              onChange={this.updatePassword}
+              id="Password"
+              required
+            />{" "}
+            <br />
             (Password must be 6-20 characters, and contain at least one
             lowercase letter, uppercase letter, and a number 0-9)
             <br />
             {/* <!--Confirm Password: <input type="text" id="ConfirmPassword" required/> <br/> </br/>--> */}
-            <div class="form-header">
-              <h4 class="title">Personal Information</h4>
+            <div className="form-header">
+              <h4 className="title">Personal Information</h4>
             </div>
             Name: <input type="text" id="Name" required /> <br />
             Nickname (for commenting and rating):{" "}
             <input type="text" id="Nickname" required /> <br />
             E-mail Address: <input type="text" id="email" required /> <br />
-            <div class="form-header">
-              <h4 class="title">Shipping/Home Address</h4>
+            <div className="form-header">
+              <h4 className="title">Shipping/Home Address</h4>
               (You will be able to add more addresses once your account has been
               created) <br />
             </div>
@@ -67,16 +96,22 @@ class Registration extends React.Component {
             State (2 letter-abbreviation):{" "}
             <input type="text" id="State" required /> <br />
             ZIP Code: <input type="text" id="ZIPCode" required /> <br /> <br />
-            <div class="form-header">
-              <h4 class="title">Credit Card Detail</h4>
+            <div className="form-header">
+              <h4 className="title">Credit Card Detail</h4>
               (You will be able to add more credit cards once your account has
               been created) <br />
             </div>
             Card # (no spaces or dashes):{" "}
-            <input type="text" id="cc_number" required /> <br />
+            <input
+              type="text"
+              onChange={this.updateCC}
+              id="cc_number"
+              required
+            />{" "}
+            <br />
             Exp Date (MM/YYYY):
-            <div class="date-field">
-              <div class="month">
+            <div className="date-field">
+              <div className="month">
                 Month{" "}
                 <select name="Month">
                   <option value="january">01</option>
@@ -93,7 +128,7 @@ class Registration extends React.Component {
                   <option value="december">12</option>
                 </select>
               </div>
-              <div class="year">
+              <div className="year">
                 Year{" "}
                 <select name="Year">
                   <option value="2019">2019</option>
@@ -112,7 +147,7 @@ class Registration extends React.Component {
               className="submit-button"
               type="submit"
               value="Submit"
-              onclick="check_entries(document.form1.Password, document.form1.cc_number);"
+              onClick={this.handleSubmit}
             />
           </form>
         </div>

@@ -8,6 +8,9 @@ export const SAVE_ADD_CART = "SAVE_ADD_CART";
 export const SAVE_REMOVE = "SAVE_REMOVE";
 export const WISH_LIST_ADD = "WISH_LIST_ADD";
 export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
+////////////////////////////////////////////////
+export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
+/////////////////////////////////////////////
 
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
@@ -24,8 +27,13 @@ var homeItems = {
   addedItems: [],
   addedItemID: [],
   savedItems: [],
-  wishlist: [],
+  wishlist: {
+    items: [],
+    options: [],
+    wishlistName: "Default"
+  },
   total: 0
+  //////////////////////////
 };
 async function book_data() {
   try {
@@ -63,8 +71,10 @@ function dbNotLoaded() {
 }
 
 const PageLogic = (state = homeItems, action) => {
+  console.log("Last Action: ", action.type);
   if (!Array.isArray(state.items) || !state.items.length) {
     state.items = dbNotLoaded();
+    console.log("PageLogic DB NOT LOADED: Length %d", homeItems.items.length);
   }
   //Adds item to detail page
   if (action.type === DETAILS) {
@@ -111,7 +121,7 @@ const PageLogic = (state = homeItems, action) => {
     //Counts for floating point problem
     let newTotal =
       (state.total * 100 -
-        removedItem.book_price * 100 * (removedItem.quantity * 100)) /
+        removedItem.book_price * 100 * removedItem.quantity) /
       100;
     return {
       ...state,
@@ -159,9 +169,7 @@ const PageLogic = (state = homeItems, action) => {
     let cartItem = state.addedItems.find(item => action.id === item.id);
     //Counts for floating point problem
     let newTotal =
-      (state.total * 100 -
-        cartItem.book_price * 100 * (cartItem.quantity * 100)) /
-      100;
+      (state.total * 100 - cartItem.book_price * 100 * cartItem.quantity) / 100;
     if (exists) {
       return state;
     } else {
@@ -180,11 +188,13 @@ const PageLogic = (state = homeItems, action) => {
     //List of cart list without selected item
     let cartItem = state.savedItems.find(item => action.id === item.id);
     let newTotal =
-      (state.total * 100 +
-        cartItem.book_price * 100 * (cartItem.quantity * 100)) /
-      100;
+      (state.total * 100 + cartItem.book_price * 100 * cartItem.quantity) / 100;
     if (exists) {
-      return state;
+      let cartList = state.addedItems.filter(item => action.id !== item.id);
+      return {
+        ...state,
+        addedItems: cartList
+      };
     } else {
       return {
         ...state,
@@ -204,21 +214,44 @@ const PageLogic = (state = homeItems, action) => {
   }
   if (action.type === WISH_LIST_ADD) {
     let wishItem = state.items.find(item => item.id === action.id);
-    let exists = state.wishlist.find(item => action.id === item.id);
+    let exists = state.wishlist.items.find(item => action.id === item.id);
     if (exists) {
       return state;
     } else {
       return {
         ...state,
-        wishlist: [...state.wishlist, wishItem]
+        wishlist: {
+          ...state.wishlist,
+          items: [...state.wishlist.items, wishItem]
+        }
       };
     }
   }
-  if (action.type === WISH_LIST_REMOVE) {
-    let newWishList = state.wishlist.filter(item => action.id !== item.id);
+  ////////////////////////////////////////////
+  //////////////////////////////////////////////
+  if (action.type === WISH_LIST_RENAME) {
     return {
       ...state,
-      wishlist: newWishList
+      wishlist: {
+        ...state.wishlist,
+        wishlistName: action.event
+      }
+    };
+  }
+  //////////////////////////////////////
+  /////////////////////////////////////
+
+  if (action.type === WISH_LIST_REMOVE) {
+    let newWishList = state.wishlist.items.filter(
+      item => action.id !== item.id
+    );
+    return {
+      ...state,
+      wishlist: {
+        ...state.wishlist,
+        items: newWishList,
+        options: []
+      }
     };
   } else {
     return state;

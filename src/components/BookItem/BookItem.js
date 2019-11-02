@@ -20,7 +20,7 @@ export class Bookitem extends Component {
   };
   render() {
     return (
-      <div className="card">
+      <div className="container">
         <div className="card-body">
           <span
             className="clickAddButton"
@@ -29,7 +29,7 @@ export class Bookitem extends Component {
             }}
           >
             <Link to="/details">
-              <a href="#tile" class="tile">
+              <span href="#tile" className="tile">
                 <h5 className="card-title">{this.props.book.book_name}</h5>
                 <img
                   src={this.props.book.book_cover}
@@ -42,32 +42,32 @@ export class Bookitem extends Component {
                 <h6 className="card-subtitle mb-2 text-muted">
                   Author Bio: {this.props.book.author_biography}
                 </h6>
-                <h7 className="card-subtitle mb-2 text-muted">
+                <span className="card-subtitle mb-2 text-muted">
                   Publish Date: {this.props.book.book_publishing_info + " "}
-                </h7>
-                <h8 className="card-subtitle mb-2 text-muted">
+                </span>
+                <span className="card-subtitle mb-2 text-muted">
                   Release Date:{this.props.book.book_releaseDate}{" "}
-                </h8>
+                </span>
                 <br></br>
-                <h9 className="card-subtitle mb-2 text-muted">
+                <span className="card-subtitle mb-2 text-muted">
                   Genre: {this.props.book.book_genre}{" "}
-                </h9>
+                </span>
                 <br></br>
-                <h9 class name="card-subtitle mb-2 text-muted">
+                <span className="card-subtitle mb-2 text-muted">
                   Rating: {this.props.book.book_rating}
-                </h9>
+                </span>
                 <br></br>
-                <h10 className="card-text">
+                <span className="card-text">
                   {" "}
                   Publisher: {this.props.book.book_publisher}
-                </h10>
+                </span>
                 <p className="card-text">
                   Author Name:{" "}
                   {this.props.book.author_first_name +
                     " " +
                     this.props.book.author_last_name}
                 </p>
-              </a>
+              </span>
             </Link>
           </span>
           <i>Price: ${this.props.book.book_price} </i>

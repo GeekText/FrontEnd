@@ -7,11 +7,24 @@ import {
   removeItem,
   saveAdd,
   saveAddToCart,
-  saveRemove
+  saveRemove,
+  addItemWish
 } from "./CartFunctions.js";
+import Popup from "./Popup";
 import "./Cart.css";
 
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showPopup: false };
+  }
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
+
   clickRemove = id => {
     this.props.clickRemove(id);
   };
@@ -22,7 +35,10 @@ class Cart extends Component {
     this.props.clickSubtr(id);
   };
   clickSave = id => {
+    let cart = this.props.items.length;
     this.props.clickSave(id);
+    if (cart === this.props.items.length) {
+    }
   };
   clickSaveToCart = id => {
     this.props.clickSaveToCart(id);
@@ -30,13 +46,16 @@ class Cart extends Component {
   clickSaveRemove = id => {
     this.props.clickSaveRemove(id);
   };
+  clickSaveToWish = id => {
+    this.props.clickSaveToWish(id);
+  };
   render() {
     let cart = this.props.items.length ? (
       this.props.items.map(item => {
         return (
-          <div class="shopping-cart-list" key={item.id}>
-            <div class="item">
-              <div class="image">
+          <div className="shopping-cart-list" key={item.id}>
+            <div className="item">
+              <div className="image">
                 <img
                   src={item.book_cover}
                   alt="Failed to load: book_cover"
@@ -45,26 +64,52 @@ class Cart extends Component {
                   className="image"
                 />
               </div>
-              <div class="description">
+              <div className="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
-                </span>
-                <i className="card-subtitle mb-2 text-muted">
-                  {item.book_desc}
-                </i>
-                <span>
-                  <i>Original Price: ${item.book_price}</i>
+                  <span className="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <i className="card-subtitle mb-2 text-muted">
+                    {item.book_desc}
+                  </i>
+                  <div className="additional-details">
+                    <div className="stats">
+                      <span className="publisher">
+                        Publisher: {item.book_publisher}
+                      </span>
+                      <span className="publisher">
+                        Released: {item.book_releaseDate}
+                      </span>
+                    </div>
+                    <div className="stats">
+                      <span className="publisher">
+                        Books Sold: {item.book_copies_sold}
+                      </span>
+                      <span className="publisher">
+                        Rating: {item.book_rating} of 5
+                      </span>
+                    </div>
+                  </div>
+                  <span className="bio">
+                    <i className="text-muted">Bio: "{item.author_biography}"</i>
+                  </span>
+                  <span className="email">({item.email})</span>
                 </span>
               </div>
-              <div class="buttons">
-                <div class="item-price">
-                  <h5>${item.book_price * item.quantity}</h5>
+              <div className="buttons">
+                <div className="item-price">
+                  <span>${item.book_price * item.quantity}</span>
+                  <i className="item-each text-muted">
+                    ${item.book_price} each
+                  </i>
                 </div>
-                <div class="quantity">
+                <div className="quantity">
                   Qty:
                   <br></br>
                   <button
-                    class="qty-button"
+                    className="qty-button"
                     type="button"
                     name="button"
                     onClick={() => {
@@ -75,7 +120,7 @@ class Cart extends Component {
                   </button>
                   <b> {item.quantity} </b>
                   <button
-                    class="qty-button"
+                    className="qty-button"
                     type="button"
                     name="button"
                     onClick={() => {
@@ -87,16 +132,22 @@ class Cart extends Component {
                 </div>
                 <br></br>
                 <span
-                  class="save-button"
+                  className="save-button"
                   onClick={() => {
                     this.clickSave(item.id);
                   }}
                 >
                   Save for later
                 </span>
+                {this.state.showPopup ? (
+                  <Popup
+                    text='Click "Close Button" to hide popup'
+                    closePopup={this.togglePopup.bind(this)}
+                  />
+                ) : null}
                 <br></br>
                 <span
-                  class="del-button"
+                  className="del-button"
                   onClick={() => {
                     this.clickRemove(item.id);
                   }}
@@ -122,9 +173,9 @@ class Cart extends Component {
     let saved = this.props.savedItems.length ? (
       this.props.savedItems.map(item => {
         return (
-          <div class="save-for-later-list" key={item.id}>
-            <div class="item">
-              <div class="image">
+          <div className="save-for-later-list" key={item.id}>
+            <div className="item">
+              <div className="image">
                 <img
                   src={item.book_cover}
                   alt="Failed to load: book_cover"
@@ -133,17 +184,30 @@ class Cart extends Component {
                   className="image"
                 />
               </div>
-              <div class="description">
+              <div className="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
+                  <span className="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <span className="publisher">
+                    Publisher: {item.book_publisher}
+                  </span>
+                  <span className="publisher">
+                    Books Sold: {item.book_copies_sold}
+                  </span>
+                  <span className="publisher">
+                    Rating: {item.book_rating} of 5
+                  </span>
                 </span>
               </div>
-              <div class="buttons">
-                <div class="item-price">
+              <div className="buttons">
+                <div className="item-price">
                   <h5>${item.book_price}</h5>
                 </div>
                 <span
-                  class="save-button"
+                  className="cart-button"
                   onClick={() => {
                     this.clickSaveToCart(item.id);
                   }}
@@ -152,7 +216,16 @@ class Cart extends Component {
                 </span>
                 <br></br>
                 <span
-                  class="del-button"
+                  className="wishcart-button"
+                  onClick={() => {
+                    this.clickSaveToWish(item.id);
+                  }}
+                >
+                  Add to Wishlist
+                </span>
+                <br></br>
+                <span
+                  className="del-button"
                   onClick={() => {
                     this.clickSaveRemove(item.id);
                   }}
@@ -172,7 +245,7 @@ class Cart extends Component {
 
     let subtotal = this.props.items.length ? (
       [
-        <div class="subtotal-price" key="Price">
+        <div className="subtotal-price" key="Price">
           <b>Subtotal: ${this.props.total}</b>
         </div>
       ]
@@ -226,6 +299,9 @@ const changeItems = dispatch => {
     },
     clickSaveRemove: id => {
       dispatch(saveRemove(id));
+    },
+    clickSaveToWish: id => {
+      dispatch(addItemWish(id));
     }
   };
 };

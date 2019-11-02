@@ -16,11 +16,35 @@
   color: #666666;
   font-weight: bold;
 }
-
 .save-button:hover {
   background-color: #f6f6f6;
   text-decoration: none;
-  color: #1900ff;
+  color: #4538b6;
+}
+
+.wishcart-button {
+  display: inline-block;
+  cursor: pointer;
+  color: #666666;
+  font-weight: bold;
+}
+.wishcart-button:hover {
+  background-color: #f6f6f6;
+  text-decoration: none;
+  color: #4538b6;
+}
+
+.cart-button {
+  display: inline-block;
+  cursor: pointer;
+  color: #666666;
+  font-weight: bold;
+}
+
+.cart-button:hover {
+  background-color: #f6f6f6;
+  text-decoration: none;
+  color: #00aa8b;
 }
 .quantity {
   text-align: center;
@@ -39,9 +63,10 @@
 }
 
 .save-for-later-list {
-  box-shadow: 1px 2px 3px 0px #0fc2aab6;
+  box-shadow: 1px 2px 3px 0px #0f63c2b6;
   border-radius: 6px;
-  width: 90%;
+  float: right;
+  width: 95%;
 }
 .item {
   display: flex;
@@ -63,22 +88,87 @@
 }
 
 .description {
-  padding-top: 1%;
-  padding-bottom: 1%;
   margin-right: 5%;
   width: auto;
 }
-
+.author {
+  font-size: smaller;
+  color: rgb(2, 71, 0);
+  padding-bottom: 1%;
+}
+.publisher {
+  font-size: smaller;
+  color: #666666;
+  margin-right: 5%;
+  width: auto;
+}
+.bio {
+  font-size: smaller;
+  color: #333131;
+  margin-right: 5%;
+  width: auto;
+}
+.email {
+  font-size: smaller;
+  color: #1133c9;
+  margin-right: 5%;
+  width: auto;
+}
 .description span {
   display: block;
 }
-
+.item-price span {
+  display: block;
+}
 .item-price {
   color: rgb(8, 85, 6);
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  font-size: large;
+}
+.item-each {
+  margin-top: 1.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  font-size: 90%;
 }
 .subtotal-price {
   margin-right: 5%;
   text-align: right;
-  padding-top: 1%;
   color: rgb(6, 54, 4);
+}
+.column {
+  float: left;
+  right: 5%;
+  width: 50%;
+}
+.stats {
+  float: left;
+  right: 5%;
+  width: 50%;
+}
+
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.popup\_inner {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 25%;
+  bottom: 25%;
+  margin: auto;
+  border-radius: 20px;
+  background: white;
 }

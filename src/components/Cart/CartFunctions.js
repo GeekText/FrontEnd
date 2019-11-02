@@ -5,6 +5,7 @@ export const COUNT_DOWN = "COUNT_DOWN";
 export const SAVE_ADD = "SAVE_ADD";
 export const SAVE_ADD_CART = "SAVE_ADD_CART";
 export const SAVE_REMOVE = "SAVE_REMOVE";
+export const WISH_LIST_ADD = "WISH_LIST_ADD";
 
 //Add or delete cart item
 export const addItem = id => {
@@ -50,6 +51,13 @@ export const saveAddToCart = id => {
 export const saveRemove = id => {
   return {
     type: SAVE_REMOVE,
+    id
+  };
+};
+
+export const addItemWish = id => {
+  return {
+    type: WISH_LIST_ADD,
     id
   };
 };
