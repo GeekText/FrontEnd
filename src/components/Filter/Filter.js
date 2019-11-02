@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AuthorNames from "./AuthorNames";
-
+import './Filter.css';
 class Filter extends Component {
   render() {
     return (
@@ -41,12 +41,12 @@ class Filter extends Component {
             </div>
             <br/>
 
-            <div className="form-group row">
+            <div className="Martyn form-group row">
               <label
                 htmlFor="inputPassword"
                 className="col-sm-2 col-form-label"
               >
-                Book Rating
+                <p>Book Rating</p>
               </label>
               <div className="col-sm-10">
                 <select className="form-control" id="exampleFormControlSelect1">
@@ -60,7 +60,7 @@ class Filter extends Component {
               </div>
             </div>
 
-            <div className="form-group row">
+            <div className="Martyn form-group row">
               <label
                 htmlFor="exampleFormControlSelect1"
                 className="col-sm-2 col-form-label"
@@ -77,7 +77,7 @@ class Filter extends Component {
             </div>
 
             {/*Todo have to do for loop to get author names to display*/}
-            <div className="form-group row">
+            <div className="Martyn form-group row">
               <label
                 htmlFor="inputPassword"
                 className="col-sm-2 col-form-label"
@@ -87,12 +87,13 @@ class Filter extends Component {
               <div className="col-sm-10">
                 <select className="form-control" id="exampleFormControlSelect1">
                   {/*Gets all the author's name and displays them*/}
+                  <option>none</option>
                   <AuthorNames bookdetails={this.props.bookdetails}/>
                 </select>
               </div>
             </div>
 
-            <div className="form-group row">
+            <div className="Martyn form-group row">
               <label
                 htmlFor="exampleInputPassword1"
                 className="col-sm-2 col-form-label"
