@@ -25,12 +25,17 @@ const url = "https://geek-text-backend.herokuapp.com/api";
 
 const MongoClient = require("mongodb").MongoClient;
 const uri =
-  "mongodb+srv://ehuez002@fiu.edu:WMCEVe9w$jEMZUb@cluster0-2eofd.mongodb.net/test?retryWrites=true&w=majority";
+  "mongodb+srv://ehuez002%40fiu%2Eedu:WMCEVe9w%24jEMZUb@cluster0-2eofd.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true });
-/*client.connect(err => {
-  //const collection = client.db("test").collection("devices");
-  // perform actions on the collection object
-  client.close();
+/*
+client.connect(err => {
+  if (err) console.log("failed to connect");
+  else {
+    console.log("connected");
+    const collection = client.db("bookstoreDB").collection("users");
+    // perform actions on the collection object
+    client.close();
+  }
 });*/
 
 var homeItems = {

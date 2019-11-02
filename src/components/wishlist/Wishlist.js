@@ -5,16 +5,6 @@ import { wishRemove, wishToCart, changeWishName } from "./WishlistFunctions.js";
 import "./Wishlist.css";
 
 class Wishlist extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { showPopup: false };
-  }
-
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
-  }
   onChange(e) {
     // current array of options
     const options = this.props.wishlist.options;
@@ -51,27 +41,7 @@ class Wishlist extends Component {
   clickRemove = id => {
     this.props.clickRemove(id);
   };
-  clickAdd = id => {
-    this.props.clickAdd(id);
-  };
-  clickSubtr = id => {
-    this.props.clickSubtr(id);
-  };
-  clickSave = id => {
-    let cart = this.props.items.length;
-    this.props.clickSave(id);
-    if (cart === this.props.items.length) {
-    }
-  };
-  clickSaveToCart = id => {
-    this.props.clickSaveToCart(id);
-  };
-  clickSaveRemove = id => {
-    this.props.clickSaveRemove(id);
-  };
-  clickSaveToWish = id => {
-    this.props.clickSaveToWish(id);
-  };
+
   render() {
     let currentWishlist = this.props.items.length ? (
       this.props.items.map(item => {
