@@ -32,8 +32,17 @@ var homeItems = {
     options: [],
     wishlistName: "Default"
   },
+  wishlist2: {
+    items: [],
+    options: [],
+    wishlistName: "Second"
+  },
+  wishlist3: {
+    items: [],
+    options: [],
+    wishlistName: "Third"
+  },
   total: 0
-  //////////////////////////
 };
 async function book_data() {
   try {
