@@ -9,15 +9,6 @@ class Filter extends Component {
           <div className="alert alert-success" role="alert">
             <h3>Sort by</h3>
             <div className="form-check form-check-inline">
-              <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="defaultCheck1"
-              />
-              <label className="form-check-label" htmlFor="defaultCheck1">
-                Genre
-              </label>
 
               <input
               className="form-check-input"
@@ -40,6 +31,35 @@ class Filter extends Component {
               </label>
             </div>
             <br></br>
+
+
+              <div className="Martyn form-group row">
+                  <label
+                      htmlFor="inputPassword"
+                      className="col-sm-2 col-form-label"
+                  >
+                      <p>Book Genre</p>
+                  </label>
+                  <div className="col-sm-10">
+                      <select className="form-control" id="exampleFormControlSelect1">
+                          <option>All</option>
+                          <option>Comedy</option>
+                          <option>Drama</option>
+                          <option>Horror</option>
+                          <option>Documentary</option>
+                          <option>Romance</option>
+                          <option>Action</option>
+                          <option>Adventure</option>
+                          <option>Mystery</option>
+                          <option>Sci-Fi</option>
+                          <option>Thriller</option>
+                          <option>Crime</option>
+                          <option>Romance</option>
+                          <option>Fantasy</option>
+                      </select>
+                  </div>
+              </div>
+
 
             <div className="Martyn form-group row">
               <label
