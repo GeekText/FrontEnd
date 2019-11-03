@@ -39,7 +39,7 @@ class Filter extends Component {
                 Book Title
               </label>
             </div>
-            <br/>
+            <br></br>
 
             <div className="Martyn form-group row">
               <label
