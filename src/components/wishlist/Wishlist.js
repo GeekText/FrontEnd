@@ -81,7 +81,7 @@ class Wishlist extends Component {
         <div className="#cart">
           <br></br>
           <h4>
-            {this.props.currentName} ({this.props.items.length})
+            {this.props.wishlist.wishlistName} ({this.props.items.length})
           </h4>
           <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
             <input

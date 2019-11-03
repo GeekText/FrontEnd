@@ -1,3 +1,4 @@
+//import MongoClient from "mongodb";
 export const ADD = "ADD";
 export const REMOVE = "REMOVE";
 export const COUNT_UP = "COUNT_UP";
@@ -11,7 +12,6 @@ export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
 ////////////////////////////////////////////////
 export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
 /////////////////////////////////////////////
-
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
 /**
@@ -23,10 +23,8 @@ const url = "https://geek-text-backend.herokuapp.com/api";
  *total: 0            - Subtotal of items on cart page
  */
 
-const MongoClient = require("mongodb").MongoClient;
-const uri =
-  "mongodb+srv://ehuez002%40fiu%2Eedu:WMCEVe9w%24jEMZUb@cluster0-2eofd.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true });
+//const uri = "mongodb+srv://user:uvkpQXgrYgDhpL5p@cluster0-2eofd.mongodb.net/test?retryWrites=true&w=majority";
+//const client = new MongoClient(uri, { useNewUrlParser: true });
 /*
 client.connect(err => {
   if (err) console.log("failed to connect");
@@ -36,8 +34,8 @@ client.connect(err => {
     // perform actions on the collection object
     client.close();
   }
-});*/
-
+});
+*/
 var homeItems = {
   items: book_data(),
   addedItems: [],
