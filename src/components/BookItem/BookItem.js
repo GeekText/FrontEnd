@@ -40,9 +40,9 @@ export class Bookitem extends Component {
                     ></img>
                   </div>
                   <div className="details">
-                    <p className="book_title">
-                      <h5>{this.props.book.book_name}</h5>
-                    </p>
+                    <h5 className="book_title">
+                      <p>{this.props.book.book_name}</p>
+                    </h5>
                     <div className="book_details">
                       <h6 className="card-subtitle mb-2 text-muted">
                         Author Bio: {this.props.book.author_biography}
@@ -79,7 +79,7 @@ export class Bookitem extends Component {
               </span>
             </Link>
           </span>
-          <p>
+          <p className="home_buttons">
             <i>Price: ${this.props.book.book_price} </i>
             <span
               className="clickAddButton"

@@ -35,7 +35,9 @@
   width: auto;
 }
 .home-page-list {
-  width: auto;
+  position: relative;
+}
+.home_buttons {
 }
 .add-button {
   box-shadow: inset 0px 1px 0px 0px #ffffff;
