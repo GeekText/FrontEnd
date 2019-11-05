@@ -140,11 +140,6 @@
   text-align: right;
   color: rgb(6, 54, 4);
 }
-.column {
-  float: left;
-  right: 5%;
-  width: 50%;
-}
 .stats {
   float: left;
   right: 5%;

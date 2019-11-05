@@ -20,56 +20,58 @@ export class Bookitem extends Component {
   };
   render() {
     return (
-      <div className="container">
-        <div className="card-body">
-          <span
-            className="clickAddButton"
-            onClick={() => {
-              this.clickOnDetails(this.props.book.id);
-            }}
-          >
-            <Link to="/details">
-              <span href="#tile" className="tile">
-                <h5 className="card-title">{this.props.book.book_name}</h5>
-                <img
-                  src={this.props.book.book_cover}
-                  alt="bookcover placeholder"
-                  width="100"
-                  height="100"
-                ></img>
-                <br></br>
-                <br></br>
-                <h6 className="card-subtitle mb-2 text-muted">
-                  Author Bio: {this.props.book.author_biography}
-                </h6>
-                <span className="card-subtitle mb-2 text-muted">
-                  Publish Date: {this.props.book.book_publishing_info + " "}
-                </span>
-                <span className="card-subtitle mb-2 text-muted">
-                  Release Date:{this.props.book.book_releaseDate}{" "}
-                </span>
-                <br></br>
-                <span className="card-subtitle mb-2 text-muted">
-                  Genre: {this.props.book.book_genre}{" "}
-                </span>
-                <br></br>
-                <span className="card-subtitle mb-2 text-muted">
-                  Rating: {this.props.book.book_rating}
-                </span>
-                <br></br>
-                <span className="card-text">
-                  {" "}
-                  Publisher: {this.props.book.book_publisher}
-                </span>
-                <p className="card-text">
-                  Author Name:{" "}
-                  {this.props.book.author_first_name +
-                    " " +
-                    this.props.book.author_last_name}
-                </p>
-              </span>
-            </Link>
-          </span>
+      <div className="home-page-list" key={this.props.book.id}>
+        <div className="container">
+          <Link to="/details">
+            <span href="#tile" className="tile">
+              <div className="item">
+                <div className="book_cover">
+                  <img
+                    src={this.props.book.book_cover}
+                    alt="bookcover placeholder"
+                    width="200"
+                    height="200"
+                  ></img>
+                </div>
+                <div className="details">
+                  <p className="book_title">
+                    <h5>{this.props.book.book_name}</h5>
+                  </p>
+                  <div className="book_details">
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      Author Bio: {this.props.book.author_biography}
+                    </h6>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Publish Date: {this.props.book.book_publishing_info + " "}
+                    </span>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Release Date:{this.props.book.book_releaseDate}{" "}
+                    </span>
+                    <br></br>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Genre: {this.props.book.book_genre}{" "}
+                    </span>
+                    <br></br>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Rating: {this.props.book.book_rating}
+                    </span>
+                    <br></br>
+                    <span className="card-text">
+                      {" "}
+                      Publisher: {this.props.book.book_publisher}
+                    </span>
+                    <p className="card-text">
+                      Author Name:{" "}
+                      {this.props.book.author_first_name +
+                        " " +
+                        this.props.book.author_last_name}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </span>
+          </Link>
+          <br></br>
           <i>Price: ${this.props.book.book_price} </i>
           <span
             className="clickAddButton"
