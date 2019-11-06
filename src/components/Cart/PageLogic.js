@@ -41,24 +41,22 @@ var homeItems = {
   addedItemID: [],
   savedItems: [],
   wishlist: {
+    id: 0,
     items: [],
     options: [],
     wishlistName: "Default"
   },
   wishlist2: {
+    id: 1,
     items: [],
     options: [],
     wishlistName: "Second"
   },
   wishlist3: {
+    id: 2,
     items: [],
     options: [],
     wishlistName: "Third"
-  },
-  currentWishlist: {
-    items: [],
-    options: [],
-    wishlistName: "Pick a list"
   },
   total: 0
 };
@@ -67,7 +65,7 @@ async function book_data() {
     const response = await axios.get(url);
     homeItems.items = response.data;
     this.setState({ items: response.data });
-    console.log("called data");
+    console.log("Called Data");
   } catch (error) {}
 }
 
@@ -264,21 +262,36 @@ const PageLogic = (state = homeItems, action) => {
     };
   }
   if (action.type === WISH_LIST_CURRENT) {
-    console.log(action.event);
-    if (action.event === "wishlist") {
+    console.log(action.event.id);
+    if (action.event.id === 0) {
       return {
         ...state,
-        currentWishlist: state.wishlist
+        wishlist: {
+          ...state.wishlist,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
       };
-    } else if (action.event === "wishlist2") {
+    } else if (action.event.id === 1) {
       return {
         ...state,
-        currentWishlist: state.wishlist2
+        wishlist2: {
+          ...state.wishlist2,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
       };
     } else {
       return {
         ...state,
-        currentWishlist: state.wishlist3
+        wishlist3: {
+          ...state.wishlist3,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
       };
     }
   }

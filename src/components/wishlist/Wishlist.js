@@ -19,6 +19,7 @@ class Wishlist extends Component {
     this.state = {
       value: "wishlist",
       currentWishlist: {
+        id: 0,
         items: [],
         options: [],
         wishlistName: "Pick a list"
@@ -26,6 +27,7 @@ class Wishlist extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
   handleChange(event) {
     this.setState({ value: event.target.value });
@@ -33,7 +35,20 @@ class Wishlist extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.handleSubmit(this.state.value);
+    this.changeCurrentWishList();
+  }
+  handleSave(event) {
+    event.preventDefault();
+    this.props.handleSave(this.state.currentWishlist);
+  }
+  changeCurrentWishList() {
+    if (this.state.value === "wishlist") {
+      this.setState({ currentWishlist: this.props.wishlist });
+    } else if (this.state.value === "wishlist2") {
+      this.setState({ currentWishlist: this.props.wishlist2 });
+    } else {
+      this.setState({ currentWishlist: this.props.wishlist3 });
+    }
   }
   /////////////////////////////////////////////
   /////////////////////////////////////////////
@@ -80,7 +95,7 @@ class Wishlist extends Component {
     this.props.clickRemove(number);
   };
   render() {
-    let currentWishlist = this.props.currentItems.length ? (
+    let currentlist = this.props.currentItems.length ? (
       this.props.currentItems.map(item => {
         return (
           <div
@@ -137,7 +152,7 @@ class Wishlist extends Component {
             />
           </form>
 
-          <ul className="wishlist">{currentWishlist}</ul>
+          <ul className="wishlist">{currentlist}</ul>
           <span
             className="wish-del-button"
             onClick={() => {
@@ -166,14 +181,18 @@ class Wishlist extends Component {
             <label>
               Choose your wishlist:
               <select value={this.state.value} onChange={this.handleChange}>
-                <option value="wishlist">Default</option>
+                <option value="wishlist">Primary</option>
                 <option value="wishlist2">Second</option>
                 <option value="wishlist3">Third</option>
               </select>
             </label>
             <input type="submit" value="Submit" />
+
+            <span className="add-button" onClick={this.handleSave}>
+              Save
+            </span>
           </form>
-          <h1>{this.props.currentList.wishlistName}</h1>
+          <h1>{this.state.currentWishlist.wishlistName}</h1>
 
           {/*/////////////////////////////////////*/}
           {/*/////////////////////////////////////*/}
@@ -209,7 +228,7 @@ const changeItems = dispatch => {
     mySubmitHandler: event => {
       dispatch(changeWishName(event));
     },
-    handleSubmit: event => {
+    handleSave: event => {
       dispatch(currentWishName(event));
     }
   };
