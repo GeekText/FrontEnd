@@ -1,10 +1,43 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { wishRemove, wishToCart, changeWishName } from "./WishlistFunctions.js";
+import {
+  wishRemove,
+  wishToCart,
+  changeWishName,
+  currentWishName
+} from "./WishlistFunctions.js";
 import "./Wishlist.css";
+//import { start } from "repl";
 
 class Wishlist extends Component {
+  ///////////////////////////////////
+  /////////////////////////////////
+  //https://reactjs.org/docs/forms.html
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "wishlist",
+      currentWishlist: {
+        items: [],
+        options: [],
+        wishlistName: "Pick a list"
+      }
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.handleSubmit(this.state.value);
+  }
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+
   onChange(e) {
     // current array of options
     const options = this.props.wishlist.options;
@@ -42,9 +75,13 @@ class Wishlist extends Component {
     this.props.clickRemove(id);
   };
 
+  clickAddToCart = number => {
+    this.props.clickWishToCart(number);
+    this.props.clickRemove(number);
+  };
   render() {
-    let currentWishlist = this.props.items.length ? (
-      this.props.items.map(item => {
+    let currentWishlist = this.props.currentItems.length ? (
+      this.props.currentItems.map(item => {
         return (
           <div
             style={{
@@ -81,7 +118,7 @@ class Wishlist extends Component {
         <div className="#cart">
           <br></br>
           <h4>
-            {this.props.wishlist.wishlistName} ({this.props.items.length})
+            {this.props.currentName} ({this.props.currentItems.length})
           </h4>
           <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
             <input
@@ -116,35 +153,31 @@ class Wishlist extends Component {
             className="add-button"
             onClick={() => {
               this.props.wishlist.options.map(number =>
-                this.props.clickWishToCart(number)
+                this.clickAddToCart(number)
               );
             }}
           >
             Add To Cart
           </span>
-          {/* <select>
-  <option value="grapefruit">Grapefruit</option>
-  <option value="lime">Lime</option>
-  <option selected value="coconut">Coconut</option>
-  <option value="mango">Mango</option>
-</select> */}
-        </div>
-        <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
-          <input
-            type="text"
-            name="wishlistName"
-            style={{ flex: "10", padding: "5px" }}
-            placeholder="Name your wishlist"
-            onChange={this.myChangeHandler}
-          />
 
-          <input
-            type="submit"
-            value="Create New List"
-            className="btn"
-            style={{ flex: "1" }}
-          />
-        </form>
+          {/*/////////////////////////////////////*/}
+          {/*/////////////////////////////////////*/}
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Choose your wishlist:
+              <select value={this.state.value} onChange={this.handleChange}>
+                <option value="wishlist">Default</option>
+                <option value="wishlist2">Second</option>
+                <option value="wishlist3">Third</option>
+              </select>
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+          <h1>{this.props.currentList.wishlistName}</h1>
+
+          {/*/////////////////////////////////////*/}
+          {/*/////////////////////////////////////*/}
+        </div>
       </div>
     );
   }
@@ -152,9 +185,16 @@ class Wishlist extends Component {
 
 const currentItems = state => {
   return {
-    items: state.wishlist.items,
+    //////////////////////////////
+    //////////////////////////////
+    currentList: state.currentWishlist,
+    currentItems: state.wishlist.items,
     currentName: state.wishlist.wishlistName,
-    wishlist: state.wishlist
+    wishlist: state.wishlist,
+    wishlist2: state.wishlist2,
+    wishlist3: state.wishlist3
+    //////////////////////////////
+    ///////////////////////////////
   };
 };
 
@@ -166,13 +206,12 @@ const changeItems = dispatch => {
     clickWishToCart: id => {
       dispatch(wishToCart(id));
     },
-    ///////////////////
-    /////////////////////
     mySubmitHandler: event => {
       dispatch(changeWishName(event));
+    },
+    handleSubmit: event => {
+      dispatch(currentWishName(event));
     }
-    /////////////////////
-    /////////////////////
   };
 };
 

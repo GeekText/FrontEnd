@@ -9,9 +9,8 @@ export const SAVE_ADD_CART = "SAVE_ADD_CART";
 export const SAVE_REMOVE = "SAVE_REMOVE";
 export const WISH_LIST_ADD = "WISH_LIST_ADD";
 export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
-////////////////////////////////////////////////
 export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
-/////////////////////////////////////////////
+export const WISH_LIST_CURRENT = "WISH_LIST_CURRENT";
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
 /**
@@ -55,6 +54,11 @@ var homeItems = {
     items: [],
     options: [],
     wishlistName: "Third"
+  },
+  currentWishlist: {
+    items: [],
+    options: [],
+    wishlistName: "Pick a list"
   },
   total: 0
 };
@@ -250,8 +254,6 @@ const PageLogic = (state = homeItems, action) => {
       };
     }
   }
-  ////////////////////////////////////////////
-  //////////////////////////////////////////////
   if (action.type === WISH_LIST_RENAME) {
     return {
       ...state,
@@ -261,9 +263,25 @@ const PageLogic = (state = homeItems, action) => {
       }
     };
   }
-  //////////////////////////////////////
-  /////////////////////////////////////
-
+  if (action.type === WISH_LIST_CURRENT) {
+    console.log(action.event);
+    if (action.event === "wishlist") {
+      return {
+        ...state,
+        currentWishlist: state.wishlist
+      };
+    } else if (action.event === "wishlist2") {
+      return {
+        ...state,
+        currentWishlist: state.wishlist2
+      };
+    } else {
+      return {
+        ...state,
+        currentWishlist: state.wishlist3
+      };
+    }
+  }
   if (action.type === WISH_LIST_REMOVE) {
     let newWishList = state.wishlist.items.filter(
       item => action.id !== item.id
