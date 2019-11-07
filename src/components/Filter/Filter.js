@@ -3,11 +3,16 @@ import AuthorNames from "./AuthorNames";
 import './Filter.css';
 class Filter extends Component {
 
-    //TODO Esteban here
-    searchPrice = (event) => {
+  constructor(props) {
+    super(props);
+  }
+
+    //!TODO Esteban here HELP
+    searchPrice = (price) => {
+      // let filteredBookPrice = [this.props.bookdetails.map(book => {book.book_price == price})];
+      let filteredBookPrice = [];
           this.setState(
-            { bookdetails : this.props.bookdetails.filter(book => {book.book_price == event.value})
-          })
+            { bookdetails : filteredBookPrice})
     }
 
   render() {
@@ -135,7 +140,7 @@ class Filter extends Component {
                   id="exampleInputPrice1"
                   placeholder="20"
                   // TODO Maybe
-                  onChange={this.searchPrice}
+                  onChange={this.searchPrice(31)}
                 />
               </div>
             </div>
