@@ -1,3 +1,4 @@
+//import MongoClient from "mongodb";
 export const ADD = "ADD";
 export const REMOVE = "REMOVE";
 export const COUNT_UP = "COUNT_UP";
@@ -8,10 +9,8 @@ export const SAVE_ADD_CART = "SAVE_ADD_CART";
 export const SAVE_REMOVE = "SAVE_REMOVE";
 export const WISH_LIST_ADD = "WISH_LIST_ADD";
 export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
-////////////////////////////////////////////////
 export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
-/////////////////////////////////////////////
-
+export const WISH_LIST_CURRENT = "WISH_LIST_CURRENT";
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
 /**
@@ -22,15 +21,42 @@ const url = "https://geek-text-backend.herokuapp.com/api";
  *wishlist: [],       - Stores items in "wishlist" list
  *total: 0            - Subtotal of items on cart page
  */
+
+//const uri = "mongodb+srv://user:uvkpQXgrYgDhpL5p@cluster0-2eofd.mongodb.net/test?retryWrites=true&w=majority";
+//const client = new MongoClient(uri, { useNewUrlParser: true });
+/*
+client.connect(err => {
+  if (err) console.log("failed to connect");
+  else {
+    console.log("connected");
+    const collection = client.db("bookstoreDB").collection("users");
+    // perform actions on the collection object
+    client.close();
+  }
+});
+*/
 var homeItems = {
   items: book_data(),
   addedItems: [],
   addedItemID: [],
   savedItems: [],
   wishlist: {
+    id: 0,
     items: [],
     options: [],
     wishlistName: "Default"
+  },
+  wishlist2: {
+    id: 1,
+    items: [],
+    options: [],
+    wishlistName: "Second"
+  },
+  wishlist3: {
+    id: 2,
+    items: [],
+    options: [],
+    wishlistName: "Third"
   },
   total: 0
   //////////////////////////
@@ -40,7 +66,7 @@ async function book_data() {
     const response = await axios.get(url);
     homeItems.items = response.data;
     this.setState({ items: response.data });
-    console.log("called data");
+    console.log("Called Data");
   } catch (error) {}
 }
 
@@ -227,8 +253,6 @@ const PageLogic = (state = homeItems, action) => {
       };
     }
   }
-  ////////////////////////////////////////////
-  //////////////////////////////////////////////
   if (action.type === WISH_LIST_RENAME) {
     return {
       ...state,
@@ -238,9 +262,40 @@ const PageLogic = (state = homeItems, action) => {
       }
     };
   }
-  //////////////////////////////////////
-  /////////////////////////////////////
-
+  if (action.type === WISH_LIST_CURRENT) {
+    console.log(action.event.id);
+    if (action.event.id === 0) {
+      return {
+        ...state,
+        wishlist: {
+          ...state.wishlist,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
+      };
+    } else if (action.event.id === 1) {
+      return {
+        ...state,
+        wishlist2: {
+          ...state.wishlist2,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
+      };
+    } else {
+      return {
+        ...state,
+        wishlist3: {
+          ...state.wishlist3,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
+      };
+    }
+  }
   if (action.type === WISH_LIST_REMOVE) {
     let newWishList = state.wishlist.items.filter(
       item => action.id !== item.id

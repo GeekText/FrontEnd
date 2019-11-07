@@ -60,7 +60,7 @@ class home extends React.Component {
     try {
       const response = await axios.get(url);
       console.log("Incoming data " + response.data);
-      if (response.data != null) {
+      if (response.data != null && response.data.length !== 0) {
         this.setState({ bookdetails: response.data });
       }
       console.log("Current state " + this.state.bookdetails);
