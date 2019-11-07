@@ -4,8 +4,8 @@ import './Filter.css';
 class Filter extends Component {
   render() {
     //TODO Esteban here
-      function searchPrice(input) {
-          this.setState({ bookdetails : this.props.bookdetails.map()})
+      function searchPrice(price) {
+          this.setState({ bookdetails : this.props.bookdetails.filter(book => { book.book_price == price})})
       }
 
       return (
@@ -131,7 +131,8 @@ class Filter extends Component {
                   className="form-control"
                   id="exampleInputPrice1"
                   placeholder="20"
-                  onKeyPress={searchPrice(price)}
+                  // TODO Maybe
+                  onKeyPress={searchPrice(exampleInputPrice1.value)}
                 />
               </div>
             </div>
