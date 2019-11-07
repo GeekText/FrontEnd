@@ -3,7 +3,12 @@ import AuthorNames from "./AuthorNames";
 import './Filter.css';
 class Filter extends Component {
   render() {
-    return (
+    //TODO Esteban here
+      function searchPrice(input) {
+          this.setState({ bookdetails : this.props.bookdetails.map()})
+      }
+
+      return (
       <div className="container">
         <div className="filter">
           <div className="alert alert-success" role="alert">
@@ -126,6 +131,7 @@ class Filter extends Component {
                   className="form-control"
                   id="exampleInputPrice1"
                   placeholder="20"
+                  onKeyPress={searchPrice(price)}
                 />
               </div>
             </div>
