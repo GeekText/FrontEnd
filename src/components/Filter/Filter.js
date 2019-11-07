@@ -2,12 +2,15 @@ import React, { Component } from "react";
 import AuthorNames from "./AuthorNames";
 import './Filter.css';
 class Filter extends Component {
-  render() {
-    //TODO Esteban here
-      function searchPrice(price) {
-          this.setState({ bookdetails : this.props.bookdetails.filter(book => { book.book_price == price})})
-      }
 
+    //TODO Esteban here
+    searchPrice = (event) => {
+          this.setState(
+            { bookdetails : this.props.bookdetails.filter(book => {book.book_price == event.value})
+          })
+    }
+
+  render() {
       return (
       <div className="container">
         <div className="filter">
@@ -132,7 +135,7 @@ class Filter extends Component {
                   id="exampleInputPrice1"
                   placeholder="20"
                   // TODO Maybe
-                  onKeyPress={searchPrice(exampleInputPrice1.value)}
+                  onChange={this.searchPrice}
                 />
               </div>
             </div>
