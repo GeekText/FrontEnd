@@ -11,6 +11,9 @@ export const WISH_LIST_ADD = "WISH_LIST_ADD";
 export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
 export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
 export const WISH_LIST_CURRENT = "WISH_LIST_CURRENT";
+export const DBADD = "DBADD";
+export const FILTER = "FILTER";
+
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
 /**
@@ -40,6 +43,7 @@ var homeItems = {
   addedItems: [],
   addedItemID: [],
   savedItems: [],
+  filteredItems: [],
   wishlist: {
     id: 0,
     items: [],
@@ -101,6 +105,22 @@ const PageLogic = (state = homeItems, action) => {
   if (!Array.isArray(state.items) || !state.items.length) {
     state.items = dbNotLoaded();
     console.log("PageLogic DB NOT LOADED: Length %d", homeItems.items.length);
+  }
+  if (action.type === DBADD) {
+    console.log("Added homeDB to PageLogic", action.event);
+    homeItems.items = action.event;
+    state.items = action.event;
+    return {
+      ...state,
+      items: action.event
+    };
+  }
+  if (action.type === FILTER) {
+    console.log("Filter in Page Logic", action.event);
+    return {
+      ...state,
+      filteredItems: action.event
+    };
   }
   //Adds item to detail page
   if (action.type === DETAILS) {
