@@ -163,12 +163,8 @@ class Filter extends Component {
                   name="exampleInputPrice1"
                   placeholder="39"
                   // TODO Maybe
-<<<<<<< HEAD
                   //onKeyPress={this.searchPrice(39)}
                   onChange={this.commonChange}
-=======
-                  onChange={this.searchPrice(31)}
->>>>>>> 3f09e64abfe57b0eee04e912f350beb43bf91cdc
                 />
               </div>
               <input type="submit" value="Submit" onClick={this.submitFilter} />
