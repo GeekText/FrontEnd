@@ -19,9 +19,6 @@ class Filter extends Component {
       [event.target.name]: event.target.value
     });
   }
-  recentState(event) {
-    //this.props.recentState(event);
-  }
   submitFilter(event) {
     event.preventDefault();
     this.searchPrice(this.state.exampleInputPrice1);
@@ -30,7 +27,6 @@ class Filter extends Component {
     this.props.sendFilter(list);
   }
   searchPrice(price) {
-    this.recentState();
     var number = parseInt(price, 10);
     console.log(number);
     let newlist = this.props.items.filter(item => item.book_price === number);
@@ -206,7 +202,4 @@ const changeItems = dispatch => {
     }
   };
 };
-export default connect(
-  currentItems,
-  changeItems
-)(Filter);
+export default connect(currentItems, changeItems)(Filter);

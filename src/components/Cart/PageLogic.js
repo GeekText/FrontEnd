@@ -11,6 +11,7 @@ export const WISH_LIST_ADD = "WISH_LIST_ADD";
 export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
 export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
 export const WISH_LIST_CURRENT = "WISH_LIST_CURRENT";
+export const DETAILS_ADD_WISLIST = "DETAILS_ADD_WISLIST";
 export const DBADD = "DBADD";
 export const FILTER = "FILTER";
 
@@ -283,6 +284,40 @@ const PageLogic = (state = homeItems, action) => {
     };
   }
   if (action.type === WISH_LIST_CURRENT) {
+    console.log(action.event.id);
+    if (action.event.id === 0) {
+      return {
+        ...state,
+        wishlist: {
+          ...state.wishlist,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
+      };
+    } else if (action.event.id === 1) {
+      return {
+        ...state,
+        wishlist2: {
+          ...state.wishlist2,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
+      };
+    } else {
+      return {
+        ...state,
+        wishlist3: {
+          ...state.wishlist3,
+          items: action.event.items,
+          options: action.event.options,
+          wishlistName: action.event.wishlistName
+        }
+      };
+    }
+  }
+  if (action.type === DETAILS_ADD_WISLIST) {
     console.log(action.event.id);
     if (action.event.id === 0) {
       return {

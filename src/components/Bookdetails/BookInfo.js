@@ -2,18 +2,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
-
+import { addItemWish } from "../Cart/CartFunctions.js";
 class BookInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "wishlist",
-      currentWishlist: {
-        id: 0,
-        items: [],
-        options: [],
-        wishlistName: "Pick a list"
-      }
+      value: "wishlist"
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,11 +18,13 @@ class BookInfo extends Component {
   handleChange(event) {
     this.setState({ value: event.target.value });
   }
-
   handleSubmit(event) {
     event.preventDefault();
     this.changeCurrentWishList();
   }
+  clickSaveToWish = id => {
+    this.props.clickSaveToWish(id);
+  };
   render() {
     let addedItemID = this.props.items.length ? (
       this.props.items.map(item => {
@@ -59,7 +55,7 @@ class BookInfo extends Component {
                   <option value="wishlist3">Third</option>
                 </select>
               </label>
-              <span className="add-button" onClick={this.handleSave}>
+              <span className="add-button" onClick={this.handleSave(item.id)}>
                 Add to Cart
               </span>
             </form>
@@ -98,5 +94,11 @@ const currentItems = state => {
     total: state.total
   };
 };
-
-export default connect(currentItems)(BookInfo);
+const changeItems = dispatch => {
+  return {
+    clickSaveToWish: id => {
+      dispatch(addItemWish(id));
+    }
+  };
+};
+export default connect(currentItems, changeItems)(BookInfo);
