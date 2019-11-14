@@ -56,12 +56,9 @@ export class Bookitem extends Component {
                     <div className="book_details">
                       <span className = "bio">
                       <h6 className="card-subtitle mb-2 text-muted">
-                        Author Bio: {this.props.book.author_biography}
+                         {this.props.book.author_biography}
                       </h6>
                       </span>
-                     
-
-
                       <span className="card-subtitle mb-2 text-muted">
                         Publish Date:{" "}
                         {this.props.book.book_publishing_info + " "}
