@@ -4,10 +4,31 @@ import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 
 class BookInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "wishlist",
+      currentWishlist: {
+        id: 0,
+        items: [],
+        options: [],
+        wishlistName: "Pick a list"
+      }
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   clickRemove = id => {
     this.props.clickRemove(id);
   };
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    this.changeCurrentWishList();
+  }
   render() {
     let addedItemID = this.props.items.length ? (
       this.props.items.map(item => {
@@ -29,7 +50,19 @@ class BookInfo extends Component {
             </p>
 
             <Ratingsystem></Ratingsystem>
-
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                Add to wishlist:
+                <select value={this.state.value} onChange={this.handleChange}>
+                  <option value="wishlist">Primary</option>
+                  <option value="wishlist2">Second</option>
+                  <option value="wishlist3">Third</option>
+                </select>
+              </label>
+              <span className="add-button" onClick={this.handleSave}>
+                Add to Cart
+              </span>
+            </form>
             <Link to="/#Items">
               <span href="#cart" className="links" type="button">
                 Back to Home Page

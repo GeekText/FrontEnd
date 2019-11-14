@@ -16,12 +16,24 @@ import "./Cart.css";
 class Cart extends Component {
   constructor(props) {
     super(props);
-    this.state = { showPopup: false };
+    this.state = { showPopupSave: false };
+    this.state = { showPopupCart: false };
+    this.state = { showPopupWish: false };
   }
 
-  togglePopup() {
+  togglePopupSave() {
     this.setState({
-      showPopup: !this.state.showPopup
+      showPopupSave: !this.state.showPopupSave
+    });
+  }
+  togglePopupCart() {
+    this.setState({
+      showPopupCart: !this.state.showPopupCart
+    });
+  }
+  togglePopupWish() {
+    this.setState({
+      showPopupWish: !this.state.showPopupWish
     });
   }
 
@@ -35,10 +47,8 @@ class Cart extends Component {
     this.props.clickSubtr(id);
   };
   clickSave = id => {
-    let cart = this.props.items.length;
+    console.log("Saving to save for later");
     this.props.clickSave(id);
-    if (cart === this.props.items.length) {
-    }
   };
   clickSaveToCart = id => {
     this.props.clickSaveToCart(id);
@@ -134,15 +144,22 @@ class Cart extends Component {
                 <span
                   className="save-button"
                   onClick={() => {
-                    this.clickSave(item.id);
+                    let exists = this.props.savedItems.find(
+                      all => all.id === item.id
+                    );
+                    if (exists) {
+                      this.togglePopupSave();
+                    } else {
+                      this.clickSave(item.id);
+                    }
                   }}
                 >
                   Save for later
                 </span>
-                {this.state.showPopup ? (
+                {this.state.showPopupSave ? (
                   <Popup
-                    text='Click "Close Button" to hide popup'
-                    closePopup={this.togglePopup.bind(this)}
+                    text='This item already exists in your "Save for later" list.'
+                    closePopup={this.togglePopupSave.bind(this)}
                   />
                 ) : null}
                 <br></br>
@@ -209,20 +226,46 @@ class Cart extends Component {
                 <span
                   className="cart-button"
                   onClick={() => {
-                    this.clickSaveToCart(item.id);
+                    let exists = this.props.items.find(
+                      all => all.id === item.id
+                    );
+                    if (exists) {
+                      this.togglePopupCart();
+                    } else {
+                      this.clickSaveToCart(item.id);
+                    }
                   }}
                 >
                   Add to cart
                 </span>
+                {this.state.showPopupCart ? (
+                  <Popup
+                    text="This item already exists in your cart."
+                    closePopup={this.togglePopupCart.bind(this)}
+                  />
+                ) : null}
                 <br></br>
                 <span
                   className="wishcart-button"
                   onClick={() => {
-                    this.clickSaveToWish(item.id);
+                    let exists = this.props.wishlist.find(
+                      all => all.id === item.id
+                    );
+                    if (exists) {
+                      this.togglePopupWish();
+                    } else {
+                      this.clickSaveToWish(item.id);
+                    }
                   }}
                 >
                   Add to Wishlist
                 </span>
+                {this.state.showPopupWish ? (
+                  <Popup
+                    text="This item already exists in your primary wishlist."
+                    closePopup={this.togglePopupWish.bind(this)}
+                  />
+                ) : null}
                 <br></br>
                 <span
                   className="del-button"
@@ -276,6 +319,7 @@ const currentItems = state => {
   return {
     items: state.addedItems,
     savedItems: state.savedItems,
+    wishlist: state.wishlist.items,
     total: state.total
   };
 };
@@ -306,7 +350,4 @@ const changeItems = dispatch => {
   };
 };
 
-export default connect(
-  currentItems,
-  changeItems
-)(Cart);
+export default connect(currentItems, changeItems)(Cart);
