@@ -40,13 +40,25 @@ export class Bookitem extends Component {
                     ></img>
                   </div>
                   <div className="details">
+                    
                     <h5 className="book_title">
                       <p>{this.props.book.book_name}</p>
                     </h5>
+                    <span className = "author">
+                      <p className="card-text">
+                        by {" "}
+                        {this.props.book.author_first_name +
+                          " " +
+                          this.props.book.author_last_name}
+                      </p>
+                      </span>
+                      
                     <div className="book_details">
+                      <span className = "bio">
                       <h6 className="card-subtitle mb-2 text-muted">
-                        Author Bio: {this.props.book.author_biography}
+                         {this.props.book.author_biography}
                       </h6>
+                      </span>
                       <span className="card-subtitle mb-2 text-muted">
                         Publish Date:{" "}
                         {this.props.book.book_publishing_info + " "}
@@ -67,12 +79,7 @@ export class Bookitem extends Component {
                         {" "}
                         Publisher: {this.props.book.book_publisher}
                       </span>
-                      <p className="card-text">
-                        Author Name:{" "}
-                        {this.props.book.author_first_name +
-                          " " +
-                          this.props.book.author_last_name}
-                      </p>
+                      
                     </div>
                   </div>
                 </div>
