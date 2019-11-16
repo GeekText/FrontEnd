@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
+import "./BookInfo.css";
 
 class BookInfo extends Component {
   clickRemove = id => {
@@ -22,11 +23,21 @@ class BookInfo extends Component {
                 className="image"
               />
             </div>
-            <p className="card-title">Title: {item.book_name}</p>
+            <span className="bookname">{item.book_name}</span>
+            <br></br>
             <i className="card-subtitle mb-2 text-muted">{item.book_desc}</i>
+            <br></br>
+            <span className="publish">
+              Published by {item.book_publisher} {" "} ({ item.book_publishing_info})
+            </span>
+            <br></br>
+            <span className = "release">
+              Released: {item.book_releaseDate}
+            </span>
             <p>
               <b>Price: ${item.book_price}</b>
             </p>
+           
 
             <Ratingsystem></Ratingsystem>
 
