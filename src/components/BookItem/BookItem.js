@@ -3,12 +3,42 @@ import { connect } from "react-redux";
 import { addItem } from "../Cart/CartFunctions";
 import { addItemDetails } from "./BookFunctions";
 import { addItemWish } from "../wishlist/WishlistFunctions";
+import "../wishlist/Wishlist";
 import { Link } from "react-router-dom";
 import "./BookItem.css";
 
 export class Bookitem extends Component {
   // style= {"width": "18rem"}
 
+  /////////////////////////////////
+  ///////////////////////////
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: "wishlist"
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleChange(event) {
+    this.setState({ value: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.changeCurrentWishList();
+  }
+  changeCurrentWishList() {
+    if (this.state.value === "wishlist") {
+      this.setState({ currentWishlist: this.props.wishlist });
+    } else if (this.state.value === "wishlist2") {
+      this.setState({ currentWishlist: this.props.wishlist2 });
+    } else {
+      this.setState({ currentWishlist: this.props.wishlist3 });
+    }
+  }
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -91,6 +121,20 @@ export class Bookitem extends Component {
                 Add
               </button>
             </span>
+
+            {/* /////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////// */}
+            <form onSubmit={this.handleSubmit}>
+              <select value={this.state.value} onChange={this.handleChange}>
+                <option value="wishlist">Primary</option>
+                <option value="wishlist2">Second</option>
+                <option value="wishlist3">Third</option>
+              </select>
+              <input type="submit" value="Submit" />
+            </form>
+            {/* /////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////// */}
+
             <span
               className="clickAddWish"
               onClick={() => {
@@ -127,7 +171,4 @@ const checkCartReducer = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  checkCartReducer
-)(Bookitem);
+export default connect(mapStateToProps, checkCartReducer)(Bookitem);
