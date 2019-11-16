@@ -8,11 +8,12 @@ class Filter extends Component {
     super(props);
     this.state = {
       filteredItems: [],
-      items: []
+      items: [],
+      searched: false,
+      exampleInputPrice1: 20
     };
     this.commonChange = this.commonChange.bind(this);
     this.submitFilter = this.submitFilter.bind(this);
-    this.state.exampleInputPrice1 = 39;
   }
   commonChange(event) {
     this.setState({
@@ -30,16 +31,31 @@ class Filter extends Component {
     var number = parseInt(price, 10);
     console.log(number);
     let newlist = this.props.items.filter(item => item.book_price === number);
-    this.setState({ filteredItems: newlist }, function() {
+    this.setState({ filteredItems: newlist, searched: true }, function() {
       //Immediately changes state
       this.sendFilter(this.state.filteredItems);
     });
   }
 
   render() {
+    let filtered =
+      this.state.filteredItems.length || this.state.searched ? (
+        this.state.filteredItems.length ? (
+          [
+            <div className="filter-number" key="filters">
+              <h4>Filtered items: ({this.state.filteredItems.length})</h4>
+            </div>
+          ]
+        ) : (
+          <div className="filter-number" key="filters2">
+            <h4>No items found: ({this.state.filteredItems.length})</h4>
+          </div>
+        )
+      ) : (
+        <div></div>
+      );
     return (
       <div className="container">
-        <h4>({this.state.filteredItems.length})</h4>
         <div className="filter">
           <div className="alert alert-success" role="alert">
             <h3>Sort by</h3>
@@ -157,7 +173,7 @@ class Filter extends Component {
                   type="number"
                   className="form-control"
                   name="exampleInputPrice1"
-                  placeholder="39"
+                  placeholder="20"
                   // TODO Maybe
                   //onKeyPress={this.searchPrice(39)}
                   onChange={this.commonChange}
@@ -181,6 +197,7 @@ class Filter extends Component {
                 placeholder="To sort by date put year here"
               />
             </div>
+            {filtered}
           </div>
         </div>
       </div>
