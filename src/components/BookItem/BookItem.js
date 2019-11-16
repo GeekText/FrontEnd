@@ -41,9 +41,16 @@ export class Bookitem extends Component {
                   </div>
                   <div className="details">
                     
-                    <h5 className="book_title">
-                      <p>{this.props.book.book_name}</p>
-                    </h5>
+                    <span className="book_title">
+                      {this.props.book.book_name}
+                    </span>
+                    <span>
+                      {" "}
+                    </span>
+                    <span className = "released">
+                      ({this.props.book.book_releaseDate})
+                    </span>
+            
                     <span className = "author">
                       <p className="card-text">
                         by {" "}
@@ -59,25 +66,21 @@ export class Bookitem extends Component {
                          {this.props.book.author_biography}
                       </h6>
                       </span>
-                      <span className="card-subtitle mb-2 text-muted">
-                        Publish Date:{" "}
-                        {this.props.book.book_publishing_info + " "}
-                      </span>
-                      <span className="card-subtitle mb-2 text-muted">
-                        Release Date:{this.props.book.book_releaseDate}{" "}
-                      </span>
-                      <br></br>
+         
                       <span className="card-subtitle mb-2 text-muted">
                         Genre: {this.props.book.book_genre}{" "}
                       </span>
                       <br></br>
                       <span className="card-subtitle mb-2 text-muted">
-                        Rating: {this.props.book.book_rating}
+                        Rating: {this.props.book.book_rating + "/5"}
                       </span>
                       <br></br>
                       <span className="card-text">
                         {" "}
-                        Publisher: {this.props.book.book_publisher}
+                        Published by  {this.props.book.book_publisher}
+                      </span>
+                      <span className="publish">
+                        {" "} ({ this.props.book.book_publishing_info})
                       </span>
                       
                     </div>
