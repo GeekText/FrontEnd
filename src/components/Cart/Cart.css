@@ -140,11 +140,6 @@
   text-align: right;
   color: rgb(6, 54, 4);
 }
-.column {
-  float: left;
-  right: 5%;
-  width: 50%;
-}
 .stats {
   float: left;
   right: 5%;
@@ -162,13 +157,28 @@
   margin: auto;
   background-color: rgba(0, 0, 0, 0.5);
 }
-.popup\_inner {
+.popup_inner {
   position: absolute;
   left: 25%;
   right: 25%;
   top: 25%;
-  bottom: 25%;
+  bottom: 65%;
   margin: auto;
   border-radius: 20px;
   background: white;
+  display: block;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.popup-button {
+  width: 60px;
+  height: 30px;
+  border-radius: 6px;
+  border: none;
+}
+.popup-button:hover {
+  background-color: #f6f6f6;
+  text-decoration: none;
+  color: #00aa8b;
 }

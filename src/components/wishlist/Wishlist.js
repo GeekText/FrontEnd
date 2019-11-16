@@ -1,20 +1,67 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { wishRemove, wishToCart, changeWishName } from "./WishlistFunctions.js";
+import {
+  wishRemove,
+  wishToCart,
+  changeWishName,
+  currentWishName
+} from "./WishlistFunctions.js";
 import "./Wishlist.css";
+//import { start } from "repl";
 
 class Wishlist extends Component {
+  ///////////////////////////////////
+  /////////////////////////////////
+  //https://reactjs.org/docs/forms.html
   constructor(props) {
     super(props);
-    this.state = { showPopup: false };
+    this.state = {
+      value: "Pick a wishlist to view",
+      currentWishlist: {
+        // current wishlist for the drop down
+        id: 0, // id number for that wishlist
+        items: [], // book items saved in wishlist
+        options: [], // option array
+        wishlistName: "Default"
+        // name of the wishlist
+      }
+    };
+    this.handleChange = this.handleChange.bind(this); // simplified function call for handleChange
+    this.handleSubmit = this.handleSubmit.bind(this); // simplified function call for handleSubmit
+    this.handleSave = this.handleSave.bind(this); // simplified function call for handleSave
+  }
+  // change "value" to value of the wishlist option
+  handleChange(event) {
+    this.setState({ value: event.target.value });
   }
 
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
+  // prevent refresh and change to wishlist of your choice.
+  handleSubmit(event) {
+    event.preventDefault();
+    this.handleSave(event);
+    this.changeCurrentWishList();
   }
+
+  // save list of your choice as current list.
+  handleSave(event) {
+    event.preventDefault();
+    this.props.handleSave(this.state.currentWishlist);
+  }
+
+  // change current wishlist of the dropdown.
+  changeCurrentWishList() {
+    if (this.state.value === "wishlist") {
+      this.setState({ currentWishlist: this.props.wishlist });
+    } else if (this.state.value === "wishlist2") {
+      this.setState({ currentWishlist: this.props.wishlist2 });
+    } else if (this.state.value === "wishlist3") {
+      this.setState({ currentWishlist: this.props.wishlist3 });
+    }
+  }
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+
   onChange(e) {
     // current array of options
     const options = this.props.wishlist.options;
@@ -39,42 +86,40 @@ class Wishlist extends Component {
     this.props.clickWishToCart(id);
   };
 
+  // When submit button is clicked, pass current wishlist name to the handler.
   mySubmitHandler = event => {
-    event.preventDefault();
-    this.props.mySubmitHandler(this.state.wishlistName);
+    event.preventDefault(); // prevent refleshing.
+    event.persist();
+    this.handleSave(event);
   };
 
+  // change the name of the current wishlist.
   myChangeHandler = event => {
-    this.setState({ wishlistName: event.target.value });
+    event.preventDefault(); // prevent refleshing.
+    event.persist();
+    let change = event.target.value;
+    this.setState(state => {
+      return {
+        ...state,
+        currentWishlist: {
+          ...state.currentWishlist,
+          wishlistName: change
+        }
+      };
+    });
   };
-
   clickRemove = id => {
     this.props.clickRemove(id);
   };
-  clickAdd = id => {
-    this.props.clickAdd(id);
+
+  clickAddToCart = number => {
+    this.props.clickWishToCart(number);
+    this.props.clickRemove(number);
   };
-  clickSubtr = id => {
-    this.props.clickSubtr(id);
-  };
-  clickSave = id => {
-    let cart = this.props.items.length;
-    this.props.clickSave(id);
-    if (cart === this.props.items.length) {
-    }
-  };
-  clickSaveToCart = id => {
-    this.props.clickSaveToCart(id);
-  };
-  clickSaveRemove = id => {
-    this.props.clickSaveRemove(id);
-  };
-  clickSaveToWish = id => {
-    this.props.clickSaveToWish(id);
-  };
+
   render() {
-    let currentWishlist = this.props.items.length ? (
-      this.props.items.map(item => {
+    let currentlist = this.state.currentWishlist.items.length ? (
+      this.state.currentWishlist.items.map(item => {
         return (
           <div
             style={{
@@ -111,7 +156,8 @@ class Wishlist extends Component {
         <div className="#cart">
           <br></br>
           <h4>
-            {this.props.currentName} ({this.props.items.length})
+            {this.state.currentWishlist.wishlistName} (
+            {this.state.currentWishlist.items.length})
           </h4>
           <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
             <input
@@ -130,7 +176,7 @@ class Wishlist extends Component {
             />
           </form>
 
-          <ul className="wishlist">{currentWishlist}</ul>
+          <ul className="wishlist">{currentlist}</ul>
           <span
             className="wish-del-button"
             onClick={() => {
@@ -146,35 +192,41 @@ class Wishlist extends Component {
             className="add-button"
             onClick={() => {
               this.props.wishlist.options.map(number =>
-                this.props.clickWishToCart(number)
+                this.clickAddToCart(number)
               );
             }}
           >
             Add To Cart
           </span>
-          {/* <select>
-  <option value="grapefruit">Grapefruit</option>
-  <option value="lime">Lime</option>
-  <option selected value="coconut">Coconut</option>
-  <option value="mango">Mango</option>
-</select> */}
-        </div>
-        <form onSubmit={this.mySubmitHandler} style={{ display: "flex" }}>
-          <input
-            type="text"
-            name="wishlistName"
-            style={{ flex: "10", padding: "5px" }}
-            placeholder="Name your wishlist"
-            onChange={this.myChangeHandler}
-          />
 
-          <input
-            type="submit"
-            value="Create New List"
-            className="btn"
-            style={{ flex: "1" }}
-          />
-        </form>
+          <span className="add-button" onClick={this.handleSave}>
+            Save Wishlist
+          </span>
+          {/*/////////////////////////////////////*/}
+          {/*/////////////////////////////////////*/}
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Choose your wishlist:
+              <select value={this.state.value} onChange={this.handleChange}>
+                <option value="value">Pick a wishlist to view</option>
+                <option value="wishlist">
+                  {this.props.wishlist.wishlistName}
+                </option>
+                <option value="wishlist2">
+                  {this.props.wishlist2.wishlistName}
+                </option>
+                <option value="wishlist3">
+                  {this.props.wishlist3.wishlistName}
+                </option>
+              </select>
+            </label>
+            <input type="submit" value="Go" />
+          </form>
+          {/* <h1>{this.state.currentWishlist.wishlistName}</h1> */}
+
+          {/*/////////////////////////////////////*/}
+          {/*/////////////////////////////////////*/}
+        </div>
       </div>
     );
   }
@@ -182,31 +234,30 @@ class Wishlist extends Component {
 
 const currentItems = state => {
   return {
-    items: state.wishlist.items,
+    currentList: state.currentWishlist,
+    currentItems: state.wishlist.items,
     currentName: state.wishlist.wishlistName,
-    wishlist: state.wishlist
+    wishlist: state.wishlist,
+    wishlist2: state.wishlist2,
+    wishlist3: state.wishlist3
   };
 };
 
 const changeItems = dispatch => {
   return {
     clickRemove: id => {
-      dispatch(wishRemove(id));
+      dispatch(wishRemove(id)); // dispatch action wishRemove that will trigger state change.
     },
     clickWishToCart: id => {
-      dispatch(wishToCart(id));
+      dispatch(wishToCart(id)); // dispatch action wishToCart that will trigger state change.
     },
-    ///////////////////
-    /////////////////////
     mySubmitHandler: event => {
-      dispatch(changeWishName(event));
+      dispatch(changeWishName(event)); // dispatch action changeWishName that will trigger state change.
+    },
+    handleSave: event => {
+      dispatch(currentWishName(event)); // dispatch action urrentWishName that will trigger state change.
     }
-    /////////////////////
-    /////////////////////
   };
 };
 
-export default connect(
-  currentItems,
-  changeItems
-)(Wishlist);
+export default connect(currentItems, changeItems)(Wishlist); // passing these 2 functions as props to component.

@@ -6,17 +6,46 @@
   color: #0d312b;
   font-family: Arial;
   font-size: 15px;
-  text-align: center;
   font-weight: bold;
   padding: 1px 40px;
   position: relative;
-  width: 100%;
+  width: 90%;
+  text-align: left;
 }
+ 
+.author{
+  font-size: 100%;
+  text-align: left;
+  position: relative;
+  bottom: 10px;
+ 
+} 
 .tile:hover {
   background-color: #f6f6f6;
   text-decoration: none;
-  text-shadow: 0px 1px 0px #cccbcb;
+  text-shadow: 0px 1px 0px #cccbcb; 
   color: #1a6355;
+}
+.book_cover { 
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  cursor: pointer;
+  padding: 6px 6px;
+}
+.book_title {
+  text-align: left;
+  color: #000000;
+}
+.details {
+  margin-right: 5%;
+  margin-left: 3%;
+  margin-top: 1%;
+  width: auto;
+}
+.home-page-list {
+  position: relative;
+}
+.home_buttons {
 }
 .add-button {
   box-shadow: inset 0px 1px 0px 0px #ffffff;
@@ -28,13 +57,12 @@
   color: #666666;
   font-family: Arial;
   font-size: 15px;
-  text-align: center;
   font-weight: bold;
   padding: 6px 6px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #ffffff;
 }
-
+ 
 .add-button:hover {
   background-color: #f6f6f6;
   text-decoration: none;
@@ -50,15 +78,17 @@
   color: #666666;
   font-family: Arial;
   font-size: 15px;
-  text-align: center;
   font-weight: bold;
   padding: 6px 6px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #ffffff;
 }
-
+ 
 .wish-button:hover {
   background-color: #f6f6f6;
   text-decoration: none;
   color: #4839d1;
 }
+ 
+
+
