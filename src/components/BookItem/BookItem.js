@@ -121,20 +121,6 @@ export class Bookitem extends Component {
                 Add
               </button>
             </span>
-
-            {/* /////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////// */}
-            <form onSubmit={this.handleSubmit}>
-              <select value={this.state.value} onChange={this.handleChange}>
-                <option value="wishlist">Primary</option>
-                <option value="wishlist2">Second</option>
-                <option value="wishlist3">Third</option>
-              </select>
-              <input type="submit" value="Submit" />
-            </form>
-            {/* /////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////// */}
-
             <span
               className="clickAddWish"
               onClick={() => {

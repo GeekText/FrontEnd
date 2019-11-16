@@ -11,7 +11,6 @@ export const WISH_LIST_ADD = "WISH_LIST_ADD";
 export const WISH_LIST_REMOVE = "WISH_LIST_REMOVE";
 export const WISH_LIST_RENAME = "WISH_LIST_RENAME";
 export const WISH_LIST_CURRENT = "WISH_LIST_CURRENT";
-export const DETAILS_ADD_WISLIST = "DETAILS_ADD_WISLIST";
 export const DBADD = "DBADD";
 export const FILTER = "FILTER";
 
@@ -45,7 +44,6 @@ var homeItems = {
   addedItemID: [],
   savedItems: [],
   filteredItems: [],
-  currentId: "",
   wishlist: {
     id: 0,
     items: [],
@@ -65,6 +63,7 @@ var homeItems = {
     wishlistName: "Third"
   },
   total: 0
+  //////////////////////////
 };
 async function book_data() {
   try {
@@ -259,128 +258,36 @@ const PageLogic = (state = homeItems, action) => {
       savedItems: newSaveList
     };
   }
-
-  //////////////////////////////////
-  //////////////////////////////////////
-  //////////////////////////////////////
   if (action.type === WISH_LIST_ADD) {
     let wishItem = state.items.find(item => item.id === action.id);
     let exists = state.wishlist.items.find(item => action.id === item.id);
     if (exists) {
       return state;
     } else {
-      if (action.event.id === 0) {
-        return {
-          ...state,
-          wishlist: {
-            ...state.wishlist,
-            items: [...state.wishlist.items, wishItem]
-          }
-        };
-      } else if (action.event.id === 1) {
-        return {
-          ...state,
-          wishlist2: {
-            ...state.wishlist2,
-            items: [...state.wishlist2.items, wishItem]
-          }
-        };
-      } else {
-        return {
-          ...state,
-          wishlist3: {
-            ...state.wishlist3,
-            items: [...state.wishlist3.items, wishItem]
-          }
-        };
+      return {
+        ...state,
+        wishlist: {
+          ...state.wishlist,
+          items: [...state.wishlist.items, wishItem]
+        }
+      };
+    }
+  }
+  if (action.type === WISH_LIST_RENAME) {
+    return {
+      ...state,
+      wishlist: {
+        ...state.wishlist,
+        wishlistName: action.event
       }
-      // return {
-      //   ...state,
-      //   wishlist: {
-      //     ...state.wishlist,
-      //     items: [...state.wishlist.items, wishItem]
-      //   }
-      // };
-    }
+    };
   }
-  if (action.type === WISH_LIST_RENAME) {
-    console.log(action.event.id);
-    if (state.currentId === 0) {
-      return {
-        ...state,
-        wishlist: {
-          ...state.wishlist,
-          wishlistName: action.event
-        }
-      };
-    } else if (state.currentId === 1) {
-      return {
-        ...state,
-        wishlist2: {
-          ...state.wishlist2,
-          wishlistName: action.event
-        }
-      };
-    } else {
-      return {
-        ...state,
-        wishlist3: {
-          ...state.wishlist3,
-          wishlistName: action.event
-        }
-      };
-    }
-    // return {
-    //   ...state,
-    //   wishlist: {
-    //     ...state.wishlist,
-    //     wishlistName: action.event
-    //   }
-    // };
-  }
-  ////////////////////////////////////////////////
-  ////////////////////////////////////////////////
-  ///////////////////////////////////////////////
-
   if (action.type === WISH_LIST_CURRENT) {
-    console.log(action.event.id);
-    if (action.event.id === 0) {
-      state.currentId = action.event.id;
-      return {
-        ...state,
-        wishlist: {
-          ...state.wishlist,
-          items: action.event.items,
-          options: action.event.options,
-          wishlistName: action.event.wishlistName
-        }
-      };
-    } else if (action.event.id === 1) {
-      state.currentId = action.event.id;
-      return {
-        ...state,
-        wishlist2: {
-          ...state.wishlist2,
-          items: action.event.items,
-          options: action.event.options,
-          wishlistName: action.event.wishlistName
-        }
-      };
-    } else {
-      state.currentId = action.event.id;
-      return {
-        ...state,
-        wishlist3: {
-          ...state.wishlist3,
-          items: action.event.items,
-          options: action.event.options,
-          wishlistName: action.event.wishlistName
-        }
-      };
-    }
-  }
-  if (action.type === DETAILS_ADD_WISLIST) {
-    console.log(action.event.id);
+    console.log(
+      "Saved Wishlist in PL: ",
+      action.event.id,
+      action.event.wishlistName
+    );
     if (action.event.id === 0) {
       return {
         ...state,
@@ -401,7 +308,7 @@ const PageLogic = (state = homeItems, action) => {
           wishlistName: action.event.wishlistName
         }
       };
-    } else {
+    } else if (action.event.id === 2) {
       return {
         ...state,
         wishlist3: {
@@ -411,6 +318,8 @@ const PageLogic = (state = homeItems, action) => {
           wishlistName: action.event.wishlistName
         }
       };
+    } else {
+      return state;
     }
   }
   if (action.type === WISH_LIST_REMOVE) {
