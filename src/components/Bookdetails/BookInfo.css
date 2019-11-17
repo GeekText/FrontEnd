@@ -1,7 +1,7 @@
 .publish
 {
 
-    font-size: 13px;
+    font-size: 17px;
 }
 .bookname
 {
@@ -12,4 +12,8 @@
     border-radius: 6px;
     border: 1px solid #dcdcdc;
     padding: 6px 6px;
+    float: left;
   }
+.released {
+
+}

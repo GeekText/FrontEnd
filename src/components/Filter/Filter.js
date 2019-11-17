@@ -1,30 +1,80 @@
 import React, { Component } from "react";
 import AuthorNames from "./AuthorNames";
-import './Filter.css';
+import { connect } from "react-redux";
+import { refresh, filtered } from "./FilterFunctions";
+import "./Filter.css";
 class Filter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filteredItems: [],
+      items: [],
+      searched: false,
+      exampleInputPrice1: 20
+    };
+    this.commonChange = this.commonChange.bind(this);
+    this.submitFilter = this.submitFilter.bind(this);
+  }
+  commonChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  }
+  submitFilter(event) {
+    event.preventDefault();
+    this.searchPrice(this.state.exampleInputPrice1);
+  }
+  sendFilter(list) {
+    this.props.sendFilter(list);
+  }
+  searchPrice(price) {
+    var number = parseInt(price, 10);
+    console.log(number);
+    let newlist = this.props.items.filter(item => item.book_price === number);
+    this.setState({ filteredItems: newlist, searched: true }, function() {
+      //Immediately changes state
+      this.sendFilter(this.state.filteredItems);
+    });
+  }
+
   render() {
+    let filtered =
+      this.state.filteredItems.length || this.state.searched ? (
+        this.state.filteredItems.length ? (
+          [
+            <div className="filter-number" key="filters">
+              <h4>Filtered items: ({this.state.filteredItems.length})</h4>
+            </div>
+          ]
+        ) : (
+          <div className="filter-number" key="filters2">
+            <h4>No items found: ({this.state.filteredItems.length})</h4>
+          </div>
+        )
+      ) : (
+        <div></div>
+      );
     return (
       <div className="container">
         <div className="filter">
           <div className="alert alert-success" role="alert">
             <h3>Sort by</h3>
             <div className="form-check form-check-inline">
-
               <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="defaultCheck2"
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="defaultCheck2"
               />
               <label className="form-check-label" htmlFor="defaultCheck2">
                 Top sellers
               </label>
 
               <input
-              className="form-check-input"
-              type="checkbox"
-              value=""
-              id="defaultCheck3"
+                className="form-check-input"
+                type="checkbox"
+                value=""
+                id="defaultCheck3"
               />
               <label className="form-check-label" htmlFor="defaultCheck3">
                 Book Title
@@ -32,34 +82,32 @@ class Filter extends Component {
             </div>
             <br></br>
 
-
-              <div className="Martyn form-group row">
-                  <label
-                      htmlFor="inputPassword"
-                      className="col-sm-2 col-form-label"
-                  >
-                      <p>Book Genre</p>
-                  </label>
-                  <div className="col-sm-10">
-                      <select className="form-control" id="exampleFormControlSelect1">
-                          <option>All</option>
-                          <option>Comedy</option>
-                          <option>Drama</option>
-                          <option>Horror</option>
-                          <option>Documentary</option>
-                          <option>Romance</option>
-                          <option>Action</option>
-                          <option>Adventure</option>
-                          <option>Mystery</option>
-                          <option>Sci-Fi</option>
-                          <option>Thriller</option>
-                          <option>Crime</option>
-                          <option>Romance</option>
-                          <option>Fantasy</option>
-                      </select>
-                  </div>
+            <div className="Martyn form-group row">
+              <label
+                htmlFor="inputPassword"
+                className="col-sm-2 col-form-label"
+              >
+                <p>Book Genre</p>
+              </label>
+              <div className="col-sm-10">
+                <select className="form-control" id="exampleFormControlSelect1">
+                  <option>All</option>
+                  <option>Comedy</option>
+                  <option>Drama</option>
+                  <option>Horror</option>
+                  <option>Documentary</option>
+                  <option>Romance</option>
+                  <option>Action</option>
+                  <option>Adventure</option>
+                  <option>Mystery</option>
+                  <option>Sci-Fi</option>
+                  <option>Thriller</option>
+                  <option>Crime</option>
+                  <option>Romance</option>
+                  <option>Fantasy</option>
+                </select>
               </div>
-
+            </div>
 
             <div className="Martyn form-group row">
               <label
@@ -108,7 +156,7 @@ class Filter extends Component {
                 <select className="form-control" id="exampleFormControlSelect1">
                   {/*Gets all the author's name and displays them*/}
                   <option>none</option>
-                  <AuthorNames bookdetails={this.props.bookdetails}/>
+                  <AuthorNames bookdetails={this.props.bookdetails} />
                 </select>
               </div>
             </div>
@@ -124,32 +172,51 @@ class Filter extends Component {
                 <input
                   type="number"
                   className="form-control"
-                  id="exampleInputPrice1"
+                  name="exampleInputPrice1"
                   placeholder="20"
+                  // TODO Maybe
+                  //onKeyPress={this.searchPrice(39)}
+                  onChange={this.commonChange}
                 />
               </div>
+              <input type="submit" value="Submit" onClick={this.submitFilter} />
             </div>
 
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <div className="input-group-text">
                   <input
-                  type="checkbox"
-                  aria-label="Checkbox for following text input"
+                    type="checkbox"
+                    aria-label="Checkbox for following text input"
                   />
                 </div>
               </div>
               <input
-              type="text"
-              className="form-control"
-              placeholder="To sort by date put year here"
+                type="text"
+                className="form-control"
+                placeholder="To sort by date put year here"
               />
             </div>
+            {filtered}
           </div>
         </div>
       </div>
     );
   }
 }
-
-export default Filter;
+const currentItems = state => {
+  return {
+    items: state.items
+  };
+};
+const changeItems = dispatch => {
+  return {
+    recentState: id => {
+      dispatch(refresh(id));
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
+    }
+  };
+};
+export default connect(currentItems, changeItems)(Filter);

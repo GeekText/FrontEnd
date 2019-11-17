@@ -3,8 +3,8 @@
   margin: auto;
 }
 
-.row
-{
-  /*display: inline-flex;*/
-  /*max-width: 734px;*/
+.filter-number {
+  margin-right: 5%;
+  text-align: center;
+  color: rgb(6, 54, 4);
 }

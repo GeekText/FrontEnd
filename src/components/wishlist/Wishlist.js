@@ -17,13 +17,14 @@ class Wishlist extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "wishlist",
+      value: "Pick a wishlist to view",
       currentWishlist: {
         // current wishlist for the drop down
         id: 0, // id number for that wishlist
         items: [], // book items saved in wishlist
         options: [], // option array
-        wishlistName: "Please choose a list" // name of the wishlist
+        wishlistName: "Default"
+        // name of the wishlist
       }
     };
     this.handleChange = this.handleChange.bind(this); // simplified function call for handleChange
@@ -38,6 +39,7 @@ class Wishlist extends Component {
   // prevent refresh and change to wishlist of your choice.
   handleSubmit(event) {
     event.preventDefault();
+    this.handleSave(event);
     this.changeCurrentWishList();
   }
 
@@ -53,7 +55,7 @@ class Wishlist extends Component {
       this.setState({ currentWishlist: this.props.wishlist });
     } else if (this.state.value === "wishlist2") {
       this.setState({ currentWishlist: this.props.wishlist2 });
-    } else {
+    } else if (this.state.value === "wishlist3") {
       this.setState({ currentWishlist: this.props.wishlist3 });
     }
   }
@@ -87,14 +89,25 @@ class Wishlist extends Component {
   // When submit button is clicked, pass current wishlist name to the handler.
   mySubmitHandler = event => {
     event.preventDefault(); // prevent refleshing.
-    this.props.mySubmitHandler(this.state.wishlistName);
+    event.persist();
+    this.handleSave(event);
   };
 
   // change the name of the current wishlist.
   myChangeHandler = event => {
-    this.setState({ wishlistName: event.target.value });
+    event.preventDefault(); // prevent refleshing.
+    event.persist();
+    let change = event.target.value;
+    this.setState(state => {
+      return {
+        ...state,
+        currentWishlist: {
+          ...state.currentWishlist,
+          wishlistName: change
+        }
+      };
+    });
   };
-
   clickRemove = id => {
     this.props.clickRemove(id);
   };
@@ -186,22 +199,28 @@ class Wishlist extends Component {
             Add To Cart
           </span>
 
+          <span className="add-button" onClick={this.handleSave}>
+            Save Wishlist
+          </span>
           {/*/////////////////////////////////////*/}
           {/*/////////////////////////////////////*/}
           <form onSubmit={this.handleSubmit}>
             <label>
               Choose your wishlist:
               <select value={this.state.value} onChange={this.handleChange}>
-                <option value="wishlist">Primary</option>
-                <option value="wishlist2">Second</option>
-                <option value="wishlist3">Third</option>
+                <option value="value">Pick a wishlist to view</option>
+                <option value="wishlist">
+                  {this.props.wishlist.wishlistName}
+                </option>
+                <option value="wishlist2">
+                  {this.props.wishlist2.wishlistName}
+                </option>
+                <option value="wishlist3">
+                  {this.props.wishlist3.wishlistName}
+                </option>
               </select>
             </label>
-            <input type="submit" value="Submit" />
-
-            <span className="add-button" onClick={this.handleSave}>
-              Save
-            </span>
+            <input type="submit" value="Go" />
           </form>
           {/* <h1>{this.state.currentWishlist.wishlistName}</h1> */}
 

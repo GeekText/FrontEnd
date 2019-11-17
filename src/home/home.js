@@ -3,6 +3,7 @@ import "./home.css";
 import Bookdetails from "../components/Bookdetails/Bookdetails";
 import Filter from "../components/Filter/Filter";
 import { connect } from "react-redux";
+import { addDB } from "./homeFunctions.js";
 
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
@@ -46,6 +47,9 @@ class home extends React.Component {
     }
   }
 
+  fixDB(event) {
+    this.props.fixDB(event);
+  }
   styling = {
     textAlign: "center"
   };
@@ -64,6 +68,8 @@ class home extends React.Component {
         this.setState({ bookdetails: response.data });
       }
       console.log("Current state " + this.state.bookdetails);
+      console.log("Sending DB to PageLogic");
+      this.fixDB(this.state.bookdetails);
     } catch (error) {
       console.error(error);
     }
@@ -73,9 +79,7 @@ class home extends React.Component {
     return (
       <div className="App" style={this.styling}>
         <h4>Books for Sale</h4>
-        <Filter
-            bookdetails={this.state.bookdetails}
-        />
+        <Filter bookdetails={this.state.bookdetails} />
         <Bookdetails
           key={this.state.bookdetails}
           bookdetails={this.state.bookdetails}
@@ -84,11 +88,20 @@ class home extends React.Component {
     );
   }
 }
-
+const changeItems = dispatch => {
+  return {
+    fixDB: event => {
+      dispatch(addDB(event));
+    }
+  };
+};
 const currentItems = state => {
   return {
     items: state.items
   };
 };
 
-export default connect(currentItems)(home);
+export default connect(
+  currentItems,
+  changeItems
+)(home);
