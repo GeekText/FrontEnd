@@ -10,13 +10,18 @@ class Filter extends Component {
       filteredItems: [],
       items: [],
       searched: false,
-      searching: false,
       exampleInputPrice1: 0,
-      selectValue: "none"
+      selectValue: "none",
+      selectGenre: "All",
+      selectRating: "All",
+      selectResults: "All"
     };
     this.commonChange = this.commonChange.bind(this);
     this.submitFilter = this.submitFilter.bind(this);
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleDropdownGenre = this.handleDropdownGenre.bind(this);
+    this.handleDropdownRating = this.handleDropdownRating.bind(this);
+    this.handleDropdownResults = this.handleDropdownResults.bind(this);
   }
   commonChange(event) {
     console.log("Price Filter", [event.target.name], event.target.value);
@@ -28,20 +33,33 @@ class Filter extends Component {
     event.preventDefault();
     this.searching();
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.value > prevState.value) {
-    }
-  }
   handleDropdownChange(e) {
     this.setState({ selectValue: e.target.value }, function() {
-      console.log("Dropbown Change Author", this.state.selectValue);
+      console.log("Show Author", this.state.selectValue);
+    });
+  }
+  handleDropdownGenre(e) {
+    this.setState({ selectGenre: e.target.value }, function() {
+      console.log("Show Genre", this.state.selectGenre);
+    });
+  }
+  handleDropdownRating(e) {
+    this.setState({ selectRating: e.target.value }, function() {
+      console.log("Show Rating", this.state.selectRating);
+    });
+  }
+  handleDropdownResults(e) {
+    this.setState({ selectResults: e.target.value }, function() {
+      console.log("Results limit", this.state.selectResults);
     });
   }
   sendFilter(list) {
     this.props.sendFilter(list);
   }
   searching() {
+    //Temp list for filter
     let filteredlist;
+    //Sort by Author
     let name = this.state.selectValue.split(",");
     if (name !== "none") {
       let listFirstName = this.props.items.filter(
@@ -54,10 +72,51 @@ class Filter extends Component {
         value => -1 !== listLastName.indexOf(value)
       );
     }
-    var number = parseInt(this.state.exampleInputPrice1, 10);
+    //Sort by Genre
+    let genre = this.state.selectGenre.split("|");
+    console.log(genre);
+    if (this.state.selectGenre !== "All") {
+      var i;
+      function mapCallback(item) {
+        let bookGenre = item.book_genre.split("|");
+        for (var x = 0; x < bookGenre.length; x++) {
+          console.log(
+            "Check",
+            bookGenre[x] === genre[i],
+            bookGenre[x],
+            genre[i]
+          );
+          if (bookGenre[x] === genre[i]) {
+            return true;
+          }
+        }
+        return false;
+      }
+      if (filteredlist && filteredlist.length) {
+        for (i = 0; i < genre.length; i++) {
+          filteredlist = filteredlist.filter(mapCallback);
+        }
+      } else {
+        for (i = 0; i < genre.length; i++) {
+          filteredlist = this.props.items.filter(mapCallback);
+        }
+      }
+    }
+    //Sort by Rating
+    if (this.state.selectRating !== "All") {
+      var rating = parseInt(this.state.selectRating);
+      if (filteredlist && filteredlist.length) {
+        filteredlist = filteredlist.filter(item => item.book_rating === rating);
+      } else {
+        filteredlist = this.props.items.filter(
+          item => item.book_rating === rating
+        );
+      }
+    }
+    //Sort by Price
+    var number = parseInt(this.state.exampleInputPrice1);
     if (Number.isInteger(number) && number > 0) {
       if (filteredlist && filteredlist.length) {
-        console.log("List", filteredlist);
         filteredlist = filteredlist.filter(item => item.book_price === number);
       } else {
         filteredlist = this.props.items.filter(
@@ -65,12 +124,22 @@ class Filter extends Component {
         );
       }
     }
-    this.setState(
-      { filteredItems: filteredlist, searched: true, searching: true },
-      function() {
-        this.sendFilter(this.state.filteredItems);
+    //Sort by Results
+    if (this.state.selectResults !== "All") {
+      var limit = parseInt(this.state.selectResults);
+      if (this.state.filteredItems.length > limit) {
+        var offset = this.state.filteredItems.length - limit;
+        if (filteredlist && filteredlist.length) {
+          filteredlist = filteredlist.slice(offset);
+        } else {
+          filteredlist = this.props.items.slice(offset);
+        }
       }
-    );
+    }
+    //Set Filter
+    this.setState({ filteredItems: filteredlist, searched: true }, function() {
+      this.sendFilter(this.state.filteredItems);
+    });
   }
   render() {
     let filtered =
@@ -125,21 +194,25 @@ class Filter extends Component {
                 <p>Book Genre</p>
               </label>
               <div className="col-sm-10">
-                <select className="form-control" id="exampleFormControlSelect1">
-                  <option>All</option>
-                  <option>Comedy</option>
-                  <option>Drama</option>
-                  <option>Horror</option>
-                  <option>Documentary</option>
-                  <option>Romance</option>
-                  <option>Action</option>
-                  <option>Adventure</option>
-                  <option>Mystery</option>
-                  <option>Sci-Fi</option>
-                  <option>Thriller</option>
-                  <option>Crime</option>
-                  <option>Romance</option>
-                  <option>Fantasy</option>
+                <select
+                  className="form-control"
+                  id="exampleFormControlSelect1"
+                  onChange={this.handleDropdownGenre}
+                >
+                  <option value="All">All</option>
+                  <option value="Comedy">Comedy</option>
+                  <option value="Drama">Drama</option>
+                  <option value="Horror">Horror</option>
+                  <option value="Documentary">Documentary</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Action">Action</option>
+                  <option value="Adventure">Adventure</option>
+                  <option value="Mystery">Mystery</option>
+                  <option value="Sci-Fi">Sci-Fi</option>
+                  <option value="Thriller">Thriller</option>
+                  <option value="Crime">Crime</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Fantasy">Fantasy</option>
                 </select>
               </div>
             </div>
@@ -152,13 +225,17 @@ class Filter extends Component {
                 <p>Book Rating</p>
               </label>
               <div className="col-sm-10">
-                <select className="form-control" id="exampleFormControlSelect1">
-                  <option>All</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+                <select
+                  className="form-control"
+                  id="exampleFormControlSelect1"
+                  onChange={this.handleDropdownRating}
+                >
+                  <option value="All">All</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
                 </select>
               </div>
             </div>
@@ -171,10 +248,14 @@ class Filter extends Component {
                 Results Per Page
               </label>
               <div className="col-sm-10">
-                <select className="form-control" id="exampleFormControlSelect1">
-                  <option>All</option>
-                  <option>10</option>
-                  <option>20</option>
+                <select
+                  className="form-control"
+                  id="exampleFormControlSelect1"
+                  onChange={this.handleDropdownResults}
+                >
+                  <option value="All">All</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
                 </select>
               </div>
             </div>

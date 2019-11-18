@@ -55,7 +55,7 @@ class Searched extends Component {
                             Publish Date: {item.book_publishing_info + " "}
                           </span>
                           <span className="card-subtitle mb-2 text-muted">
-                            Release Date:{item.book_releaseDate}{" "}
+                            Release Date: {item.book_releaseDate}{" "}
                           </span>
                           <br></br>
                           <span className="card-subtitle mb-2 text-muted">
