@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
+import { filtered } from "../Filter/FilterFunctions";
 class BookInfo extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +15,8 @@ class BookInfo extends Component {
         items: [], // book items saved in wishlist
         options: [], // option array
         wishlistName: "BookInfo" // name of the wishlist
-      }
+      },
+      filteredItems: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,22 +68,92 @@ class BookInfo extends Component {
       this.setState({ currentWishlist: this.props.wishlist3 });
     }
   }
+
+  searchAuthor(name) {
+    let listFirstName;
+    let listLastName;
+    listFirstName = this.props.items.filter(
+      item => item.author_first_name === name[0]
+    );
+    listLastName = this.props.items.filter(
+      item => item.author_last_name === name[1]
+    );
+
+    let names = listFirstName.filter(
+      value => -1 !== listLastName.indexOf(value)
+    );
+    this.sendFilter(names);
+  }
+
+  submitFilter(name) {
+    this.searchAuthor(name);
+  }
+  sendFilter(list) {
+    this.props.sendFilter(list);
+  }
   render() {
+    //let authorName = [this.props.items.author_first_name,this.props.items.author_last_name];
     let addedItemID = this.props.items.length ? (
       this.props.items.map(item => {
         return (
           <div className="slot" key={item.id}>
-            <div>
-              <img
-                src={item.book_cover}
-                alt="Failed to load: book_cover"
-                width="200"
-                height="200"
-                className="image"
-              />
-            </div>
-            <p className="card-title">Title: {item.book_name}</p>
-            <i className="card-subtitle mb-2 text-muted">{item.book_desc}</i>
+            <span href="#tile" className="tile">
+              <div className="item">
+                <div className="book_cover">
+                  <img
+                    src={item.book_cover}
+                    alt="bookcover placeholder"
+                    width="200"
+                    height="200"
+                  ></img>
+                </div>
+                <div className="details">
+                  <h5 className="book_title">
+                    <p>{item.book_name}</p>
+                  </h5>
+                  <div className="book_details">
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      Author Bio: {item.author_biography}
+                    </h6>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Publish Date: {item.book_publishing_info + " "}
+                    </span>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Release Date:{item.book_releaseDate}{" "}
+                    </span>
+                    <br></br>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Genre: {item.book_genre}{" "}
+                    </span>
+                    <br></br>
+                    <span className="card-subtitle mb-2 text-muted">
+                      Rating: {item.book_rating}
+                    </span>
+                    <br></br>
+                    <span className="card-text">
+                      {" "}
+                      Publisher: {item.book_publisher}
+                    </span>
+                    <p className="card-text">
+                      Author Name:{" "}
+                      <span
+                        className="clickAddButton"
+                        onClick={() =>
+                          this.submitFilter([
+                            item.author_first_name,
+                            item.author_last_name
+                          ])
+                        }
+                      >
+                        <Link to="/search">
+                          {item.author_first_name + " " + item.author_last_name}
+                        </Link>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </span>
             <p>
               <b>Price: ${item.book_price}</b>
             </p>
@@ -146,6 +218,9 @@ const changeItems = dispatch => {
   return {
     handleSave: event => {
       dispatch(currentWishName(event)); // dispatch action urrentWishName that will trigger state change.
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
     }
   };
 };

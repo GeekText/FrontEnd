@@ -4,6 +4,7 @@ import Bookdetails from "../components/Bookdetails/Bookdetails";
 import Filter from "../components/Filter/Filter";
 import { connect } from "react-redux";
 import { addDB } from "./homeFunctions.js";
+import { Link } from "react-router-dom";
 
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
@@ -84,6 +85,11 @@ class home extends React.Component {
           key={this.state.bookdetails}
           bookdetails={this.state.bookdetails}
         />
+        <Link to="/">
+          <span href="#fitler" className="links" type="button">
+            Reset Search
+          </span>
+        </Link>
       </div>
     );
   }
@@ -101,7 +107,4 @@ const currentItems = state => {
   };
 };
 
-export default connect(
-  currentItems,
-  changeItems
-)(home);
+export default connect(currentItems, changeItems)(home);

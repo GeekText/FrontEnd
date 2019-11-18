@@ -44,6 +44,7 @@ var homeItems = {
   addedItemID: [],
   savedItems: [],
   filteredItems: [],
+  searched: [],
   wishlist: {
     id: 0,
     items: [],
