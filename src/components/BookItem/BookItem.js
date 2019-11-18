@@ -94,10 +94,7 @@ export class Bookitem extends Component {
                 {" "}
                 Published by {this.props.book.book_publisher}
               </span>
-              <span className="publish">
-                {" "}
-                ({this.props.book.book_publishing_info})
-              </span>
+              
             </div>
           </div>
         </div>
