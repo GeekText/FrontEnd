@@ -136,7 +136,8 @@ class BookInfo extends Component {
                     </span>
                     <p className="card-text">
                       Author Name:{" "}
-                      <span
+                      <Link
+                        to="/search"
                         className="clickAddButton"
                         onClick={() =>
                           this.submitFilter([
@@ -145,10 +146,8 @@ class BookInfo extends Component {
                           ])
                         }
                       >
-                        <Link to="/search">
-                          {item.author_first_name + " " + item.author_last_name}
-                        </Link>
-                      </span>
+                        {item.author_first_name + " " + item.author_last_name}
+                      </Link>
                     </p>
                   </div>
                 </div>

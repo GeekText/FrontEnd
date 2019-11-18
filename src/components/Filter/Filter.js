@@ -26,10 +26,6 @@ class Filter extends Component {
   }
   submitFilter(event) {
     event.preventDefault();
-    //this.searchAuthor(this.state.selectValue);
-    //console.log(this.state.searching);
-    //this.searchPrice(this.state.exampleInputPrice1);
-    //this.setState({ searching: false });
     this.searching();
   }
   componentDidUpdate(prevProps, prevState) {
@@ -61,9 +57,8 @@ class Filter extends Component {
     var number = parseInt(this.state.exampleInputPrice1, 10);
     if (Number.isInteger(number) && number > 0) {
       if (filteredlist && filteredlist.length) {
-        filteredlist = this.props.filteredlist.filter(
-          item => item.book_price === number
-        );
+        console.log("List", filteredlist);
+        filteredlist = filteredlist.filter(item => item.book_price === number);
       } else {
         filteredlist = this.props.items.filter(
           item => item.book_price === number
@@ -76,65 +71,6 @@ class Filter extends Component {
         this.sendFilter(this.state.filteredItems);
       }
     );
-  }
-  searchPrice(price) {
-    var number = parseInt(price, 10);
-    let newlist;
-    if (Number.isInteger(number) && number > 0) {
-      if (this.state.searching) {
-        newlist = this.state.filteredItems.filter(
-          item => item.book_price === number
-        );
-        console.log("Using filtered list in Price", this.state.filteredItems);
-        console.log("New list in Price", newlist);
-      } else {
-        newlist = this.props.items.filter(item => item.book_price === number);
-      }
-
-      this.setState(
-        { filteredItems: newlist, searched: true, searching: true },
-        function() {
-          //Immediately changes state
-          this.sendFilter(this.state.filteredItems);
-        }
-      );
-    }
-  }
-  searchAuthor(name) {
-    name = name.split(",");
-    let listFirstName;
-    let listLastName;
-    if (name !== "none") {
-      if (this.state.searching) {
-        listFirstName = this.state.filteredItems.filter(
-          item => item.author_first_name === name[0]
-        );
-        listLastName = this.state.filteredItems.filter(
-          item => item.author_last_name === name[1]
-        );
-        console.log("Using filtered list in Author", this.state.filteredItems);
-      } else {
-        listFirstName = this.props.items.filter(
-          item => item.author_first_name === name[0]
-        );
-        listLastName = this.props.items.filter(
-          item => item.author_last_name === name[1]
-        );
-      }
-
-      let names = listFirstName.filter(
-        value => -1 !== listLastName.indexOf(value)
-      );
-      console.log("New list in Author", names);
-      this.setState(
-        { filteredItems: names, searched: true, searching: true },
-        function() {
-          //Immediately changes state
-          this.sendFilter(this.state.filteredItems);
-          console.log("TRUE:", this.state.searching);
-        }
-      );
-    }
   }
   render() {
     let filtered =

@@ -5,40 +5,10 @@ import { addItemDetails } from "./BookFunctions";
 import { addItemWish } from "../wishlist/WishlistFunctions";
 import "../wishlist/Wishlist";
 import { Link } from "react-router-dom";
+import { filtered } from "../Filter/FilterFunctions";
 import "./BookItem.css";
 
 export class Bookitem extends Component {
-  // style= {"width": "18rem"}
-
-  /////////////////////////////////
-  ///////////////////////////
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: "wishlist"
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.changeCurrentWishList();
-  }
-  changeCurrentWishList() {
-    if (this.state.value === "wishlist") {
-      this.setState({ currentWishlist: this.props.wishlist });
-    } else if (this.state.value === "wishlist2") {
-      this.setState({ currentWishlist: this.props.wishlist2 });
-    } else {
-      this.setState({ currentWishlist: this.props.wishlist3 });
-    }
-  }
-  /////////////////////////////////////////////
-  /////////////////////////////////////////////
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -48,7 +18,89 @@ export class Bookitem extends Component {
   clickOnWish = id => {
     this.props.addItemWish(id);
   };
+  searchAuthor(name) {
+    let listFirstName;
+    let listLastName;
+    listFirstName = this.props.items.filter(
+      item => item.author_first_name === name[0]
+    );
+    listLastName = this.props.items.filter(
+      item => item.author_last_name === name[1]
+    );
+
+    let names = listFirstName.filter(
+      value => -1 !== listLastName.indexOf(value)
+    );
+    this.sendFilter(names);
+  }
+
+  submitFilter(name) {
+    this.searchAuthor(name);
+  }
+  sendFilter(list) {
+    this.props.sendFilter(list);
+  }
   render() {
+    let bookInfo = (
+      <span href="#tile" className="tile">
+        <div className="item">
+          <div className="book_cover">
+            <img
+              src={this.props.book.book_cover}
+              alt="bookcover placeholder"
+              width="200"
+              height="200"
+            ></img>
+          </div>
+          <div className="details">
+            <h5 className="book_title">
+              <p>{this.props.book.book_name}</p>
+            </h5>
+            <div className="book_details">
+              <h6 className="card-subtitle mb-2 text-muted">
+                Author Bio: {this.props.book.author_biography}
+              </h6>
+              <span className="card-subtitle mb-2 text-muted">
+                Publish Date: {this.props.book.book_publishing_info + " "}
+              </span>
+              <span className="card-subtitle mb-2 text-muted">
+                Release Date:{this.props.book.book_releaseDate}{" "}
+              </span>
+              <br></br>
+              <span className="card-subtitle mb-2 text-muted">
+                Genre: {this.props.book.book_genre}{" "}
+              </span>
+              <br></br>
+              <span className="card-subtitle mb-2 text-muted">
+                Rating: {this.props.book.book_rating}
+              </span>
+              <br></br>
+              <span className="card-text">
+                {" "}
+                Publisher: {this.props.book.book_publisher}
+              </span>
+              <p className="card-text">
+                Author Name:{" "}
+                <Link
+                  to="/search"
+                  className="clickAddButton"
+                  onClick={() =>
+                    this.submitFilter([
+                      this.props.book.author_first_name,
+                      this.props.book.author_last_name
+                    ])
+                  }
+                >
+                  {this.props.book.author_first_name +
+                    " " +
+                    this.props.book.author_last_name}
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </span>
+    );
     return (
       <div className="home-page-list" key={this.props.book.id}>
         <div className="container">
@@ -58,56 +110,7 @@ export class Bookitem extends Component {
               this.clickOnDetails(this.props.book.id);
             }}
           >
-            <Link to="/details">
-              <span href="#tile" className="tile">
-                <div className="item">
-                  <div className="book_cover">
-                    <img
-                      src={this.props.book.book_cover}
-                      alt="bookcover placeholder"
-                      width="200"
-                      height="200"
-                    ></img>
-                  </div>
-                  <div className="details">
-                    <h5 className="book_title">
-                      <p>{this.props.book.book_name}</p>
-                    </h5>
-                    <div className="book_details">
-                      <h6 className="card-subtitle mb-2 text-muted">
-                        Author Bio: {this.props.book.author_biography}
-                      </h6>
-                      <span className="card-subtitle mb-2 text-muted">
-                        Publish Date:{" "}
-                        {this.props.book.book_publishing_info + " "}
-                      </span>
-                      <span className="card-subtitle mb-2 text-muted">
-                        Release Date:{this.props.book.book_releaseDate}{" "}
-                      </span>
-                      <br></br>
-                      <span className="card-subtitle mb-2 text-muted">
-                        Genre: {this.props.book.book_genre}{" "}
-                      </span>
-                      <br></br>
-                      <span className="card-subtitle mb-2 text-muted">
-                        Rating: {this.props.book.book_rating}
-                      </span>
-                      <br></br>
-                      <span className="card-text">
-                        {" "}
-                        Publisher: {this.props.book.book_publisher}
-                      </span>
-                      <p className="card-text">
-                        Author Name:{" "}
-                        {this.props.book.author_first_name +
-                          " " +
-                          this.props.book.author_last_name}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </span>
-            </Link>
+            <Link to="/details">{bookInfo}</Link>
           </span>
           <p className="home_buttons">
             <i>Price: ${this.props.book.book_price} </i>
@@ -153,6 +156,9 @@ const checkCartReducer = dispatch => {
     },
     addItemWish: id => {
       dispatch(addItemWish(id));
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
     }
   };
 };

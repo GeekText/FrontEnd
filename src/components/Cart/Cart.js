@@ -10,6 +10,7 @@ import {
   saveRemove,
   addItemWish
 } from "./CartFunctions.js";
+import { filtered } from "../Filter/FilterFunctions";
 import Popup from "./Popup";
 import "./Cart.css";
 
@@ -35,6 +36,29 @@ class Cart extends Component {
     this.setState({
       showPopupWish: !this.state.showPopupWish
     });
+  }
+
+  searchAuthor(name) {
+    let listFirstName;
+    let listLastName;
+    listFirstName = this.props.items.filter(
+      item => item.author_first_name === name[0]
+    );
+    listLastName = this.props.items.filter(
+      item => item.author_last_name === name[1]
+    );
+
+    let names = listFirstName.filter(
+      value => -1 !== listLastName.indexOf(value)
+    );
+    this.sendFilter(names);
+  }
+
+  submitFilter(name) {
+    this.searchAuthor(name);
+  }
+  sendFilter(list) {
+    this.props.sendFilter(list);
   }
 
   clickRemove = id => {
@@ -76,10 +100,23 @@ class Cart extends Component {
               </div>
               <div className="description">
                 <span className="card-title">
-                  <b>{item.book_name}</b>
+                  <h5 className="book_title">{item.book_name}</h5>
                   <span className="author">
-                    By: {item.author_first_name} {item.author_last_name} (
-                    {item.gender})
+                    By:{" "}
+                    <b
+                      className="clickAddButton"
+                      onClick={() =>
+                        this.submitFilter([
+                          item.author_first_name,
+                          item.author_last_name
+                        ])
+                      }
+                    >
+                      <Link to="/search">
+                        {item.author_first_name + " " + item.author_last_name}
+                      </Link>
+                    </b>{" "}
+                    ({item.gender})
                   </span>
                   <i className="card-subtitle mb-2 text-muted">
                     {item.book_desc}
@@ -346,6 +383,9 @@ const changeItems = dispatch => {
     },
     clickSaveToWish: id => {
       dispatch(addItemWish(id));
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
     }
   };
 };

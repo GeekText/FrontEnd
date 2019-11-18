@@ -2,9 +2,9 @@ import React from "react";
 import "./home.css";
 import Bookdetails from "../components/Bookdetails/Bookdetails";
 import Filter from "../components/Filter/Filter";
+import { filtered } from "../components/Filter/FilterFunctions";
 import { connect } from "react-redux";
 import { addDB } from "./homeFunctions.js";
-import { Link } from "react-router-dom";
 
 const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
@@ -54,11 +54,9 @@ class home extends React.Component {
   styling = {
     textAlign: "center"
   };
-  // componentWillMount()
-  // {
-  //     // Clear the interval right before component unmount
-  //     clearInterval(this.interval);
-  // }
+  sendFilter(list) {
+    this.props.sendFilter(list);
+  }
 
   async getData() {
     console.log("Getting DB data");
@@ -85,11 +83,15 @@ class home extends React.Component {
           key={this.state.bookdetails}
           bookdetails={this.state.bookdetails}
         />
-        <Link to="/">
-          <span href="#fitler" className="links" type="button">
-            Reset Search
-          </span>
-        </Link>
+        <span
+          onClick={() => this.sendFilter([])}
+          to="/"
+          href="#search"
+          className="links"
+          type="button"
+        >
+          Reset Search
+        </span>
       </div>
     );
   }
@@ -98,6 +100,9 @@ const changeItems = dispatch => {
   return {
     fixDB: event => {
       dispatch(addDB(event));
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
     }
   };
 };
