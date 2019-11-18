@@ -1,0 +1,19 @@
+.publish
+{
+
+    font-size: 17px;
+}
+.bookname
+{
+    text-align: inline; 
+    font-size: 30px;
+}
+.image { 
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+    padding: 6px 6px;
+    float: left;
+  }
+.released {
+
+}

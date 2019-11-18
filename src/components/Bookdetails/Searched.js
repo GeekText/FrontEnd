@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { addItemDetails } from "../BookItem/BookFunctions";
 import Filter from "../Filter/Filter";
+import { filtered } from "../Filter/FilterFunctions";
 import { addItem } from "../Cart/CartFunctions";
 import { addItemWish } from "../wishlist/WishlistFunctions";
 
@@ -16,6 +17,9 @@ class Searched extends Component {
   clickOnWish = id => {
     this.props.addItemWish(id);
   };
+  sendFilter(list) {
+    this.props.sendFilter(list);
+  }
   render() {
     let fitler = this.props.items.length ? (
       this.props.items.map(item => {
@@ -122,10 +126,14 @@ class Searched extends Component {
           <Filter bookdetails={this.props.all} />
           <h4>Related entries: ({this.props.items.length})</h4>
           <ul className="current-items">{fitler}</ul>
-          <Link to="/#Items">
-            <span href="#fitler" className="links" type="button">
-              Reset Search
-            </span>
+          <Link
+            onClick={() => this.sendFilter([])}
+            to="/"
+            href="#search"
+            className="links"
+            type="button"
+          >
+            Reset Search
           </Link>
         </div>
       </div>
@@ -153,6 +161,9 @@ const changeItems = dispatch => {
     },
     addItemWish: id => {
       dispatch(addItemWish(id));
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
     }
   };
 };

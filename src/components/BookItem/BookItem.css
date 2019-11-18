@@ -18,6 +18,7 @@
   text-align: left;
   position: relative;
   bottom: 10px;
+  top: 0.3px;
 }
 .tile:hover {
   background-color: #f6f6f6;
@@ -32,8 +33,22 @@
   padding: 6px 6px;
 }
 .book_title {
+  font-weight: normal;
+  font-size: 20px;
   text-align: left;
   color: #000000;
+  bottom: 10px;
+}
+.released {
+  display: inline;
+  font-weight: normal;
+  color: #808080;
+}
+.book_details {
+  margin-top: 2%;
+}
+.publish {
+  font-size: 12px;
 }
 .details {
   margin-right: 5%;

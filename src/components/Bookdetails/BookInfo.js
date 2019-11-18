@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
+import "./BookInfo.css";
+
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
 class BookInfo extends Component {

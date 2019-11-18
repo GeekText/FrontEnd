@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { addItem } from "../Cart/CartFunctions";
 import { addItemDetails } from "./BookFunctions";
 import { addItemWish } from "../wishlist/WishlistFunctions";
-import "../wishlist/Wishlist";
 import { Link } from "react-router-dom";
 import { filtered } from "../Filter/FilterFunctions";
 import "./BookItem.css";
 
 export class Bookitem extends Component {
+  // style= {"width": "18rem"}
+
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -53,49 +54,50 @@ export class Bookitem extends Component {
             ></img>
           </div>
           <div className="details">
-            <h5 className="book_title">
-              <p>{this.props.book.book_name}</p>
-            </h5>
+            <span className="book_title">{this.props.book.book_name}</span>
+            <span> </span>
+            <span className="released">
+              ({this.props.book.book_releaseDate})
+            </span>{" "}
+            <p className="author">
+              by{" "}
+              <Link
+                to="/search"
+                onClick={() =>
+                  this.submitFilter([
+                    this.props.book.author_first_name,
+                    this.props.book.author_last_name
+                  ])
+                }
+              >
+                {this.props.book.author_first_name +
+                  " " +
+                  this.props.book.author_last_name}
+              </Link>
+            </p>
             <div className="book_details">
-              <h6 className="card-subtitle mb-2 text-muted">
-                Author Bio: {this.props.book.author_biography}
-              </h6>
-              <span className="card-subtitle mb-2 text-muted">
-                Publish Date: {this.props.book.book_publishing_info + " "}
+              <span className="bio">
+                <h6 className="card-subtitle mb-2 text-muted">
+                  {this.props.book.author_biography}
+                </h6>
               </span>
-              <span className="card-subtitle mb-2 text-muted">
-                Release Date:{this.props.book.book_releaseDate}{" "}
-              </span>
-              <br></br>
+
               <span className="card-subtitle mb-2 text-muted">
                 Genre: {this.props.book.book_genre}{" "}
               </span>
               <br></br>
               <span className="card-subtitle mb-2 text-muted">
-                Rating: {this.props.book.book_rating}
+                Rating: {this.props.book.book_rating + "/5"}
               </span>
               <br></br>
               <span className="card-text">
                 {" "}
-                Publisher: {this.props.book.book_publisher}
+                Published by {this.props.book.book_publisher}
               </span>
-              <p className="card-text">
-                Author Name:{" "}
-                <Link
-                  to="/search"
-                  className="clickAddButton"
-                  onClick={() =>
-                    this.submitFilter([
-                      this.props.book.author_first_name,
-                      this.props.book.author_last_name
-                    ])
-                  }
-                >
-                  {this.props.book.author_first_name +
-                    " " +
-                    this.props.book.author_last_name}
-                </Link>
-              </p>
+              <span className="publish">
+                {" "}
+                ({this.props.book.book_publishing_info})
+              </span>
             </div>
           </div>
         </div>
