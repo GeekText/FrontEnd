@@ -139,8 +139,11 @@ class BookInfo extends Component {
                     <p className="card-text">
                       Author Name:{" "}
                       <Link
-                        to="/search"
-                        className="clickAddButton"
+                        to={
+                          "/search#" +
+                          item.author_first_name +
+                          item.author_last_name
+                        }
                         onClick={() =>
                           this.submitFilter([
                             item.author_first_name,
