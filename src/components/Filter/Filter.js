@@ -7,6 +7,7 @@ class Filter extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ...this.state,
       filteredItems: [],
       items: [],
       searched: false,
@@ -14,7 +15,8 @@ class Filter extends Component {
       selectValue: "none",
       selectGenre: "All",
       selectRating: "All",
-      selectResults: "All"
+      selectResults: "All",
+      inputDate: "2019"
     };
     this.commonChange = this.commonChange.bind(this);
     this.submitFilter = this.submitFilter.bind(this);
@@ -56,36 +58,53 @@ class Filter extends Component {
   sendFilter(list) {
     this.props.sendFilter(list);
   }
+  myChangeHandler = event => {
+    event.preventDefault(); // prevent refleshing.
+    event.persist();
+    let change = event.target.value;
+    this.setState(state => {
+      return {
+        ...state,
+        inputDate: change
+      };
+    });
+  };
   searching() {
     //Temp list for filter
-    let filteredlist;
+    let filteredlist = [];
+
+    console.log("Length before Author", filteredlist.length);
     //Sort by Author
     let name = this.state.selectValue.split(",");
-    if (name !== "none") {
-      let listFirstName = this.props.items.filter(
-        item => item.author_first_name === name[0]
-      );
-      let listLastName = this.props.items.filter(
-        item => item.author_last_name === name[1]
-      );
+    if (this.state.selectValue !== "none") {
+      let listFirstName, listLastName;
+      if (filteredlist && filteredlist.length) {
+        listFirstName = filteredlist.filter(
+          item => item.author_first_name === name[0]
+        );
+        listLastName = filteredlist.filter(
+          item => item.author_last_name === name[1]
+        );
+      } else {
+        listFirstName = this.props.items.filter(
+          item => item.author_first_name === name[0]
+        );
+        listLastName = this.props.items.filter(
+          item => item.author_last_name === name[1]
+        );
+      }
       filteredlist = listFirstName.filter(
         value => -1 !== listLastName.indexOf(value)
       );
     }
+    console.log("Length before Genre", filteredlist.length);
     //Sort by Genre
     let genre = this.state.selectGenre.split("|");
-    console.log(genre);
     if (this.state.selectGenre !== "All") {
       var i;
       function mapCallback(item) {
         let bookGenre = item.book_genre.split("|");
         for (var x = 0; x < bookGenre.length; x++) {
-          console.log(
-            "Check",
-            bookGenre[x] === genre[i],
-            bookGenre[x],
-            genre[i]
-          );
           if (bookGenre[x] === genre[i]) {
             return true;
           }
@@ -102,6 +121,7 @@ class Filter extends Component {
         }
       }
     }
+    console.log("Length before Rating", filteredlist.length);
     //Sort by Rating
     if (this.state.selectRating !== "All") {
       var rating = parseInt(this.state.selectRating);
@@ -113,6 +133,7 @@ class Filter extends Component {
         );
       }
     }
+    console.log("Length before Price", filteredlist.length);
     //Sort by Price
     var number = parseInt(this.state.exampleInputPrice1);
     if (Number.isInteger(number) && number > 0) {
@@ -124,22 +145,110 @@ class Filter extends Component {
         );
       }
     }
+    console.log("Length before Res", filteredlist.length);
     //Sort by Results
     if (this.state.selectResults !== "All") {
       var limit = parseInt(this.state.selectResults);
-      if (this.state.filteredItems.length > limit) {
-        var offset = this.state.filteredItems.length - limit;
+      if (filteredlist.length > limit) {
         if (filteredlist && filteredlist.length) {
-          filteredlist = filteredlist.slice(offset);
+          filteredlist = filteredlist.slice(0, limit);
         } else {
-          filteredlist = this.props.items.slice(offset);
+          filteredlist = this.props.items.slice(0, limit);
         }
       }
     }
+    console.log("Length before Top Sellers", filteredlist.length);
+    //Sort by Top Sellers book_copies_sold
+    if (this.refs.top_sellers.checked) {
+      if (this.refs.book_titles.checked) {
+        this.refs.book_titles.checked = false;
+      }
+      function sortNumber(a, b) {
+        return a.book_copies_sold - b.book_copies_sold;
+      }
+      if (filteredlist && filteredlist.length) {
+        filteredlist = filteredlist.sort(sortNumber);
+      } else {
+        filteredlist = this.props.items.slice().sort(sortNumber);
+      }
+    }
+    console.log("Length before ABC", filteredlist.length);
+    //Sort by Book Title (ABC)
+    if (this.refs.book_titles.checked) {
+      if (this.refs.top_sellers.checked) {
+        this.refs.top_sellers.checked = false;
+      }
+      if (filteredlist && filteredlist.length) {
+        filteredlist = filteredlist.sort(function(a, b) {
+          var nameA = a.book_name.toLowerCase(),
+            nameB = b.book_name.toLowerCase();
+          if (nameA < nameB) {
+            return -1;
+          } //sort string ascending
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0; //default return value (no sorting)
+        });
+      } else {
+        filteredlist = this.props.items.slice().sort(function(a, b) {
+          var nameA = a.book_name.toLowerCase(),
+            nameB = b.book_name.toLowerCase();
+          if (nameA < nameB) {
+            return -1;
+          } //sort string ascending
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0; //default return value (no sorting)
+        });
+      }
+    }
+    console.log("Length before Date", filteredlist.length);
+    //Sort by Date
+    if (this.refs.sort_dates.checked) {
+      if (this.refs.top_sellers.checked) {
+        this.refs.top_sellers.checked = false;
+      }
+      if (this.refs.book_titles.checked) {
+        this.refs.book_titles.checked = false;
+      }
+      let userDate = this.state.inputDate;
+      function sortYear(item) {
+        let yearDate = item.book_releaseDate.split("/");
+        return userDate === yearDate[2];
+      }
+      if (filteredlist && filteredlist.length) {
+        filteredlist = filteredlist.filter(item => sortYear(item));
+        filteredlist = filteredlist.slice().sort(function(a, b) {
+          let date2 = b.book_releaseDate.split("/");
+          let date1 = a.book_releaseDate.split("/");
+          return (
+            new Date([userDate] + "-" + date1[0] + "-" + date1[1]) -
+            new Date([userDate] + "-" + date2[0] + "-" + date2[1])
+          );
+        });
+      } else {
+        filteredlist = this.props.items.filter(item => sortYear(item));
+        filteredlist = filteredlist.slice().sort(function(a, b) {
+          let date2 = b.book_releaseDate.split("/");
+          let date1 = a.book_releaseDate.split("/");
+          return (
+            new Date([userDate] + "-" + date1[0] + "-" + date1[1]) -
+            new Date([userDate] + "-" + date2[0] + "-" + date2[1])
+          );
+        });
+      }
+    }
+    console.log("Length before DB", filteredlist.length);
     //Set Filter
     this.setState({ filteredItems: filteredlist, searched: true }, function() {
       this.sendFilter(this.state.filteredItems);
     });
+    this.forceStateUpdate();
+  }
+  forceStateUpdate() {
+    this.setState({ state: this.state });
   }
   render() {
     let filtered =
@@ -152,7 +261,7 @@ class Filter extends Component {
           ]
         ) : (
           <div className="filter-number" key="filters2">
-            <h4>No items found: ({this.state.filteredItems.length})</h4>
+            <h4>({this.state.filteredItems.length}) items in filter</h4>
           </div>
         )
       ) : (
@@ -164,23 +273,22 @@ class Filter extends Component {
           <div className="alert alert-success" role="alert">
             <h3>Sort by</h3>
             <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="defaultCheck2"
-              />
-              <label className="form-check-label" htmlFor="defaultCheck2">
+              <label>
+                <input
+                  className="form-check-label"
+                  htmlFor="defaultCheck2"
+                  type="checkbox"
+                  ref="top_sellers"
+                />{" "}
                 Top sellers
               </label>
-
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="defaultCheck3"
-              />
-              <label className="form-check-label" htmlFor="defaultCheck3">
+              <label>
+                <input
+                  className="form-check-label"
+                  htmlFor="defaultCheck3"
+                  type="checkbox"
+                  ref="book_titles"
+                />{" "}
                 Book Title
               </label>
             </div>
@@ -308,13 +416,16 @@ class Filter extends Component {
                   <input
                     type="checkbox"
                     aria-label="Checkbox for following text input"
+                    ref="sort_dates"
                   />
                 </div>
               </div>
               <input
                 type="text"
                 className="form-control"
-                placeholder="To sort by date put year here"
+                placeholder="To sort by date put YYYY"
+                onChange={this.myChangeHandler}
+                name="date_text"
               />
             </div>
             {filtered}

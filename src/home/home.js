@@ -10,31 +10,32 @@ const axios = require("axios");
 const url = "https://geek-text-backend.herokuapp.com/api";
 
 class home extends React.Component {
+  defaultState = [
+    {
+      _id: "0",
+      id: 0,
+      book_name: "Loading...",
+      book_cover: "http://dummyimage.com/350x350.png/cc0000/ffffff",
+      author_first_name: "",
+      author_last_name: "",
+      author_biography: "",
+      book_desc: "",
+      book_genre: "",
+      book_publisher: "",
+      book_releaseDate: "",
+      book_rating: 0,
+      email: "",
+      gender: "",
+      book_publishing_info: "",
+      book_copies_sold: 0,
+      book_price: 0,
+      quantity: 0
+    }
+  ];
   constructor(props) {
     super(props);
     this.state = {
-      bookdetails: [
-        {
-          _id: "0",
-          id: 0,
-          book_name: "Loading...",
-          book_cover: "http://dummyimage.com/350x350.png/cc0000/ffffff",
-          author_first_name: "",
-          author_last_name: "",
-          author_biography: "",
-          book_desc: "",
-          book_genre: "",
-          book_publisher: "",
-          book_releaseDate: "",
-          book_rating: 0,
-          email: "",
-          gender: "",
-          book_publishing_info: "",
-          book_copies_sold: 0,
-          book_price: 0,
-          quantity: 0
-        }
-      ],
+      bookdetails: this.defaultState,
       FetchedAt: null
     };
 
@@ -69,11 +70,15 @@ class home extends React.Component {
       console.log("Current state " + this.state.bookdetails);
       console.log("Sending DB to PageLogic");
       this.fixDB(this.state.bookdetails);
+      this.forceStateUpdate();
     } catch (error) {
-      console.error(error);
+      console.error("Couldn't get DB, trying again...");
+      this.getData();
     }
   }
-
+  forceStateUpdate() {
+    this.setState({ state: this.state });
+  }
   render() {
     return (
       <div className="App" style={this.styling}>
