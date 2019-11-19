@@ -145,18 +145,6 @@ class Filter extends Component {
         );
       }
     }
-    console.log("Length before Res", filteredlist.length);
-    //Sort by Results
-    if (this.state.selectResults !== "All") {
-      var limit = parseInt(this.state.selectResults);
-      if (filteredlist.length > limit) {
-        if (filteredlist && filteredlist.length) {
-          filteredlist = filteredlist.slice(0, limit);
-        } else {
-          filteredlist = this.props.items.slice(0, limit);
-        }
-      }
-    }
     console.log("Length before Top Sellers", filteredlist.length);
     //Sort by Top Sellers book_copies_sold
     if (this.refs.top_sellers.checked) {
@@ -238,6 +226,18 @@ class Filter extends Component {
             new Date([userDate] + "-" + date2[0] + "-" + date2[1])
           );
         });
+      }
+    }
+    console.log("Length before Res", filteredlist.length);
+    //Sort by Results
+    if (this.state.selectResults !== "All") {
+      var limit = parseInt(this.state.selectResults);
+      if (filteredlist.length > limit) {
+        if (filteredlist && filteredlist.length) {
+          filteredlist = filteredlist.slice(0, limit);
+        } else {
+          filteredlist = this.props.items.slice(0, limit);
+        }
       }
     }
     console.log("Length before DB", filteredlist.length);
@@ -423,7 +423,7 @@ class Filter extends Component {
               <input
                 type="text"
                 className="form-control"
-                placeholder="To sort by date put YYYY"
+                placeholder="2019"
                 onChange={this.myChangeHandler}
                 name="date_text"
               />
