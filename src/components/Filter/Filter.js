@@ -248,6 +248,10 @@ class Filter extends Component {
     } else {
       onPage = allFilteredList;
     }
+    let starting_page = 1;
+    if (onPage.length < 1) {
+      starting_page = 0;
+    }
     //Set Filter
     this.setState(
       {
@@ -256,7 +260,7 @@ class Filter extends Component {
         filteredItemsAll: allFilteredList,
         page: 1,
         maxEntries: limit,
-        begin: 1,
+        begin: starting_page,
         end: onPage.length
       },
       function() {
@@ -274,7 +278,7 @@ class Filter extends Component {
       let currentMinIndex = this.state.page * this.state.maxEntries;
       let currentMaxIndex = (this.state.page + 1) * this.state.maxEntries;
       if (currentMaxIndex >= entries) {
-        currentMaxIndex = this.state.filteredItemsAll.length - 1;
+        currentMaxIndex = this.state.filteredItemsAll.length;
       }
       let onPage = this.state.filteredItemsAll.slice(
         currentMinIndex,
@@ -341,7 +345,34 @@ class Filter extends Component {
   forceStateUpdate() {
     this.setState({ state: this.state });
   }
+  resetSearch() {
+    this.refs.sort_dates.checked = false;
+    this.refs.top_sellers.checked = false;
+    this.refs.book_titles.checked = false;
+    this.setState(
+      {
+        filteredItems: [],
+        searched: false,
+        filteredItemsAll: [],
+        page: 1,
+        maxEntries: this.props.items.length,
+        begin: 0,
+        end: this.props.items.length - 1
+      },
+      function() {
+        this.sendFilter([]);
+      }
+    );
+  }
   render() {
+    let resetBtn = (
+      <input
+        className="linksSmall"
+        type="submit"
+        value="Reset"
+        onClick={() => this.resetSearch()}
+      />
+    );
     let pageBtn = (
       <div className="quantity">
         Page:
@@ -365,38 +396,45 @@ class Filter extends Component {
         </button>
       </div>
     );
+
+    let searchBtn = (
+      <input
+        className="linksSmall"
+        type="submit"
+        value="Search"
+        onClick={this.submitFilter}
+      />
+    );
     let filtered =
       this.state.filteredItems.length || this.state.searched ? (
         this.state.filteredItems.length &&
         this.state.selectResults === "All" ? (
           [
             <div className="filter-number" key="filters">
-              <h4>
-                Filtered items: ({this.state.filteredItemsAll.length - 1})
-              </h4>
+              <h4>Filtered items: ({this.state.filteredItemsAll.length})</h4>
+              {searchBtn}
+              {resetBtn}
             </div>
           ]
         ) : this.state.selectResults !== "All" ? (
           [
             <div className="filter-number" key="filters">
-              <h4>
-                Filtered items: ({this.state.filteredItemsAll.length - 1})
-              </h4>
+              <h4>Filtered items: ({this.state.filteredItemsAll.length})</h4>
               Showing entries: {this.state.begin} - {this.state.end}
               {pageBtn}
+              {searchBtn}
+              {resetBtn}
             </div>
           ]
         ) : (
-          +(
-            <div className="filter-number" key="filters2">
-              <h4>
-                ({this.state.filteredItemsAll.length - 1}) items in filter
-              </h4>
-            </div>
-          )
+          <div className="filter-number" key="filters2">
+            <h4>({this.state.filteredItemsAll.length}) items in filter</h4>
+            {searchBtn}
+            {resetBtn}
+          </div>
         )
       ) : (
-        <div></div>
+        <div>{searchBtn}</div>
       );
     return (
       <div className="container">
@@ -536,9 +574,7 @@ class Filter extends Component {
                   onChange={this.commonChange}
                 />
               </div>
-              <input type="submit" value="Submit" onClick={this.submitFilter} />
             </div>
-
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <div className="input-group-text">
