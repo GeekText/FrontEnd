@@ -1,5 +1,4 @@
 import React from "react";
-import "./BookItem.css";
 import "./BookInfo.css";
 
 class Popup extends React.Component{
@@ -10,10 +9,11 @@ class Popup extends React.Component{
             <div className = "popup_inner">
             <br></br>
             <img
-              src={this.props.book.book_cover}
+              src={this.props.book_cover}
               alt="bookcover placeholder"
-              width="500"
-              height="500"
+              width="300"
+              height="300"
+              className = "image"
             ></img>
             <div className = "container"></div>
             <button className = "popup-button" onClick = {this.props.closePopup}>

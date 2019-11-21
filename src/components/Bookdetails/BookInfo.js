@@ -3,12 +3,14 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 import "./BookInfo.css";
+import Popup from "./Bookpop.js";
 
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
 class BookInfo extends Component {
   constructor(props) {
     super(props);
+    this.state = {showPopupImg:false};
     this.state = {
       value: "wishlist",
       currentWishlist: {
@@ -22,6 +24,12 @@ class BookInfo extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  togglePopupImg()
+  {
+    this.setState({
+      showPopupImg: !this.state.showPopupImg
+    });
   }
   handleChange(event) {
     this.setState({
@@ -98,6 +106,7 @@ class BookInfo extends Component {
     let addedItemID = this.props.items.length ? (
       this.props.items.map(item => {
         return (
+          
           <div className="slot" key={item.id}>
             <span href="#tile" className="tile">
               <div className="item">
@@ -107,6 +116,9 @@ class BookInfo extends Component {
                     alt="bookcover placeholder"
                     width="200"
                     height="200"
+                    onClick={() => {
+                      this.togglePopupImg();
+                    }}
                   ></img>
                 </div>
                 <div className="details">
@@ -185,6 +197,15 @@ class BookInfo extends Component {
                 Back to Home Page
               </span>
             </Link>
+
+            {this.state.showPopupImg ?  (
+            <Popup
+            book_cover = {item.book_cover}
+            closePopup = {this.togglePopupImg.bind(this)}
+          />
+         ) : null }
+         <br></br>
+
           </div>
         );
       })
