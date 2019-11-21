@@ -26,6 +26,7 @@ class BookInfo extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   togglePopup() {
+    console.log(this.state.showPopup);
     this.setState({
       showPopup: !this.state.showPopup
     });
@@ -109,20 +110,28 @@ class BookInfo extends Component {
             <span href="#tile" className="tile">
               <div className="item">
                 <div className="book_cover">
-                  <img
-                    src={item.book_cover}
-                    alt="bookcover placeholder"
-                    width="200"
-                    height="200"
-                    onClick={() => {
-                      this.togglePopup();
-                    }}
-                  ></img>
+                  {!this.state.showPopup ? (
+                    <img
+                      src={item.book_cover}
+                      alt="bookcover placeholder"
+                      width="200"
+                      height="200"
+                      onClick={() => {
+                        this.togglePopup();
+                      }}
+                    ></img>
+                  ) : null}
                   {this.state.showPopup ? (
-                    <Popup
-                      book_cover={item.book_cover}
-                      closePopup={this.togglePopup.bind(this)}
-                    />
+                    <span
+                      onClick={() => {
+                        this.togglePopup();
+                      }}
+                    >
+                      <Popup
+                        book_cover={item.book_cover}
+                        closePopup={this.togglePopup.bind(this)}
+                      />
+                    </span>
                   ) : null}
                 </div>
                 <div className="details">
