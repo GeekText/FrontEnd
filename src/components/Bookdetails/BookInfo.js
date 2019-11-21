@@ -3,13 +3,15 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 import "./BookInfo.css";
-
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
+import Popup from "./BookPop";
+
 class BookInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showPopup: false,
       value: "wishlist",
       currentWishlist: {
         // current wishlist for the drop down
@@ -22,6 +24,11 @@ class BookInfo extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
   }
   handleChange(event) {
     this.setState({
@@ -107,7 +114,16 @@ class BookInfo extends Component {
                     alt="bookcover placeholder"
                     width="200"
                     height="200"
+                    onClick={() => {
+                      this.togglePopup();
+                    }}
                   ></img>
+                  {this.state.showPopup ? (
+                    <Popup
+                      book_cover={item.book_cover}
+                      closePopup={this.togglePopup.bind(this)}
+                    />
+                  ) : null}
                 </div>
                 <div className="details">
                   <h5 className="book_title">

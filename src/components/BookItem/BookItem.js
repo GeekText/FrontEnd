@@ -6,21 +6,8 @@ import { addItemWish } from "../wishlist/WishlistFunctions";
 import { Link } from "react-router-dom";
 import { filtered } from "../Filter/FilterFunctions";
 import "./BookItem.css";
-import Popup from "./BookPop";
 
 export class Bookitem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { showPopup: false };
-  }
-
-  togglePopup() {
-    console.log("Clicked");
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
-  }
-
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -62,16 +49,7 @@ export class Bookitem extends Component {
               alt="bookcover placeholder"
               width="200"
               height="200"
-              onClick={() => {
-                this.togglePopup();
-              }}
             ></img>
-            {this.state.showPopup ? (
-              <Popup
-                book_cover={this.props.book.book_cover}
-                closePopup={this.togglePopup.bind(this)}
-              />
-            ) : null}
           </div>
           <div className="details">
             <span className="book_title">{this.props.book.book_name}</span>
