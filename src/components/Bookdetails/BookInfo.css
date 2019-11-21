@@ -8,12 +8,23 @@
     text-align: inline; 
     font-size: 30px;
 }
-.image { 
-    border-radius: 6px;
-    border: 1px solid #dcdcdc;
-    padding: 6px 6px;
-    float: left;
-  }
-.released {
 
-}
+.popup {
+
+    width: 500px;
+    height: 500px;
+
+  }
+  .popup_inner {
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    top: 25%;
+    bottom: 65%;
+    margin: auto;
+    border-radius: 20px;
+    background: white;
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
+  }
