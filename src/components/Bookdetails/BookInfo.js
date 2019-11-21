@@ -3,15 +3,16 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 import "./BookInfo.css";
-import Popup from "./Bookpop.js";
-
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
+import Popup from "./BookPop";
+
 class BookInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {showPopupImg:false};
     this.state = {
+      showPopup: false,
       value: "wishlist",
       currentWishlist: {
         // current wishlist for the drop down
@@ -25,10 +26,10 @@ class BookInfo extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  togglePopupImg()
-  {
+  togglePopup() {
+    console.log(this.state.showPopup);
     this.setState({
-      showPopupImg: !this.state.showPopupImg
+      showPopup: !this.state.showPopup
     });
   }
   handleChange(event) {
@@ -111,15 +112,29 @@ class BookInfo extends Component {
             <span href="#tile" className="tile">
               <div className="item">
                 <div className="book_cover">
-                  <img
-                    src={item.book_cover}
-                    alt="bookcover placeholder"
-                    width="200"
-                    height="200"
-                    onClick={() => {
-                      this.togglePopupImg();
-                    }}
-                  ></img>
+                  {!this.state.showPopup ? (
+                    <img
+                      src={item.book_cover}
+                      alt="bookcover placeholder"
+                      width="200"
+                      height="200"
+                      onClick={() => {
+                        this.togglePopup();
+                      }}
+                    ></img>
+                  ) : null}
+                  {this.state.showPopup ? (
+                    <span
+                      onClick={() => {
+                        this.togglePopup();
+                      }}
+                    >
+                      <Popup
+                        book_cover={item.book_cover}
+                        closePopup={this.togglePopup.bind(this)}
+                      />
+                    </span>
+                  ) : null}
                 </div>
                 <div className="details">
                   <h5 className="book_title">

@@ -8,7 +8,6 @@ import { filtered } from "../Filter/FilterFunctions";
 import "./BookItem.css";
 
 export class Bookitem extends Component {
-  // style= {"width": "18rem"}
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -97,7 +96,6 @@ export class Bookitem extends Component {
                 {" "}
                 Published by {this.props.book.book_publisher}
               </span>
-
             </div>
           </div>
         </div>
