@@ -236,6 +236,7 @@ class Filter extends Component {
     var limit = this.state.maxEntries;
     if (this.state.selectResults !== "All") {
       limit = parseInt(this.state.selectResults);
+      console.log("Check", allFilteredList.length, limit);
       if (allFilteredList.length > limit) {
         onPage = allFilteredList;
         if (allFilteredList && allFilteredList.length) {
@@ -244,6 +245,8 @@ class Filter extends Component {
           onPage = this.props.items.slice(0, limit);
         }
         console.log("Min: 0 Max:", limit - 1, "onPage = ", onPage);
+      } else {
+        onPage = allFilteredList;
       }
     } else {
       onPage = allFilteredList;
@@ -252,6 +255,8 @@ class Filter extends Component {
     if (onPage.length < 1) {
       starting_page = 0;
     }
+    console.log("Page:", onPage);
+    console.log("All:", allFilteredList);
     //Set Filter
     this.setState(
       {
