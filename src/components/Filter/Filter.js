@@ -9,6 +9,8 @@ class Filter extends Component {
     this.state = {
       ...this.state,
       filteredItems: [],
+      filteredItemsAll: [],
+      page: 1,
       items: [],
       searched: false,
       exampleInputPrice1: 0,
@@ -16,7 +18,10 @@ class Filter extends Component {
       selectGenre: "All",
       selectRating: "All",
       selectResults: "All",
-      inputDate: "2019"
+      inputDate: "2019",
+      maxEntries: 50,
+      begin: 0,
+      end: 50
     };
     this.commonChange = this.commonChange.bind(this);
     this.submitFilter = this.submitFilter.bind(this);
@@ -24,6 +29,8 @@ class Filter extends Component {
     this.handleDropdownGenre = this.handleDropdownGenre.bind(this);
     this.handleDropdownRating = this.handleDropdownRating.bind(this);
     this.handleDropdownResults = this.handleDropdownResults.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
   }
   commonChange(event) {
     console.log("Price Filter", [event.target.name], event.target.value);
@@ -71,18 +78,17 @@ class Filter extends Component {
   };
   searching() {
     //Temp list for filter
-    let filteredlist = [];
-
-    console.log("Length before Author", filteredlist.length);
+    let allFilteredList = [];
+    let onPage = [];
     //Sort by Author
     let name = this.state.selectValue.split(",");
     if (this.state.selectValue !== "none") {
       let listFirstName, listLastName;
-      if (filteredlist && filteredlist.length) {
-        listFirstName = filteredlist.filter(
+      if (allFilteredList && allFilteredList.length) {
+        listFirstName = allFilteredList.filter(
           item => item.author_first_name === name[0]
         );
-        listLastName = filteredlist.filter(
+        listLastName = allFilteredList.filter(
           item => item.author_last_name === name[1]
         );
       } else {
@@ -93,11 +99,10 @@ class Filter extends Component {
           item => item.author_last_name === name[1]
         );
       }
-      filteredlist = listFirstName.filter(
+      allFilteredList = listFirstName.filter(
         value => -1 !== listLastName.indexOf(value)
       );
     }
-    console.log("Length before Genre", filteredlist.length);
     //Sort by Genre
     let genre = this.state.selectGenre.split("|");
     if (this.state.selectGenre !== "All") {
@@ -111,41 +116,42 @@ class Filter extends Component {
         }
         return false;
       }
-      if (filteredlist && filteredlist.length) {
+      if (allFilteredList && allFilteredList.length) {
         for (i = 0; i < genre.length; i++) {
-          filteredlist = filteredlist.filter(mapCallback);
+          allFilteredList = allFilteredList.filter(mapCallback);
         }
       } else {
         for (i = 0; i < genre.length; i++) {
-          filteredlist = this.props.items.filter(mapCallback);
+          allFilteredList = this.props.items.filter(mapCallback);
         }
       }
     }
-    console.log("Length before Rating", filteredlist.length);
     //Sort by Rating
     if (this.state.selectRating !== "All") {
       var rating = parseInt(this.state.selectRating);
-      if (filteredlist && filteredlist.length) {
-        filteredlist = filteredlist.filter(item => item.book_rating === rating);
+      if (allFilteredList && allFilteredList.length) {
+        allFilteredList = allFilteredList.filter(
+          item => item.book_rating === rating
+        );
       } else {
-        filteredlist = this.props.items.filter(
+        allFilteredList = this.props.items.filter(
           item => item.book_rating === rating
         );
       }
     }
-    console.log("Length before Price", filteredlist.length);
     //Sort by Price
     var number = parseInt(this.state.exampleInputPrice1);
     if (Number.isInteger(number) && number > 0) {
-      if (filteredlist && filteredlist.length) {
-        filteredlist = filteredlist.filter(item => item.book_price === number);
+      if (allFilteredList && allFilteredList.length) {
+        allFilteredList = allFilteredList.filter(
+          item => item.book_price === number
+        );
       } else {
-        filteredlist = this.props.items.filter(
+        allFilteredList = this.props.items.filter(
           item => item.book_price === number
         );
       }
     }
-    console.log("Length before Top Sellers", filteredlist.length);
     //Sort by Top Sellers book_copies_sold
     if (this.refs.top_sellers.checked) {
       if (this.refs.book_titles.checked) {
@@ -154,20 +160,19 @@ class Filter extends Component {
       function sortNumber(a, b) {
         return a.book_copies_sold - b.book_copies_sold;
       }
-      if (filteredlist && filteredlist.length) {
-        filteredlist = filteredlist.sort(sortNumber);
+      if (allFilteredList && allFilteredList.length) {
+        allFilteredList = allFilteredList.sort(sortNumber);
       } else {
-        filteredlist = this.props.items.slice().sort(sortNumber);
+        allFilteredList = this.props.items.slice().sort(sortNumber);
       }
     }
-    console.log("Length before ABC", filteredlist.length);
     //Sort by Book Title (ABC)
     if (this.refs.book_titles.checked) {
       if (this.refs.top_sellers.checked) {
         this.refs.top_sellers.checked = false;
       }
-      if (filteredlist && filteredlist.length) {
-        filteredlist = filteredlist.sort(function(a, b) {
+      if (allFilteredList && allFilteredList.length) {
+        allFilteredList = allFilteredList.sort(function(a, b) {
           var nameA = a.book_name.toLowerCase(),
             nameB = b.book_name.toLowerCase();
           if (nameA < nameB) {
@@ -179,7 +184,7 @@ class Filter extends Component {
           return 0; //default return value (no sorting)
         });
       } else {
-        filteredlist = this.props.items.slice().sort(function(a, b) {
+        allFilteredList = this.props.items.slice().sort(function(a, b) {
           var nameA = a.book_name.toLowerCase(),
             nameB = b.book_name.toLowerCase();
           if (nameA < nameB) {
@@ -192,7 +197,6 @@ class Filter extends Component {
         });
       }
     }
-    console.log("Length before Date", filteredlist.length);
     //Sort by Date
     if (this.refs.sort_dates.checked) {
       if (this.refs.top_sellers.checked) {
@@ -206,9 +210,9 @@ class Filter extends Component {
         let yearDate = item.book_releaseDate.split("/");
         return userDate === yearDate[2];
       }
-      if (filteredlist && filteredlist.length) {
-        filteredlist = filteredlist.filter(item => sortYear(item));
-        filteredlist = filteredlist.slice().sort(function(a, b) {
+      if (allFilteredList && allFilteredList.length) {
+        allFilteredList = allFilteredList.filter(item => sortYear(item));
+        allFilteredList = allFilteredList.slice().sort(function(a, b) {
           let date2 = b.book_releaseDate.split("/");
           let date1 = a.book_releaseDate.split("/");
           return (
@@ -217,8 +221,8 @@ class Filter extends Component {
           );
         });
       } else {
-        filteredlist = this.props.items.filter(item => sortYear(item));
-        filteredlist = filteredlist.slice().sort(function(a, b) {
+        allFilteredList = this.props.items.filter(item => sortYear(item));
+        allFilteredList = allFilteredList.slice().sort(function(a, b) {
           let date2 = b.book_releaseDate.split("/");
           let date1 = a.book_releaseDate.split("/");
           return (
@@ -228,44 +232,209 @@ class Filter extends Component {
         });
       }
     }
-    console.log("Length before Res", filteredlist.length);
     //Sort by Results
+    var limit = this.state.maxEntries;
     if (this.state.selectResults !== "All") {
-      var limit = parseInt(this.state.selectResults);
-      if (filteredlist.length > limit) {
-        if (filteredlist && filteredlist.length) {
-          filteredlist = filteredlist.slice(0, limit);
+      limit = parseInt(this.state.selectResults);
+      if (allFilteredList.length > limit) {
+        onPage = allFilteredList;
+        if (allFilteredList && allFilteredList.length) {
+          onPage = onPage.slice(0, limit);
         } else {
-          filteredlist = this.props.items.slice(0, limit);
+          onPage = this.props.items.slice(0, limit);
         }
+        console.log("Min: 0 Max:", limit - 1, "onPage = ", onPage);
       }
+    } else {
+      onPage = allFilteredList;
     }
-    console.log("Length before DB", filteredlist.length);
+    let starting_page = 1;
+    if (onPage.length < 1) {
+      starting_page = 0;
+    }
     //Set Filter
-    this.setState({ filteredItems: filteredlist, searched: true }, function() {
-      this.sendFilter(this.state.filteredItems);
-    });
+    this.setState(
+      {
+        filteredItems: onPage,
+        searched: true,
+        filteredItemsAll: allFilteredList,
+        page: 1,
+        maxEntries: limit,
+        begin: starting_page,
+        end: onPage.length
+      },
+      function() {
+        this.sendFilter(this.state.filteredItems);
+      }
+    );
     this.forceStateUpdate();
+  }
+  nextPage() {
+    let newPage = this.state.page + 1;
+    let entries = this.state.filteredItemsAll.length;
+    let maxPages = Math.ceil(entries / this.state.maxEntries);
+    console.log("Next Page -> ", newPage, "MaxPages:", maxPages);
+    if (newPage <= maxPages) {
+      let currentMinIndex = this.state.page * this.state.maxEntries;
+      let currentMaxIndex = (this.state.page + 1) * this.state.maxEntries;
+      if (currentMaxIndex >= entries) {
+        currentMaxIndex = this.state.filteredItemsAll.length;
+      }
+      let onPage = this.state.filteredItemsAll.slice(
+        currentMinIndex,
+        currentMaxIndex
+      );
+      console.log(
+        "Min:",
+        currentMinIndex,
+        "Max:",
+        currentMaxIndex - 1,
+        "onPage = ",
+        onPage
+      );
+
+      this.setState(
+        {
+          filteredItems: onPage,
+          page: newPage,
+          begin: currentMinIndex + 1,
+          end: currentMaxIndex
+        },
+        function() {
+          this.sendFilter(this.state.filteredItems);
+        }
+      );
+      this.forceStateUpdate();
+    }
+  }
+  prevPage() {
+    let newPage = this.state.page - 1;
+    console.log("Next Page -> ", newPage, "Prev", newPage > 0);
+    if (newPage > 0) {
+      let currentMinIndex = (this.state.page - 2) * this.state.maxEntries;
+      let currentMaxIndex = (this.state.page - 1) * this.state.maxEntries;
+      if (currentMinIndex < 0) {
+        currentMinIndex = 0;
+      }
+      let onPage = this.state.filteredItemsAll.slice(
+        currentMinIndex,
+        currentMaxIndex
+      );
+      console.log(
+        "Min:",
+        currentMinIndex,
+        "Max:",
+        currentMaxIndex - 1,
+        "onPage = ",
+        onPage
+      );
+      this.setState(
+        {
+          filteredItems: onPage,
+          page: newPage,
+          begin: currentMinIndex + 1,
+          end: currentMaxIndex
+        },
+        function() {
+          this.sendFilter(this.state.filteredItems);
+        }
+      );
+      this.forceStateUpdate();
+    }
   }
   forceStateUpdate() {
     this.setState({ state: this.state });
   }
+  resetSearch() {
+    this.refs.sort_dates.checked = false;
+    this.refs.top_sellers.checked = false;
+    this.refs.book_titles.checked = false;
+    this.setState(
+      {
+        filteredItems: [],
+        searched: false,
+        filteredItemsAll: [],
+        page: 1,
+        maxEntries: this.props.items.length,
+        begin: 0,
+        end: this.props.items.length - 1
+      },
+      function() {
+        this.sendFilter([]);
+      }
+    );
+  }
   render() {
+    let resetBtn = (
+      <input
+        className="linksSmall"
+        type="submit"
+        value="Reset"
+        onClick={() => this.resetSearch()}
+      />
+    );
+    let pageBtn = (
+      <div className="quantity">
+        Page:
+        <br></br>
+        <button
+          className="qty-button"
+          type="button"
+          name="button"
+          onClick={this.nextPage}
+        >
+          +
+        </button>
+        <b> {this.state.page} </b>
+        <button
+          className="qty-button"
+          type="button"
+          name="button"
+          onClick={this.prevPage}
+        >
+          -
+        </button>
+      </div>
+    );
+
+    let searchBtn = (
+      <input
+        className="linksSmall"
+        type="submit"
+        value="Search"
+        onClick={this.submitFilter}
+      />
+    );
     let filtered =
       this.state.filteredItems.length || this.state.searched ? (
-        this.state.filteredItems.length ? (
+        this.state.filteredItems.length &&
+        this.state.selectResults === "All" ? (
           [
             <div className="filter-number" key="filters">
-              <h4>Filtered items: ({this.state.filteredItems.length})</h4>
+              <h4>Filtered items: ({this.state.filteredItemsAll.length})</h4>
+              {searchBtn}
+              {resetBtn}
+            </div>
+          ]
+        ) : this.state.selectResults !== "All" ? (
+          [
+            <div className="filter-number" key="filters">
+              <h4>Filtered items: ({this.state.filteredItemsAll.length})</h4>
+              Showing entries: {this.state.begin} - {this.state.end}
+              {pageBtn}
+              {searchBtn}
+              {resetBtn}
             </div>
           ]
         ) : (
           <div className="filter-number" key="filters2">
-            <h4>({this.state.filteredItems.length}) items in filter</h4>
+            <h4>({this.state.filteredItemsAll.length}) items in filter</h4>
+            {searchBtn}
+            {resetBtn}
           </div>
         )
       ) : (
-        <div></div>
+        <div>{searchBtn}</div>
       );
     return (
       <div className="container">
@@ -402,14 +571,10 @@ class Filter extends Component {
                   className="form-control"
                   name="exampleInputPrice1"
                   placeholder="0"
-                  // TODO Maybe
-                  //onKeyPress={this.searchPrice(39)}
                   onChange={this.commonChange}
                 />
               </div>
-              <input type="submit" value="Submit" onClick={this.submitFilter} />
             </div>
-
             <div className="input-group mb-3">
               <div className="input-group-prepend">
                 <div className="input-group-text">

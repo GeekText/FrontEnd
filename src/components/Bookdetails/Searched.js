@@ -20,6 +20,25 @@ class Searched extends Component {
   sendFilter(list) {
     this.props.sendFilter(list);
   }
+  searchAuthor(name) {
+    let listFirstName;
+    let listLastName;
+    listFirstName = this.props.items.filter(
+      item => item.author_first_name === name[0]
+    );
+    listLastName = this.props.items.filter(
+      item => item.author_last_name === name[1]
+    );
+
+    let names = listFirstName.filter(
+      value => -1 !== listLastName.indexOf(value)
+    );
+    this.sendFilter(names);
+  }
+
+  submitFilter(name) {
+    this.searchAuthor(name);
+  }
   render() {
     let fitler = this.props.items.length ? (
       this.props.items.map(item => {
@@ -72,9 +91,23 @@ class Searched extends Component {
                           </span>
                           <p className="card-text">
                             Author Name:{" "}
-                            {item.author_first_name +
-                              " " +
-                              item.author_last_name}
+                            <Link
+                              to={
+                                "/search#" +
+                                item.author_first_name +
+                                item.author_last_name
+                              }
+                              onClick={() =>
+                                this.submitFilter([
+                                  item.author_first_name,
+                                  item.author_last_name
+                                ])
+                              }
+                            >
+                              {item.author_first_name +
+                                " " +
+                                item.author_last_name}
+                            </Link>
                           </p>
                         </div>
                       </div>
@@ -91,7 +124,7 @@ class Searched extends Component {
                   }}
                 >
                   <button className="add-button" type="button">
-                    Add
+                    Add to Cart
                   </button>
                 </span>
                 <span
@@ -122,19 +155,10 @@ class Searched extends Component {
 
     return (
       <div className="container">
-        <div className="#search">
+        <div className="filter-number">
           <Filter bookdetails={this.props.all} />
           <h4>Related entries: ({this.props.items.length})</h4>
           <ul className="current-items">{fitler}</ul>
-          <Link
-            onClick={() => this.sendFilter([])}
-            to="/"
-            href="#search"
-            className="links"
-            type="button"
-          >
-            Reset Search
-          </Link>
         </div>
       </div>
     );

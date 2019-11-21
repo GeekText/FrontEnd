@@ -62,7 +62,11 @@ export class Bookitem extends Component {
             <p className="author">
               by{" "}
               <Link
-                to="/search"
+                to={
+                  "/search#" +
+                  this.props.book.author_first_name +
+                  this.props.book.author_last_name
+                }
                 onClick={() =>
                   this.submitFilter([
                     this.props.book.author_first_name,
@@ -120,7 +124,7 @@ export class Bookitem extends Component {
               }}
             >
               <button className="add-button" type="button">
-                Add
+                Add to Cart
               </button>
             </span>
             <span
