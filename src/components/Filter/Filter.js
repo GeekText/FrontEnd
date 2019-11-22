@@ -44,22 +44,22 @@ class Filter extends Component {
   }
   handleDropdownChange(e) {
     this.setState({ selectValue: e.target.value }, function() {
-      console.log("Show Author", this.state.selectValue);
+      console.log("Show Author: ", this.state.selectValue);
     });
   }
   handleDropdownGenre(e) {
     this.setState({ selectGenre: e.target.value }, function() {
-      console.log("Show Genre", this.state.selectGenre);
+      console.log("Show Genre: ", this.state.selectGenre);
     });
   }
   handleDropdownRating(e) {
     this.setState({ selectRating: e.target.value }, function() {
-      console.log("Show Rating", this.state.selectRating);
+      console.log("Show Rating: ", this.state.selectRating);
     });
   }
   handleDropdownResults(e) {
     this.setState({ selectResults: e.target.value }, function() {
-      console.log("Results limit", this.state.selectResults);
+      console.log("Results limit: ", this.state.selectResults);
     });
   }
   sendFilter(list) {
@@ -236,7 +236,6 @@ class Filter extends Component {
     var limit = this.state.maxEntries;
     if (this.state.selectResults !== "All") {
       limit = parseInt(this.state.selectResults);
-      console.log("Check", allFilteredList.length, limit);
       if (allFilteredList.length > limit) {
         onPage = allFilteredList;
         if (allFilteredList && allFilteredList.length) {
@@ -255,8 +254,6 @@ class Filter extends Component {
     if (onPage.length < 1) {
       starting_page = 0;
     }
-    console.log("Page:", onPage);
-    console.log("All:", allFilteredList);
     //Set Filter
     this.setState(
       {

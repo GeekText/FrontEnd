@@ -3,11 +3,17 @@ import { connect } from "react-redux";
 import { addItem } from "../Cart/CartFunctions";
 import { addItemDetails } from "./BookFunctions";
 import { addItemWish } from "../wishlist/WishlistFunctions";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { filtered } from "../Filter/FilterFunctions";
 import "./BookItem.css";
 
 export class Bookitem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false
+    };
+  }
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -16,6 +22,9 @@ export class Bookitem extends Component {
   };
   clickOnWish = id => {
     this.props.addItemWish(id);
+  };
+  onClick = () => {
+    this.setState({ redirect: true });
   };
   searchAuthor(name) {
     let listFirstName;
@@ -40,6 +49,9 @@ export class Bookitem extends Component {
     this.props.sendFilter(list);
   }
   render() {
+    if (this.state.redirect) {
+      return <Redirect push to="/details" />;
+    }
     let bookInfo = (
       <span href="#tile" className="tile">
         <div className="item">
@@ -110,7 +122,7 @@ export class Bookitem extends Component {
               this.clickOnDetails(this.props.book.id);
             }}
           >
-            <Link to="/details">{bookInfo}</Link>
+            <span onClick={this.onClick}>{bookInfo}</span>
           </span>
           <p className="home_buttons">
             <i>Price: ${this.props.book.book_price} </i>

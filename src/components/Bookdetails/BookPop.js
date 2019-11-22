@@ -12,10 +12,6 @@ class Popup extends React.Component {
             height="600"
             className="image"
           />
-          <div className="container"></div>
-          <button className="popup-button" onClick={this.props.closePopup}>
-            Close
-          </button>
         </div>
       </div>
     );
