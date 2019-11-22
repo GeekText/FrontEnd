@@ -26,8 +26,10 @@ class BookInfo extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
   togglePopup() {
-    console.log(this.state.showPopup);
     this.setState({
       showPopup: !this.state.showPopup
     });

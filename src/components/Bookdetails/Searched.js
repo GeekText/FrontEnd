@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { addItemDetails } from "../BookItem/BookFunctions";
 import Filter from "../Filter/Filter";
 import { filtered } from "../Filter/FilterFunctions";
@@ -8,6 +8,15 @@ import { addItem } from "../Cart/CartFunctions";
 import { addItemWish } from "../wishlist/WishlistFunctions";
 
 class Searched extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false
+    };
+  }
+  onClick = () => {
+    this.setState({ redirect: true });
+  };
   clickOn = id => {
     this.props.addItem(id);
   };
@@ -40,6 +49,9 @@ class Searched extends Component {
     this.searchAuthor(name);
   }
   render() {
+    if (this.state.redirect) {
+      return <Redirect push to="/details" />;
+    }
     let fitler = this.props.items.length ? (
       this.props.items.map(item => {
         return (
@@ -51,7 +63,7 @@ class Searched extends Component {
                   this.clickOnDetails(item.id);
                 }}
               >
-                <Link to="/details">
+                <span onClick={this.onClick}>
                   <span href="#tile" className="tile">
                     <div className="item">
                       <div className="book_cover">
@@ -113,7 +125,7 @@ class Searched extends Component {
                       </div>
                     </div>
                   </span>
-                </Link>
+                </span>
               </span>
               <p className="home_buttons">
                 <i>Price: ${item.book_price} </i>

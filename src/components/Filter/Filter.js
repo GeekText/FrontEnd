@@ -44,22 +44,22 @@ class Filter extends Component {
   }
   handleDropdownChange(e) {
     this.setState({ selectValue: e.target.value }, function() {
-      console.log("Show Author", this.state.selectValue);
+      console.log("Show Author: ", this.state.selectValue);
     });
   }
   handleDropdownGenre(e) {
     this.setState({ selectGenre: e.target.value }, function() {
-      console.log("Show Genre", this.state.selectGenre);
+      console.log("Show Genre: ", this.state.selectGenre);
     });
   }
   handleDropdownRating(e) {
     this.setState({ selectRating: e.target.value }, function() {
-      console.log("Show Rating", this.state.selectRating);
+      console.log("Show Rating: ", this.state.selectRating);
     });
   }
   handleDropdownResults(e) {
     this.setState({ selectResults: e.target.value }, function() {
-      console.log("Results limit", this.state.selectResults);
+      console.log("Results limit: ", this.state.selectResults);
     });
   }
   sendFilter(list) {
@@ -244,6 +244,8 @@ class Filter extends Component {
           onPage = this.props.items.slice(0, limit);
         }
         console.log("Min: 0 Max:", limit - 1, "onPage = ", onPage);
+      } else {
+        onPage = allFilteredList;
       }
     } else {
       onPage = allFilteredList;
