@@ -162,7 +162,7 @@ const checkCartReducer = dispatch => {
     sendFilter: event => {
       dispatch(filtered(event));
     }
-  };
+  }; 
 };
 
 export default connect(mapStateToProps, checkCartReducer)(Bookitem);

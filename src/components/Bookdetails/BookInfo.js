@@ -147,6 +147,7 @@ class BookInfo extends Component {
                     <span className="card-subtitle mb-2 text-muted">
                       Publish Date: {item.book_publishing_info + " "}
                     </span>
+                    <br></br>
                     <span className="card-subtitle mb-2 text-muted">
                       Release Date:{item.book_releaseDate}{" "}
                     </span>
