@@ -96,6 +96,7 @@ class Registration extends React.Component {
     return (
       <div className="base-container">
         <form name="form">
+          <br />
           Welcome to the Account Creation page. Here, you will create your
           account. <br />
           <Link to="/login">
@@ -107,86 +108,97 @@ class Registration extends React.Component {
           <div className="form-header">
             <h4 className="title">Login Credentials</h4>
           </div>
-          Login ID: <input type="text" id="LoginID" required /> <br />
-          Password:{" "}
-          <input
-            type="text"
-            onChange={this.updatePassword}
-            id="Password"
-            required
-          />{" "}
+          <div className="lbl">
+            Login ID: <input type="text" id="LoginID" required /> <br />
+            Password:{" "}
+            <input
+              type="text"
+              onChange={this.updatePassword}
+              id="Password"
+              required
+            />{" "}
+          </div>
           <br />
           (Password must be 6-20 characters, and contain at least one lowercase
           letter, uppercase letter, and a number 0-9)
           <br />
           <div className="form-header">
+            <br />
             <h4 className="title">Personal Information</h4>
           </div>
-          Name: <input type="text" id="Name" required /> <br />
-          Nickname (for commenting and rating):{" "}
-          <input type="text" id="Nickname" required /> <br />
-          E-mail Address: <input type="text" id="email" required /> <br />
+          <div className="lbl">
+            Name: <input type="text" id="Name" required /> <br />
+            Nickname (for commenting and rating):{" "}
+            <input type="text" id="Nickname" required /> <br />
+            E-mail Address: <input type="text" id="email" required /> <br />
+          </div>
           <div className="form-header">
+            <br />
             <h4 className="title">Shipping/Home Address</h4>
             <h5 className="title">Address 1</h5>
             <br />
           </div>
-          Unit Number and Street:{" "}
-          <input type="text" id="AddressLine1" required /> <br />
-          City: <input type="text" id="City" required /> <br />
-          State (2 letter-abbreviation):{" "}
-          <input type="text" id="State" required /> <br />
-          ZIP Code: <input type="text" id="ZIPCode" required /> <br />
-          <br />
+          <div className="lbl">
+            Unit Number and Street:{" "}
+            <input type="text" id="AddressLine1" required /> <br />
+            City: <input type="text" id="City" required /> <br />
+            State (2 letter-abbreviation):{" "}
+            <input type="text" id="State" required /> <br />
+            ZIP Code: <input type="text" id="ZIPCode" required /> <br />
+            <br />
+          </div>
           {this.state.Addresses.map((address, index) => {
             return (
               <div key={index}>
                 <h5 className="title">Address {index + 2}</h5>
                 <br />
-                Unit Number and Street:{" "}
-                <input
-                  type="text"
-                  id="AddressLine1"
-                  onChange={e => this.handleChangeAddress(e, index)}
-                  value={address}
-                />{" "}
-                <br />
-                City:{" "}
-                <input
-                  type="text"
-                  id="City"
-                  onChange={e => this.handleChangeAddress(e, index)}
-                  value={address}
-                />{" "}
-                <br />
-                State (2 letter-abbreviation):{" "}
-                <input
-                  type="text"
-                  id="State"
-                  onChange={e => this.handleChangeAddress(e, index)}
-                  value={address}
-                />{" "}
-                <br />
-                ZIP Code:{" "}
-                <input
-                  type="text"
-                  id="ZIPCode"
-                  onChange={e => this.handleChangeAddress(e, index)}
-                  value={address}
-                />{" "}
-                <br />
-                <br />
-                <button onClick={e => this.deleteAddress(e)}>
-                  Delete This Address
-                </button>
-                <br /> <br />
+                <div className="lbl">
+                  Unit Number and Street:{" "}
+                  <input
+                    type="text"
+                    id="AddressLine1"
+                    onChange={e => this.handleChangeAddress(e, index)}
+                    value={address}
+                  />{" "}
+                  <br />
+                  City:{" "}
+                  <input
+                    type="text"
+                    id="City"
+                    onChange={e => this.handleChangeAddress(e, index)}
+                    value={address}
+                  />{" "}
+                  <br />
+                  State (2 letter-abbreviation):{" "}
+                  <input
+                    type="text"
+                    id="State"
+                    onChange={e => this.handleChangeAddress(e, index)}
+                    value={address}
+                  />{" "}
+                  <br />
+                  ZIP Code:{" "}
+                  <input
+                    type="text"
+                    id="ZIPCode"
+                    onChange={e => this.handleChangeAddress(e, index)}
+                    value={address}
+                  />{" "}
+                  <br />
+                  <br />
+                  <button onClick={e => this.deleteAddress(e)}>
+                    Delete This Address
+                  </button>
+                  <br /> <br />
+                </div>
               </div>
             );
           })}
+          <br />
           <button onClick={e => this.addAddress(e)}>Add Address</button>
           <br />
           <br />
-          <br /> <br />
+          <br />
           <div className="form-header">
             <h4 className="title">Credit Cards</h4>
           </div>
