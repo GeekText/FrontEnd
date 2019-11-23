@@ -171,8 +171,10 @@ class Checkout extends Component {
           <br></br>
           <div className="review-list">
             <h5>Pay with</h5>
+            {"[Not Implemented]"}
             <ul className="current-saved">{}</ul>
             <h5>Ship to </h5>
+            {"[Not Implemented]"}
             <h5>Review items ({this.props.items.length})</h5>
             <ul className="current-items">{cart}</ul>
             <Link to="/cart#review">
