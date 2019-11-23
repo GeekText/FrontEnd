@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./Navbar";
 import home from "./home/home";
 import Cart from "./components/Cart/Cart";
+import Checkout from "./components/Cart/Checkout";
 import Registration from "./components/Registration(Profile Mgmt)/Registration";
 import BookInfo from "./components/Bookdetails/BookInfo.js";
 import Searched from "./components/Bookdetails/Searched";
@@ -20,6 +21,7 @@ class App extends React.Component {
             <Route exact path="/" component={home} />
             <Route path="/home" component={home} />
             <Route path="/cart" component={Cart} />
+            <Route path="/checkout" component={Checkout} />
             <Route path="/profile" component={Registration} />
             <Route path="/login" component={Login} />
             <Route path="/details" component={BookInfo} />

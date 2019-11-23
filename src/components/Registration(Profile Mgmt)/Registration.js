@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Profile.css";
+import "./style.css";
 class Registration extends React.Component {
   constructor(props) {
     super(props);
@@ -50,107 +51,103 @@ class Registration extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="form">
-          <form name="form1">
-            Welcome to the Account Creation page. Here, you will create your
-            account. <br />
-            <br />
-            <Link to="/login">
-              <span href="#login" className="account-link" type="button">
-                Already have an account? Click here to login.
-              </span>
-            </Link>{" "}
-            Enter the following to proceed: <br /> <br />
-            <div className="form-header">
-              <h4 className="title">Login Credentials</h4>
+      <div className="base-container">
+        <form name="form">
+          Welcome to the Account Creation page. Here, you will create your
+          account. <br />
+          <Link to="/login">
+            <span href="#login" className="account-link">
+              Already have an account? Click here to login.
+            </span>
+          </Link>{" "}
+          Enter the following to proceed: <br /> <br />
+          <div class="form-header">
+            <h4 class="title">Login Credentials</h4>
+          </div>
+          Login ID: <input type="text" id="LoginID" required /> <br />
+          Password:{" "}
+          <input
+            type="text"
+            onChange={this.updatePassword}
+            id="Password"
+            required
+          />{" "}
+          <br />
+          (Password must be 6-20 characters, and contain at least one lowercase
+          letter, uppercase letter, and a number 0-9)
+          <br />
+          <div class="form-header">
+            <h4 class="title">Personal Information</h4>
+          </div>
+          Name: <input type="text" id="Name" required /> <br />
+          Nickname (for commenting and rating):{" "}
+          <input type="text" id="Nickname" required /> <br />
+          E-mail Address: <input type="text" id="email" required /> <br />
+          <div class="form-header">
+            <h4 class="title">Shipping/Home Address</h4>
+            (You will be able to add more addresses once your account has been
+            created) <br />
+          </div>
+          Unit Number and Street:{" "}
+          <input type="text" id="AddressLine1" required /> <br />
+          City: <input type="text" id="City" required /> <br />
+          State (2 letter-abbreviation):{" "}
+          <input type="text" id="State" required /> <br />
+          ZIP Code: <input type="text" id="ZIPCode" required /> <br /> <br />
+          <div class="form-header">
+            <h4 class="title">Credit Card Detail</h4>
+            (You will be able to add more credit cards once your account has
+            been created) <br />
+          </div>
+          Card # (no spaces or dashes):{" "}
+          <input
+            type="text"
+            onChange={this.updateCC}
+            id="cc_number"
+            required
+          />{" "}
+          <br />
+          Exp Date (MM/YYYY):
+          <div class="date-field">
+            <div class="month">
+              Month{" "}
+              <select name="Month">
+                <option value="january">01</option>
+                <option value="february">02</option>
+                <option value="march">03</option>
+                <option value="april">04</option>
+                <option value="may">05</option>
+                <option value="june">06</option>
+                <option value="july">07</option>
+                <option value="august">08</option>
+                <option value="september">09</option>
+                <option value="october">10</option>
+                <option value="november">11</option>
+                <option value="december">12</option>
+              </select>
             </div>
-            Login ID: <input type="text" id="LoginID" required /> <br />
-            Password:{" "}
-            <input
-              type="text"
-              onChange={this.updatePassword}
-              id="Password"
-              required
-            />{" "}
-            <br />
-            (Password must be 6-20 characters, and contain at least one
-            lowercase letter, uppercase letter, and a number 0-9)
-            <br />
-            {/* <!--Confirm Password: <input type="text" id="ConfirmPassword" required/> <br/> </br/>--> */}
-            <div className="form-header">
-              <h4 className="title">Personal Information</h4>
+            <div class="year">
+              Year{" "}
+              <select name="Year">
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+              </select>
             </div>
-            Name: <input type="text" id="Name" required /> <br />
-            Nickname (for commenting and rating):{" "}
-            <input type="text" id="Nickname" required /> <br />
-            E-mail Address: <input type="text" id="email" required /> <br />
-            <div className="form-header">
-              <h4 className="title">Shipping/Home Address</h4>
-              (You will be able to add more addresses once your account has been
-              created) <br />
-            </div>
-            Unit Number and Street:{" "}
-            <input type="text" id="AddressLine1" required /> <br />
-            City: <input type="text" id="City" required /> <br />
-            State (2 letter-abbreviation):{" "}
-            <input type="text" id="State" required /> <br />
-            ZIP Code: <input type="text" id="ZIPCode" required /> <br /> <br />
-            <div className="form-header">
-              <h4 className="title">Credit Card Detail</h4>
-              (You will be able to add more credit cards once your account has
-              been created) <br />
-            </div>
-            Card # (no spaces or dashes):{" "}
-            <input
-              type="text"
-              onChange={this.updateCC}
-              id="cc_number"
-              required
-            />{" "}
-            <br />
-            Exp Date (MM/YYYY):
-            <div className="date-field">
-              <div className="month">
-                Month{" "}
-                <select name="Month">
-                  <option value="january">01</option>
-                  <option value="february">02</option>
-                  <option value="march">03</option>
-                  <option value="april">04</option>
-                  <option value="may">05</option>
-                  <option value="june">06</option>
-                  <option value="july">07</option>
-                  <option value="august">08</option>
-                  <option value="september">09</option>
-                  <option value="october">10</option>
-                  <option value="november">11</option>
-                  <option value="december">12</option>
-                </select>
-              </div>
-              <div className="year">
-                Year{" "}
-                <select name="Year">
-                  <option value="2019">2019</option>
-                  <option value="2020">2020</option>
-                  <option value="2021">2021</option>
-                  <option value="2022">2022</option>
-                  <option value="2023">2023</option>
-                  <option value="2024">2024</option>
-                  <option value="2025">2025</option>
-                  <option value="2026">2026</option>
-                </select>
-              </div>
-            </div>
-            CVV: <input type="text" id="cc_cvv" required /> <br /> <br />
-            <input
-              className="submit-button"
-              type="submit"
-              value="Submit"
-              onClick={this.handleSubmit}
-            />
-          </form>
-        </div>
+          </div>
+          CVV: <input type="text" id="cc_cvv" required /> <br /> <br />
+          <input
+            className="submit-button"
+            type="submit"
+            value="Submit"
+            onClick={this.handleSubmit}
+          />
+        </form>
       </div>
     );
   }

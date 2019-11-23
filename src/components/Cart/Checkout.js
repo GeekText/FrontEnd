@@ -11,33 +11,9 @@ import {
   addItemWish
 } from "./CartFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
-import Popup from "./Popup";
 import "./Cart.css";
 
-class Cart extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { showPopupSave: false };
-    this.state = { showPopupCart: false };
-    this.state = { showPopupWish: false };
-  }
-
-  togglePopupSave() {
-    this.setState({
-      showPopupSave: !this.state.showPopupSave
-    });
-  }
-  togglePopupCart() {
-    this.setState({
-      showPopupCart: !this.state.showPopupCart
-    });
-  }
-  togglePopupWish() {
-    this.setState({
-      showPopupWish: !this.state.showPopupWish
-    });
-  }
-
+class Checkout extends Component {
   searchAuthor(name) {
     let listFirstName;
     let listLastName;
@@ -69,19 +45,6 @@ class Cart extends Component {
   };
   clickSubtr = id => {
     this.props.clickSubtr(id);
-  };
-  clickSave = id => {
-    console.log("Saving to save for later");
-    this.props.clickSave(id);
-  };
-  clickSaveToCart = id => {
-    this.props.clickSaveToCart(id);
-  };
-  clickSaveRemove = id => {
-    this.props.clickSaveRemove(id);
-  };
-  clickSaveToWish = id => {
-    this.props.clickSaveToWish(id);
   };
   render() {
     let cart = this.props.items.length ? (
@@ -178,28 +141,6 @@ class Cart extends Component {
                 </div>
                 <br></br>
                 <span
-                  className="save-button"
-                  onClick={() => {
-                    let exists = this.props.savedItems.find(
-                      all => all.id === item.id
-                    );
-                    if (exists) {
-                      this.togglePopupSave();
-                    } else {
-                      this.clickSave(item.id);
-                    }
-                  }}
-                >
-                  Save for later
-                </span>
-                {this.state.showPopupSave ? (
-                  <Popup
-                    text='This item already exists in your "Save for later" list.'
-                    closePopup={this.togglePopupSave.bind(this)}
-                  />
-                ) : null}
-                <br></br>
-                <span
                   className="del-button"
                   onClick={() => {
                     this.clickRemove(item.id);
@@ -214,110 +155,12 @@ class Cart extends Component {
       })
     ) : (
       <div>
-        <p>Your shopping cart is empty.</p>
+        <p>There seems to be a problem with your order.</p>
         <Link to="/#Items">
           <span href="#cart" className="links" type="button">
-            Start Shopping
+            Go Back
           </span>
         </Link>
-      </div>
-    );
-
-    let saved = this.props.savedItems.length ? (
-      this.props.savedItems.map(item => {
-        return (
-          <div className="save-for-later-list" key={item.id}>
-            <div className="item">
-              <div className="image">
-                <img
-                  src={item.book_cover}
-                  alt="Failed to load: book_cover"
-                  width="100"
-                  height="100"
-                />
-              </div>
-              <div className="description">
-                <span className="card-title">
-                  <b>{item.book_name}</b>
-                  <span className="author">
-                    By: {item.author_first_name} {item.author_last_name} (
-                    {item.gender})
-                  </span>
-                  <span className="publisher">
-                    Publisher: {item.book_publisher}
-                  </span>
-                  <span className="publisher">
-                    Books Sold: {item.book_copies_sold}
-                  </span>
-                  <span className="publisher">
-                    Rating: {item.book_rating} of 5
-                  </span>
-                </span>
-              </div>
-              <div className="buttons">
-                <div className="item-price">
-                  <h5>${item.book_price}</h5>
-                </div>
-                <span
-                  className="cart-button"
-                  onClick={() => {
-                    let exists = this.props.items.find(
-                      all => all.id === item.id
-                    );
-                    if (exists) {
-                      this.togglePopupCart();
-                    } else {
-                      this.clickSaveToCart(item.id);
-                    }
-                  }}
-                >
-                  Add to cart
-                </span>
-                {this.state.showPopupCart ? (
-                  <Popup
-                    text="This item already exists in your cart."
-                    closePopup={this.togglePopupCart.bind(this)}
-                  />
-                ) : null}
-                <br></br>
-                <span
-                  className="wishcart-button"
-                  onClick={() => {
-                    let exists = this.props.wishlist.find(
-                      all => all.id === item.id
-                    );
-                    if (exists) {
-                      this.togglePopupWish();
-                    } else {
-                      this.clickSaveToWish(item.id);
-                    }
-                  }}
-                >
-                  Add to Wishlist
-                </span>
-                {this.state.showPopupWish ? (
-                  <Popup
-                    text="This item already exists in your primary wishlist."
-                    closePopup={this.togglePopupWish.bind(this)}
-                  />
-                ) : null}
-                <br></br>
-                <span
-                  className="del-button"
-                  onClick={() => {
-                    this.clickSaveRemove(item.id);
-                  }}
-                >
-                  Remove
-                </span>
-              </div>
-            </div>
-          </div>
-        );
-      })
-    ) : (
-      <div>
-        <p>Your list is empty.</p>
       </div>
     );
 
@@ -338,21 +181,19 @@ class Cart extends Component {
       <div className="container">
         <div className="#cart">
           <br></br>
-          <h4>Shopping cart ({this.props.items.length})</h4>
+          <h5>Pay with</h5>
+          <ul className="current-saved">{}</ul>
+          <h5>Ship to </h5>
+          <h5>Review items ({this.props.items.length})</h5>
           <ul className="current-items">{cart}</ul>
           <div className="shopping-cart">
             <h5>{subtotal}</h5>
           </div>
-          <h5>
-            <p>Save for later ({this.props.savedItems.length})</p>
-          </h5>
-          <ul className="current-saved">{saved}</ul>
         </div>
       </div>
     );
   }
 }
-
 const currentItems = state => {
   return {
     items: state.addedItems,
@@ -391,4 +232,4 @@ const changeItems = dispatch => {
   };
 };
 
-export default connect(currentItems, changeItems)(Cart);
+export default connect(currentItems, changeItems)(Checkout);
