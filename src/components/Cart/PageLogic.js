@@ -142,6 +142,7 @@ const PageLogic = (state = homeItems, action) => {
   }
   //Adds item to cart
   if (action.type === ADD) {
+    console.log("TESSSSTeg", action.id);
     let cartItem = state.items.find(item => item.id === action.id);
     let exists = state.addedItems.find(item => action.id === item.id);
     if (exists) {
