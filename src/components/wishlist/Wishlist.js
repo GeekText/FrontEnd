@@ -345,8 +345,8 @@ class Wishlist extends Component {
                   {this.props.wishlist3.wishlistName}
                 </option>
               </select>
+              <input className="add-button" type="submit" value="Go" />
             </label>
-            <input type="submit" value="Go" />
           </form>
           {/*/////////////////////////////////////*/}
           {/*/////////////////////////////////////*/}
@@ -370,8 +370,8 @@ class Wishlist extends Component {
                   {this.props.wishlist3.wishlistName}
                 </option>
               </select>
+              <input className="add-button" type="submit" value="Go" />
             </label>
-            <input type="submit" value="Go" />
           </form>
           {/*/////////////////////////////////////*/}
           {/*/////////////////////////////////////*/}

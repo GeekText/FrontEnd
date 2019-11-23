@@ -59,8 +59,8 @@ class Checkout extends Component {
                 <img
                   src={item.book_cover}
                   alt="Failed to load: book_cover"
-                  width="60"
-                  height="60"
+                  width="75"
+                  height="75"
                 />
               </div>
               <div className="description">

@@ -13,15 +13,17 @@ class Registration extends React.Component {
       Addresses: [],
       Cards: []
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.updateCC = this.updateCC.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
-  addAddress() {
+  addAddress(e) {
+    e.preventDefault(); // prevent refleshing.
     this.setState({ Addresses: [...this.state.Addresses, ""] });
   }
 
   deleteAddress(index) {
+    index.preventDefault(); // prevent refleshing.
     // remove item at index
     this.state.Addresses.splice(index, 1);
 
@@ -30,6 +32,7 @@ class Registration extends React.Component {
   }
 
   handleChangeAddress(e, index) {
+    e.preventDefault(); // prevent refleshing.
     let change = this.state.Addresses;
     change[index] = e.target.value;
     this.setState({ Addresses: change });
@@ -40,6 +43,7 @@ class Registration extends React.Component {
   }
 
   deleteCard(index) {
+    index.preventDefault(); // prevent refleshing.
     // remove item at index
     this.state.Cards.splice(index, 1);
 
@@ -47,49 +51,38 @@ class Registration extends React.Component {
     this.setState({ Cards: this.state.Cards });
   }
 
-  handleSubmit = () => {
-    // method to handle submission of Login and Password
-  };
-
   handleChangeCards(e, index) {
+    e.preventDefault(); // prevent refleshing.
     let change = this.state.Cards;
     change[index] = e.target.value;
     this.setState({ Cards: change });
   }
 
-  check_entries(input, cc_num) {
-    /* var loginid = document.getElementByID("LoginID");
-    var pw = document.getElementByID("Password");
-    var cfrmpw = document.getElementByID("ConfirmPassword");
-    var name = document.getElementByID("Name");
-    var nickname = document.getElementByID("Nickname");
-    var email = document.myForm.email.value // document.getElementByID("email");
-    var addrLine1 = document.getElementByID("AddressLine1");
-    var city = document.getElementByID("City");!cc_num.value.match(desired_ccnum)
-    var state = document.getElementByID("State");!input.value.match(desired_pswd)
-    var zip = document.getElementByID("ZIPCode"); */
+  updatePassword(event) {
+    event.preventDefault(); // prevent refleshing.
+    this.setState({ Password: event.target.value });
+  }
+  updateCC(event) {
+    event.preventDefault(); // prevent refleshing.
+    this.setState({ cc_number: event.target.value });
+  }
+  handleSubmit(event) {
+    event.preventDefault(); // prevent refleshing.
+    var password = this.state.Password;
+    var cc_num = this.state.cc_number;
+    console.log(password, cc_num);
+    console.log(this.state.Password, this.state.cc_number);
+    // method to handle submission of Login and Password
     var desired_pswd = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-    if (!desired_pswd.test(input.value)) {
+    if (!password.value.match(desired_pswd)) {
       alert("Password does not meet criteria! Try again.");
       return false;
     }
     var desired_ccnum = /^(?=.*[0-9])/;
-    if (!desired_ccnum.test(cc_num.value)) {
+    if (!cc_num.value.match(desired_ccnum)) {
       alert("Invalid credit card number. Should only contain numbers!");
       return false;
     }
-
-    // insert form validation here
-  }
-  updatePassword(event) {
-    this.setState({ Password: event.target.value });
-  }
-  updateCC(event) {
-    this.setState({ cc_number: event.target.value });
-  }
-  handleSubmit() {
-    console.log("PW: %s \nCC: %s", this.state.Password, this.state.cc_number);
-    this.check_entries(this.state.Password, this.state.cc_number);
   }
 
   render() {
@@ -113,7 +106,7 @@ class Registration extends React.Component {
             Password:{" "}
             <input
               type="text"
-              onChange={this.updatePassword}
+              onChange={() => this.updatePassword}
               id="Password"
               required
             />{" "}
@@ -207,7 +200,7 @@ class Registration extends React.Component {
           Card # (no spaces or dashes):{" "}
           <input
             type="text"
-            onChange={this.updateCC}
+            onChange={() => this.updateCC}
             id="cc_number"
             required
           />{" "}
@@ -302,7 +295,7 @@ class Registration extends React.Component {
             className="submit-button"
             type="submit"
             value="Submit"
-            onClick={this.handleSubmit}
+            onClick={() => this.handleSubmit}
           />
           <br />
           <br />
