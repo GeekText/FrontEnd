@@ -1,19 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  addQuantity,
-  subtractQuantity,
-  removeItem,
-  saveAdd,
-  saveAddToCart,
-  saveRemove,
-  addItemWish
-} from "./CartFunctions.js";
+import { addQuantity, subtractQuantity, removeItem } from "./CartFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
+import Popup from "./Popup";
 import "./Cart.css";
 
 class Checkout extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showPopupPaid: false };
+  }
+
+  showPopupPaid() {
+    this.setState({
+      showPopupPaid: !this.state.showPopupPaid
+    });
+  }
   searchAuthor(name) {
     let listFirstName;
     let listLastName;
@@ -56,8 +59,8 @@ class Checkout extends Component {
                 <img
                   src={item.book_cover}
                   alt="Failed to load: book_cover"
-                  width="200"
-                  height="200"
+                  width="60"
+                  height="60"
                 />
               </div>
               <div className="description">
@@ -78,33 +81,7 @@ class Checkout extends Component {
                         {item.author_first_name + " " + item.author_last_name}
                       </Link>
                     </b>{" "}
-                    ({item.gender})
                   </span>
-                  <i className="card-subtitle mb-2 text-muted">
-                    {item.book_desc}
-                  </i>
-                  <div className="additional-details">
-                    <div className="stats">
-                      <span className="publisher">
-                        Publisher: {item.book_publisher}
-                      </span>
-                      <span className="publisher">
-                        Released: {item.book_releaseDate}
-                      </span>
-                    </div>
-                    <div className="stats">
-                      <span className="publisher">
-                        Books Sold: {item.book_copies_sold}
-                      </span>
-                      <span className="publisher">
-                        Rating: {item.book_rating} of 5
-                      </span>
-                    </div>
-                  </div>
-                  <span className="bio">
-                    <i className="text-muted">Bio: "{item.author_biography}"</i>
-                  </span>
-                  <span className="email">({item.email})</span>
                 </span>
               </div>
               <div className="buttons">
@@ -114,6 +91,8 @@ class Checkout extends Component {
                     ${item.book_price} each
                   </i>
                 </div>
+              </div>
+              <div className="buttons">
                 <div className="quantity">
                   Qty:
                   <br></br>
@@ -139,7 +118,6 @@ class Checkout extends Component {
                     -
                   </button>
                 </div>
-                <br></br>
                 <span
                   className="del-button"
                   onClick={() => {
@@ -154,8 +132,64 @@ class Checkout extends Component {
         );
       })
     ) : (
+      <div></div>
+    );
+
+    let subtotal = this.props.items.length ? (
+      [
+        <div className="total-price" key="Price">
+          <p>Subtotal: ${this.props.total.toFixed(2)}</p>
+          <h5>
+            <b>Total: ${this.props.total.toFixed(2)}</b>
+          </h5>
+          <span
+            to="/checkout"
+            className="checkout_btn"
+            onClick={() => {
+              this.showPopupPaid();
+            }}
+          >
+            Pay
+          </span>
+          {this.state.showPopupPaid ? (
+            <Link to="/">
+              <Popup
+                text="Thank you for paying!"
+                closePopup={this.showPopupPaid.bind(this)}
+              />
+            </Link>
+          ) : null}
+        </div>
+      ]
+    ) : (
+      <div></div>
+    );
+
+    let checkitem = this.props.items.length ? (
+      [
+        <div className="checkout-list">
+          <br></br>
+          <div className="review-list">
+            <h5>Pay with</h5>
+            {"[Not Implemented]"}
+            <ul className="current-saved">{}</ul>
+            <h5>Ship to </h5>
+            {"[Not Implemented]"}
+            <h5>Review items ({this.props.items.length})</h5>
+            <ul className="current-items">{cart}</ul>
+            <Link to="/cart#review">
+              <span href="#cart" className="links" type="button">
+                Go Back
+              </span>
+            </Link>
+          </div>
+          <div className="review-list">{subtotal}</div>
+        </div>
+      ]
+    ) : (
       <div>
-        <p>There seems to be a problem with your order.</p>
+        <br></br>
+        <p>There are no items in your order.</p>
         <Link to="/#Items">
           <span href="#cart" className="links" type="button">
             Go Back
@@ -163,35 +197,7 @@ class Checkout extends Component {
         </Link>
       </div>
     );
-
-    let subtotal = this.props.items.length ? (
-      [
-        <div className="subtotal-price" key="Price">
-          <b>Subtotal: ${this.props.total}</b>
-          <br></br>
-          <Link to="/checkout" className="checkout_btn">
-            Checkout
-          </Link>
-        </div>
-      ]
-    ) : (
-      <div></div>
-    );
-    return (
-      <div className="container">
-        <div className="#cart">
-          <br></br>
-          <h5>Pay with</h5>
-          <ul className="current-saved">{}</ul>
-          <h5>Ship to </h5>
-          <h5>Review items ({this.props.items.length})</h5>
-          <ul className="current-items">{cart}</ul>
-          <div className="shopping-cart">
-            <h5>{subtotal}</h5>
-          </div>
-        </div>
-      </div>
-    );
+    return <div className="container">{checkitem}</div>;
   }
 }
 const currentItems = state => {
@@ -213,18 +219,6 @@ const changeItems = dispatch => {
     },
     clickSubtr: id => {
       dispatch(subtractQuantity(id));
-    },
-    clickSave: id => {
-      dispatch(saveAdd(id));
-    },
-    clickSaveToCart: id => {
-      dispatch(saveAddToCart(id));
-    },
-    clickSaveRemove: id => {
-      dispatch(saveRemove(id));
-    },
-    clickSaveToWish: id => {
-      dispatch(addItemWish(id));
     },
     sendFilter: event => {
       dispatch(filtered(event));
