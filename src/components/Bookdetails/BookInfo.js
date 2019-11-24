@@ -3,14 +3,18 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Ratingsystem } from '../Ratingsystem/Ratingsystem'
 
+var libro;
+
 class BookInfo extends Component {
   clickRemove = id => {
     this.props.clickRemove(id);
   };
 
+  
   render() {
     let addedItemID = this.props.items.length ? (
-      this.props.items.map(item => {
+        this.props.items.map(item => {
+        libro = item.id;
         return (
           <div className="slot" key={item.id}>
             <div>
@@ -27,8 +31,10 @@ class BookInfo extends Component {
             <p>
               <b>Price: ${item.book_price}</b>
             </p>
-
-            <Ratingsystem></Ratingsystem>
+                
+                <Ratingsystem> 
+                </Ratingsystem>
+                
 
             <Link to="/#Items">
               <a href="#cart" class="links" type="button">
@@ -67,4 +73,6 @@ const currentItems = state => {
   };
 };
 
+
+export { libro };
 export default connect(currentItems)(BookInfo);
