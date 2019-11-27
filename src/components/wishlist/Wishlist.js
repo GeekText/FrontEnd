@@ -189,9 +189,11 @@ class Wishlist extends Component {
     // update the state with the new array of options
     //this.setState({ options: options });
   }
-  clickWishToCart = id => {
-    this.props.clickWishToCart(id);
-  };
+  clickWishToCart() {
+    this.state.currentWishlist.options.map(number =>
+      this.props.clickWishToCart(number)
+    );
+  }
 
   // When submit button is clicked, pass current wishlist name to the handler.
   mySubmitHandler = event => {
@@ -233,10 +235,10 @@ class Wishlist extends Component {
     });
   }
 
-  clickAddToCart = number => {
-    this.props.clickWishToCart(number);
-    this.props.clickRemove(number);
-  };
+  clickAddToCart() {
+    this.clickWishToCart();
+    this.clickRemove();
+  }
   ////////////////////////////////////////
   ///////////////////////////////////////
   // When clicked, transfer from one list to another.
@@ -319,9 +321,7 @@ class Wishlist extends Component {
           <span
             className="add-button"
             onClick={() => {
-              this.props.wishlist.options.map(number =>
-                this.clickAddToCart(number)
-              );
+              this.clickAddToCart();
             }}
           >
             Add To Cart
@@ -345,8 +345,8 @@ class Wishlist extends Component {
                   {this.props.wishlist3.wishlistName}
                 </option>
               </select>
+              <input className="add-button" type="submit" value="Go" />
             </label>
-            <input type="submit" value="Go" />
           </form>
           {/*/////////////////////////////////////*/}
           {/*/////////////////////////////////////*/}
@@ -370,8 +370,8 @@ class Wishlist extends Component {
                   {this.props.wishlist3.wishlistName}
                 </option>
               </select>
+              <input className="add-button" type="submit" value="Go" />
             </label>
-            <input type="submit" value="Go" />
           </form>
           {/*/////////////////////////////////////*/}
           {/*/////////////////////////////////////*/}
