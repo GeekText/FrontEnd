@@ -5,7 +5,7 @@ import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 import "./BookInfo.css";
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
-import Popup from "./BookPop";
+import Popup from "./Bookpop";
 
 class BookInfo extends Component {
   constructor(props) {
@@ -146,6 +146,10 @@ class BookInfo extends Component {
                     <h6 className="card-subtitle mb-2 text-muted">
                       Author Bio: {item.author_biography}
                     </h6>
+                    <span>
+                      Description: {item.book_desc}
+                    </span>
+                    <br></br>
                     <span className="card-subtitle mb-2 text-muted">
                       Publish Date: {item.book_publishing_info + " "}
                     </span>
