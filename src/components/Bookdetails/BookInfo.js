@@ -7,6 +7,8 @@ import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
 import Popup from "./BookPop";
 
+var libro;
+
 class BookInfo extends Component {
   constructor(props) {
     super(props);
@@ -81,6 +83,7 @@ class BookInfo extends Component {
     }
   }
 
+
   searchAuthor(name) {
     let listFirstName;
     let listLastName;
@@ -103,10 +106,12 @@ class BookInfo extends Component {
   sendFilter(list) {
     this.props.sendFilter(list);
   }
+
   render() {
     //let authorName = [this.props.items.author_first_name,this.props.items.author_last_name];
     let addedItemID = this.props.items.length ? (
-      this.props.items.map(item => {
+        this.props.items.map(item => {
+        libro = item.id;
         return (
           <div className="slot" key={item.id}>
             <span href="#tile" className="tile">
@@ -207,6 +212,7 @@ class BookInfo extends Component {
               </label>
               <input type="submit" value="Submit" />
             </form>
+
             <Link to="/#Items">
               <span href="#cart" className="links" type="button">
                 Back to Home Page
@@ -245,6 +251,7 @@ const currentItems = state => {
     wishlist3: state.wishlist3
   };
 };
+
 const changeItems = dispatch => {
   return {
     handleSave: event => {
@@ -256,3 +263,6 @@ const changeItems = dispatch => {
   };
 };
 export default connect(currentItems, changeItems)(BookInfo);
+export { libro };
+export default connect(currentItems)(BookInfo);
+

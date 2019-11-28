@@ -1,30 +1,33 @@
 .star-rating {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  box-shadow: 1px 2px 3px 0px;
-  border-radius: 2px;
-  width: 20%;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    box-shadow: 1px 2px 3px 0px;
+    border-radius: 2px;
+    width: 20%;
+    margin: 2em auto;
+}
+
+#NameBox {
+    width: 20000px;
+    padding: 20px;
+
+
+}
+
+#comentario {
+    width: 20000px;
+    padding: 20px;
 }
 
 .star {
-  cursor: pointer;
-  width: 2em;
-  height: 2em;
+    cursor: pointer;
+    width: 2em;
+    height: 2em;
+    background-color: grey;
+    clip-path: polygon( 50% 0%, 63% 38%, 100% 38%, 69% 59%, 82% 100%, 50% 75%, 18% 100%, 31% 59%, 0% 38%, 37% 38% );
 
-  background-color: grey;
-  clip-path: polygon(
-    50% 0%,
-    63% 38%,
-    100% 38%,
-    69% 59%,
-    82% 100%,
-    50% 75%,
-    18% 100%,
-    31% 59%,
-    0% 38%,
-    37% 38%
-  );
 }
 
 .star.selected {
@@ -39,9 +42,11 @@ p {
 }
 */
 .comment {
-  background: #eee;
-  width: 300%;
-  margin: 2em auto;
-  border: 6px solid #e2e2e2;
-  height: 20em;
+    background: #FFEBCD;
+    width: 90%;
+    margin: 2em auto;
+    border: 6px solid #e2e2e2;
+    height: 20em;
+
 }
+
