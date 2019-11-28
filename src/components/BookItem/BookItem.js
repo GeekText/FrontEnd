@@ -92,7 +92,7 @@ export class Bookitem extends Component {
             <div className="book_details">
               <span className="bio">
                 <h6 className="card-subtitle mb-2 text-muted">
-                  {this.props.book.author_biography}
+                  {this.props.book.book_desc}
                 </h6>
               </span>
 
@@ -149,6 +149,8 @@ export class Bookitem extends Component {
           </p>
         </div>
       </div>
+
+      
     );
   }
 }
@@ -172,7 +174,7 @@ const checkCartReducer = dispatch => {
     sendFilter: event => {
       dispatch(filtered(event));
     }
-  };
+  }; 
 };
 
 export default connect(mapStateToProps, checkCartReducer)(Bookitem);

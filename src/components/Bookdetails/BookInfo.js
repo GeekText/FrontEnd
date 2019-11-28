@@ -5,13 +5,14 @@ import { Ratingsystem } from "../Ratingsystem/Ratingsystem";
 import "./BookInfo.css";
 import { currentWishName } from "../wishlist/WishlistFunctions.js";
 import { filtered } from "../Filter/FilterFunctions";
-import Popup from "./BookPop";
+import Popup from "./Bookpop";
 
 var libro;
 
 class BookInfo extends Component {
   constructor(props) {
     super(props);
+    this.state = {showPopupImg:false};
     this.state = {
       showPopup: false,
       value: "wishlist",
@@ -113,6 +114,7 @@ class BookInfo extends Component {
         this.props.items.map(item => {
         libro = item.id;
         return (
+          
           <div className="slot" key={item.id}>
             <span href="#tile" className="tile">
               <div className="item">
@@ -149,9 +151,14 @@ class BookInfo extends Component {
                     <h6 className="card-subtitle mb-2 text-muted">
                       Author Bio: {item.author_biography}
                     </h6>
+                    <span>
+                      Description: {item.book_desc}
+                    </span>
+                    <br></br>
                     <span className="card-subtitle mb-2 text-muted">
                       Publish Date: {item.book_publishing_info + " "}
                     </span>
+                    <br></br>
                     <span className="card-subtitle mb-2 text-muted">
                       Release Date:{item.book_releaseDate}{" "}
                     </span>
@@ -218,6 +225,15 @@ class BookInfo extends Component {
                 Back to Home Page
               </span>
             </Link>
+
+            {this.state.showPopupImg ?  (
+            <Popup
+            book_cover = {item.book_cover}
+            closePopup = {this.togglePopupImg.bind(this)}
+          />
+         ) : null }
+         <br></br>
+
           </div>
         );
       })
