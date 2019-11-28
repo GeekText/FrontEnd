@@ -3,6 +3,7 @@ import "./styles.css";
 
 //Todo Figure out why `export default Ratingsystem;` does not work
 export class Ratingsystem extends React.Component {
+
     render() {
         return (
             
@@ -27,9 +28,9 @@ export class Ratingsystem extends React.Component {
 
 var createClass = require('create-react-class');
 
-const Checkbox = props => (
-    <input type="checkbox" {...props} />
-)
+
+const Checkbox = props => <input type="checkbox" {...props} />;
+
 
 const Star = (
 
@@ -59,6 +60,7 @@ var StarRating = ({ totalStars }) => {
         
          
     );
+
 };
 
 
@@ -90,6 +92,7 @@ function Average() {
 
 
 var commentData = [
+
     {
         author: "Eric Jerez",
         text: "Horrible book",
@@ -135,6 +138,7 @@ var CommentBox = createClass({
 
 
 var CommentList = createClass({
+
     render: function () {
         return (
 
@@ -241,7 +245,32 @@ var CommentForm = createClass({
             );
 
  
+
     }
+    this.props.onCommentSubmit({ author: authorVal, text: textVal });
+    e.target[0].value = "";
+    e.target[1].value = "";
+    return;
+  },
+  render: function() {
+    return (
+      <form className="comment-form form-group" onSubmit={this.handleSubmit}>
+        <div className="input-group">
+          <span className="input-group-addon">Name</span>
+          <input type="text" placeholder="Your name" className="form-control" />
+        </div>
+        <div className="input-group">
+          <span className="input-group-addon">Comment</span>
+          <input
+            type="text"
+            placeholder="Say something..."
+            className="form-control"
+          />
+        </div>
+        <input type="submit" value="Post" className="btn btn-primary" />
+      </form>
+    );
+  }
 });
 
 var pressed = false;
@@ -302,6 +331,7 @@ const cambio = () => {
 
 
 var Comment = createClass({
+
     render: function () {
 
        
@@ -322,3 +352,4 @@ var Comment = createClass({
 
     }
 });
+

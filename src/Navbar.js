@@ -18,8 +18,8 @@ class Navbar extends React.Component {
                 Home
               </span>
             </Link>
-            <Link to="/profile">
-              <span href="#profile" className="links" type="button">
+            <Link to="/login">
+              <span href="#login" className="links" type="button">
                 Registration
               </span>
             </Link>

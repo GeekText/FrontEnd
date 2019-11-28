@@ -7,11 +7,60 @@ import {
   removeItem,
   saveAdd,
   saveAddToCart,
-  saveRemove
+  saveRemove,
+  addItemWish
 } from "./CartFunctions.js";
+import { filtered } from "../Filter/FilterFunctions";
+import Popup from "./Popup";
 import "./Cart.css";
 
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { showPopupSave: false };
+    this.state = { showPopupCart: false };
+    this.state = { showPopupWish: false };
+  }
+
+  togglePopupSave() {
+    this.setState({
+      showPopupSave: !this.state.showPopupSave
+    });
+  }
+  togglePopupCart() {
+    this.setState({
+      showPopupCart: !this.state.showPopupCart
+    });
+  }
+  togglePopupWish() {
+    this.setState({
+      showPopupWish: !this.state.showPopupWish
+    });
+  }
+
+  searchAuthor(name) {
+    let listFirstName;
+    let listLastName;
+    listFirstName = this.props.items.filter(
+      item => item.author_first_name === name[0]
+    );
+    listLastName = this.props.items.filter(
+      item => item.author_last_name === name[1]
+    );
+
+    let names = listFirstName.filter(
+      value => -1 !== listLastName.indexOf(value)
+    );
+    this.sendFilter(names);
+  }
+
+  submitFilter(name) {
+    this.searchAuthor(name);
+  }
+  sendFilter(list) {
+    this.props.sendFilter(list);
+  }
+
   clickRemove = id => {
     this.props.clickRemove(id);
   };
@@ -22,6 +71,7 @@ class Cart extends Component {
     this.props.clickSubtr(id);
   };
   clickSave = id => {
+    console.log("Saving to save for later");
     this.props.clickSave(id);
   };
   clickSaveToCart = id => {
@@ -30,41 +80,82 @@ class Cart extends Component {
   clickSaveRemove = id => {
     this.props.clickSaveRemove(id);
   };
+  clickSaveToWish = id => {
+    this.props.clickSaveToWish(id);
+  };
   render() {
     let cart = this.props.items.length ? (
       this.props.items.map(item => {
         return (
-          <div class="shopping-cart" key={item.id}>
-            <div class="item">
-              <div class="image">
+          <div className="shopping-cart-list" key={item.id}>
+            <div className="item">
+              <div className="image">
                 <img
                   src={item.book_cover}
                   alt="Failed to load: book_cover"
                   width="200"
                   height="200"
-                  className="image"
                 />
               </div>
-              <div class="description">
+              <div className="description">
                 <span className="card-title">
-                  <b>{item.book_name}</b>
-                </span>
-                <i className="card-subtitle mb-2 text-muted">
-                  {item.book_desc}
-                </i>
-                <span>
-                  <i>Original Price: ${item.book_price}</i>
+                  <h5 className="book_title">{item.book_name}</h5>
+                  <span className="author">
+                    By:{" "}
+                    <b
+                      className="clickAddButton"
+                      onClick={() =>
+                        this.submitFilter([
+                          item.author_first_name,
+                          item.author_last_name
+                        ])
+                      }
+                    >
+                      <Link to="/search">
+                        {item.author_first_name + " " + item.author_last_name}
+                      </Link>
+                    </b>{" "}
+                    ({item.gender})
+                  </span>
+                  <i className="card-subtitle mb-2 text-muted">
+                    {item.book_desc}
+                  </i>
+                  <div className="additional-details">
+                    <div className="stats">
+                      <span className="publisher">
+                        Publisher: {item.book_publisher}
+                      </span>
+                      <span className="publisher">
+                        Released: {item.book_releaseDate}
+                      </span>
+                    </div>
+                    <div className="stats">
+                      <span className="publisher">
+                        Books Sold: {item.book_copies_sold}
+                      </span>
+                      <span className="publisher">
+                        Rating: {item.book_rating} of 5
+                      </span>
+                    </div>
+                  </div>
+                  <span className="bio">
+                    <i className="text-muted">Bio: "{item.author_biography}"</i>
+                  </span>
+                  <span className="email">({item.email})</span>
                 </span>
               </div>
-              <div class="buttons">
-                <div class="item-price">
-                  <h5>${item.book_price * item.quantity}</h5>
+              <div className="buttons">
+                <div className="item-price">
+                  <span>${item.book_price * item.quantity}</span>
+                  <i className="item-each text-muted">
+                    ${item.book_price} each
+                  </i>
                 </div>
-                <div class="quantity">
+                <div className="quantity">
                   Qty:
                   <br></br>
                   <button
-                    class="qty-button"
+                    className="qty-button"
                     type="button"
                     name="button"
                     onClick={() => {
@@ -75,7 +166,7 @@ class Cart extends Component {
                   </button>
                   <b> {item.quantity} </b>
                   <button
-                    class="qty-button"
+                    className="qty-button"
                     type="button"
                     name="button"
                     onClick={() => {
@@ -87,16 +178,29 @@ class Cart extends Component {
                 </div>
                 <br></br>
                 <span
-                  class="save-button"
+                  className="save-button"
                   onClick={() => {
-                    this.clickSave(item.id);
+                    let exists = this.props.savedItems.find(
+                      all => all.id === item.id
+                    );
+                    if (exists) {
+                      this.togglePopupSave();
+                    } else {
+                      this.clickSave(item.id);
+                    }
                   }}
                 >
                   Save for later
                 </span>
+                {this.state.showPopupSave ? (
+                  <Popup
+                    text='This item already exists in your "Save for later" list.'
+                    closePopup={this.togglePopupSave.bind(this)}
+                  />
+                ) : null}
                 <br></br>
                 <span
-                  class="del-button"
+                  className="del-button"
                   onClick={() => {
                     this.clickRemove(item.id);
                   }}
@@ -113,7 +217,7 @@ class Cart extends Component {
         <p>Your shopping cart is empty.</p>
         <Link to="/#Items">
           <span href="#cart" className="links" type="button">
-            Shop Here
+            Start Shopping
           </span>
         </Link>
       </div>
@@ -122,37 +226,84 @@ class Cart extends Component {
     let saved = this.props.savedItems.length ? (
       this.props.savedItems.map(item => {
         return (
-          <div class="shopping-cart" key={item.id}>
-            <div class="item">
-              <div class="image">
+          <div className="save-for-later-list" key={item.id}>
+            <div className="item">
+              <div className="image">
                 <img
                   src={item.book_cover}
                   alt="Failed to load: book_cover"
                   width="100"
                   height="100"
-                  className="image"
                 />
               </div>
-              <div class="description">
+              <div className="description">
                 <span className="card-title">
                   <b>{item.book_name}</b>
+                  <span className="author">
+                    By: {item.author_first_name} {item.author_last_name} (
+                    {item.gender})
+                  </span>
+                  <span className="publisher">
+                    Publisher: {item.book_publisher}
+                  </span>
+                  <span className="publisher">
+                    Books Sold: {item.book_copies_sold}
+                  </span>
+                  <span className="publisher">
+                    Rating: {item.book_rating} of 5
+                  </span>
                 </span>
               </div>
-              <div class="buttons">
-                <div class="item-price">
+              <div className="buttons">
+                <div className="item-price">
                   <h5>${item.book_price}</h5>
                 </div>
                 <span
-                  class="save-button"
+                  className="cart-button"
                   onClick={() => {
-                    this.clickSaveToCart(item.id);
+                    let exists = this.props.items.find(
+                      all => all.id === item.id
+                    );
+                    if (exists) {
+                      this.togglePopupCart();
+                    } else {
+                      this.clickSaveToCart(item.id);
+                    }
                   }}
                 >
                   Add to cart
                 </span>
+                {this.state.showPopupCart ? (
+                  <Popup
+                    text="This item already exists in your cart."
+                    closePopup={this.togglePopupCart.bind(this)}
+                  />
+                ) : null}
                 <br></br>
                 <span
-                  class="del-button"
+                  className="wishcart-button"
+                  onClick={() => {
+                    let exists = this.props.wishlist.find(
+                      all => all.id === item.id
+                    );
+                    if (exists) {
+                      this.togglePopupWish();
+                    } else {
+                      this.clickSaveToWish(item.id);
+                    }
+                  }}
+                >
+                  Add to Wishlist
+                </span>
+                {this.state.showPopupWish ? (
+                  <Popup
+                    text="This item already exists in your primary wishlist."
+                    closePopup={this.togglePopupWish.bind(this)}
+                  />
+                ) : null}
+                <br></br>
+                <span
+                  className="del-button"
                   onClick={() => {
                     this.clickSaveRemove(item.id);
                   }}
@@ -172,23 +323,24 @@ class Cart extends Component {
 
     let subtotal = this.props.items.length ? (
       [
-        <div class="subtotal-price">
-          <b>
-            <h5>Subtotal: ${this.props.total}</h5>
-          </b>
+        <div className="subtotal-price" key="Price">
+          <b>Subtotal: ${this.props.total}</b>
+          <br></br>
+          <Link to="/checkout" className="checkout_btn">
+            Checkout
+          </Link>
         </div>
       ]
     ) : (
       <div></div>
     );
-
     return (
       <div className="container">
         <div className="#cart">
           <br></br>
           <h4>Shopping cart ({this.props.items.length})</h4>
           <ul className="current-items">{cart}</ul>
-          <div class="shopping-cart">
+          <div className="shopping-cart">
             <h5>{subtotal}</h5>
           </div>
           <h5>
@@ -205,6 +357,7 @@ const currentItems = state => {
   return {
     items: state.addedItems,
     savedItems: state.savedItems,
+    wishlist: state.wishlist.items,
     total: state.total
   };
 };
@@ -228,11 +381,14 @@ const changeItems = dispatch => {
     },
     clickSaveRemove: id => {
       dispatch(saveRemove(id));
+    },
+    clickSaveToWish: id => {
+      dispatch(addItemWish(id));
+    },
+    sendFilter: event => {
+      dispatch(filtered(event));
     }
   };
 };
 
-export default connect(
-  currentItems,
-  changeItems
-)(Cart);
+export default connect(currentItems, changeItems)(Cart);
