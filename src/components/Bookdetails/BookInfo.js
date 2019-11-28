@@ -264,5 +264,5 @@ const changeItems = dispatch => {
 };
 export default connect(currentItems, changeItems)(BookInfo);
 export { libro };
-export default connect(currentItems)(BookInfo);
+
 

@@ -3,22 +3,21 @@ import "./styles.css";
 
 //Todo Figure out why `export default Ratingsystem;` does not work
 export class Ratingsystem extends React.Component {
-
     render() {
         return (
-            
+
             <div className="">
                 <Checkbox
                     checked={this.checked}
                     onChange={buttonPressed} />
                 <span>No purchased </span>
                 <br />
-                <h> 
-                  Average Rating: <Average /> 
+                <h>
+                    Average Rating: <Average />
                 </h>
                 <StarRating totalStars={5} />
                 <CommentBox data={commentData} />
-                
+
             </div>
         );
     }
@@ -28,21 +27,21 @@ export class Ratingsystem extends React.Component {
 
 var createClass = require('create-react-class');
 
-
-const Checkbox = props => <input type="checkbox" {...props} />;
-
+const Checkbox = props => (
+    <input type="checkbox" {...props} />
+)
 
 const Star = (
 
     { selected = false, onClick = f => f }) => (
-    <div className={selected ? "star selected" : "star"} onClick={onClick} />
-);
+        <div className={selected ? "star selected" : "star"} onClick={onClick} />
+    );
 
 
 var StarRating = ({ totalStars }) => {
-    var  [starsSelected, selectStar] = useState(1);
+    var [starsSelected, selectStar] = useState(1);
     return (
-        <div className="star-rating">         
+        <div className="star-rating">
             {[...Array(totalStars)].map((n, i) => (
                 <Star
                     key={i}
@@ -53,14 +52,13 @@ var StarRating = ({ totalStars }) => {
             <p>
 
                 {starsSelected} out of {totalStars} stars
-                <input value={starsSelected} id="SelectedStars" hidden = "true"/>
-                 
+                <input value={starsSelected} id="SelectedStars" hidden="true" />
+
             </p>
         </div>
-        
-         
-    );
 
+
+    );
 };
 
 
@@ -78,7 +76,7 @@ function Average() {
         item = commentData[i];
         if (item.rating) {
             popularitySum = parseFloat(popularitySum) + parseFloat(item.rating);
-            itemsFound = itemsFound + 1 ;
+            itemsFound = itemsFound + 1;
         }
     }
     averagePopularity = popularitySum / itemsFound;
@@ -92,7 +90,6 @@ function Average() {
 
 
 var commentData = [
-
     {
         author: "Eric Jerez",
         text: "Horrible book",
@@ -110,12 +107,10 @@ var commentData = [
     }
 ];
 var CommentBox = createClass({
-    
-    getInitialState: function ()
-    
-    {
+
+    getInitialState: function () {
         return {
-            
+
             data: commentData
         }
     },
@@ -138,16 +133,15 @@ var CommentBox = createClass({
 
 
 var CommentList = createClass({
-
     render: function () {
         return (
 
             <div className="comment-list">
                 {this.props.data.map(function (c) {
-                    return (  
-                        
+                    return (
+
                         <Comment author={c.author} text={c.text} rating={c.rating} />
-                        
+
                     );
                 })}
             </div>
@@ -162,7 +156,7 @@ var CommentForm = createClass({
 
         if (prueba == 1) {
 
-            
+
             e.preventDefault();
             var authorVal = e.target[0].value.trim();
             var textVal = e.target[2].value.trim();
@@ -172,7 +166,7 @@ var CommentForm = createClass({
                 return;
             }
 
-         
+
 
 
             if (document.getElementById("NameBox").disabled == false) {
@@ -186,7 +180,7 @@ var CommentForm = createClass({
 
             else {
 
-           
+
 
                 this.props.onCommentSubmit({ author: authorVal, text: textVal, rating: rateVal });
                 e.target[0].value = 'Anonymous';
@@ -217,74 +211,48 @@ var CommentForm = createClass({
     render: function () {
         return (
 
-                <form className="comment-form form-group" onSubmit={this.handleSubmit}>
+            <form className="comment-form form-group" onSubmit={this.handleSubmit}>
 
 
-                
-               
+
+
                 <div className="input-group">
-                        <span className="input-group-addon">Name</span>
+                    <span className="input-group-addon">Name</span>
                     <input type="text" id="NameBox" placeholder="Your name" className="form-control" />
                     <Checkbox
                         checked={this.checked}
                         onChange={cambio && myFunction}
-                        id = "AnonymousCheckbox"
+                        id="AnonymousCheckbox"
                     />
                     <span>Do not show username (Anonymous)</span>
 
                 </div>
 
-                    <div className="input-group">
-                        <span className="input-group-addon">Comment</span>
-                    <input type="text" id ="comentario" maxLength="1200" placeholder="Say something... (Limited to:1200 Chars)" className="form-control" />
+                <div className="input-group">
+                    <span className="input-group-addon">Comment</span>
+                    <input type="text" id="comentario" maxLength="1200" placeholder="Say something... (Limited to:1200 Chars)" className="form-control" />
                 </div>
 
-                <input type = "number" id = "estrellaNumero" min ="1" max ="5" hidden ="true"/>
-                    <input type="submit" value="Post" className="btn btn-primary" />
-                </form>
-            );
+                <input type="number" id="estrellaNumero" min="1" max="5" hidden="true" />
+                <input type="submit" value="Post" className="btn btn-primary" />
+            </form>
+        );
 
- 
 
     }
-    this.props.onCommentSubmit({ author: authorVal, text: textVal });
-    e.target[0].value = "";
-    e.target[1].value = "";
-    return;
-  },
-  render: function() {
-    return (
-      <form className="comment-form form-group" onSubmit={this.handleSubmit}>
-        <div className="input-group">
-          <span className="input-group-addon">Name</span>
-          <input type="text" placeholder="Your name" className="form-control" />
-        </div>
-        <div className="input-group">
-          <span className="input-group-addon">Comment</span>
-          <input
-            type="text"
-            placeholder="Say something..."
-            className="form-control"
-          />
-        </div>
-        <input type="submit" value="Post" className="btn btn-primary" />
-      </form>
-    );
-  }
 });
 
 var pressed = false;
 
 
-function  buttonPressed() {
-    if (pressed == false)
-    {
+function buttonPressed() {
+    if (pressed == false) {
         pressed = true;
         document.getElementById("NameBox").disabled = true;
         document.getElementById("comentario").disabled = true;
         document.getElementById("AnonymousCheckbox").disabled = true;
 
-        
+
     }
     else {
         pressed = false;
@@ -293,9 +261,9 @@ function  buttonPressed() {
         document.getElementById("AnonymousCheckbox").disabled = false;
     }
 
-    
 
- 
+
+
 }
 
 function myFunction() {
@@ -319,37 +287,35 @@ var prueba = 1;
 const cambio = () => {
     if (prueba == 1) {
         prueba = 2;
-        
-        
+
+
     }
     else {
         prueba = 1;
-        
+
     }
     return prueba;
 };
 
 
 var Comment = createClass({
-
     render: function () {
 
-       
 
-            return (
-                <div className="comment">
-                    <h2 className="author">{this.props.author}</h2>
-                    <h3>Rating: {this.props.rating}</h3>
-                    
-                    {this.props.text}
-               
-                </div>
-            );
 
-        
+        return (
+            <div className="comment">
+                <h2 className="author">{this.props.author}</h2>
+                <h3>Rating: {this.props.rating}</h3>
 
-       
+                {this.props.text}
+
+            </div>
+        );
+
+
+
+
 
     }
 });
-

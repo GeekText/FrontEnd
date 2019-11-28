@@ -1,5 +1,4 @@
 .star-rating {
-
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
@@ -12,8 +11,6 @@
 #NameBox {
     width: 20000px;
     padding: 20px;
-
-
 }
 
 #comentario {
@@ -27,26 +24,21 @@
     height: 2em;
     background-color: grey;
     clip-path: polygon( 50% 0%, 63% 38%, 100% 38%, 69% 59%, 82% 100%, 50% 75%, 18% 100%, 31% 59%, 0% 38%, 37% 38% );
-
 }
 
-.star.selected {
-  background-color: Khaki;
-}
-/*Board css statements cause problems in other parts of the site.
-This p will affect all other <p>(s) everywhere. 
-Try something like .star p {} to affect things only within a that className div.
+    .star.selected {
+        background-color: Khaki;
+    }
+
 p {
     flex-basis: 100%;
     text-align: center;
 }
-*/
+
 .comment {
     background: #FFEBCD;
     width: 90%;
     margin: 2em auto;
     border: 6px solid #e2e2e2;
     height: 20em;
-
 }
-
